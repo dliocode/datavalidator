@@ -126,6 +126,33 @@ begin
     .CheckedAll;
 ```
 
+
+#### Como saber se houve error
+
+```
+    Result := LResult.Ok; // True = Nenhum erro | False = Tem erro
+```
+
+#### Como recuperar todas as mensagens de errors
+```
+    Result := LResult.Informations.Message;
+```
+
+#### Como recuperar uma única mensagem de error
+```
+    Result := LResult.Informations.GetItem(0).Message;
+```
+
+#### Como recuperar o total de errors
+```
+    Result := LResult.Informations.Count;
+```
+
+#### Diferença de Checked e CheckedAll
+
+- **Checked**: Faz a verificação de todos os **_validate_**, mas se houver um retorno **_fase_** ele finaliza a verificação!
+- **CheckedAll**: Faz a verificação de todos os **_validate_**!
+
 #### **Validação Schema**
 - É uma forma de criar uma validação e conseguir reutilizar a mesma validação em outros **_validate_**.
 
@@ -179,33 +206,6 @@ begin
   Readln;  
 end.
 ```
-
-
-#### Como saber se houve error
-
-```
-    Result := LResult.Ok; // True = Nenhum erro | False = Tem erro
-```
-
-#### Como recuperar todas as mensagens de errors
-```
-    Result := LResult.Informations.Message;
-```
-
-#### Como recuperar uma única mensagem de error
-```
-    Result := LResult.Informations.GetItem(0).Message;
-```
-
-#### Como recuperar o total de errors
-```
-    Result := LResult.Informations.Count;
-```
-
-#### Diferença de Checked e CheckedAll
-
-- **Checked**: Faz a verificação de todos os **_validate_**, mas se houver um retorno **_fase_** ele finaliza a verificação!
-- **CheckedAll**: Faz a verificação de todos os **_validate_**!
 
 #### Sanitizers
 

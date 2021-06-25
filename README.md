@@ -82,6 +82,7 @@ begin
 ##### Modo: JSON
 
 - No modo JSON, o que deve ser informado **_validate_** é o nome da key do json! 
+- Caso seja utilizado algum **_sanitizer_**, o valor dentro do JSON será modificado!
 
 ```
 var

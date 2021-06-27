@@ -1,3 +1,10 @@
+{
+  *************************************
+  Created by Danilo Lucas
+  Github - https://github.com/dliocode
+  *************************************
+}
+
 unit DataValidator.Schema;
 
 interface

@@ -150,7 +150,7 @@ begin
 
 #### Diferença de Checked e CheckedAll
 
-- **Checked**: Faz a verificação de todos os **_validate_**, mas se houver um retorno **_fase_** ele finaliza a verificação!
+- **Checked**: Faz a verificação de todos os **_validate_**, mas se houver um item com retorno **_false_** ele interompe a verificação!
 - **CheckedAll**: Faz a verificação de todos os **_validate_**!
 
 #### **Validação Schema**

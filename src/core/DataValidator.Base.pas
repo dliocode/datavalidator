@@ -446,7 +446,7 @@ begin
   Result := Add(TValidatorIsNumeric.Create('Value is not numeric!'));
 end;
 
-function TDataValidatorsBase<T>.IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_pt_BR): IDataValidatorsBase<T>;
+function TDataValidatorsBase<T>.IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): IDataValidatorsBase<T>;
 begin
   Result := Add(TValidatorIsPhoneNumber.Create('Value is not phone number!'), ALocaleLanguage);
 end;

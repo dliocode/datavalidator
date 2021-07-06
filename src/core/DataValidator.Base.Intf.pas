@@ -58,7 +58,7 @@ type
     function IsMD5(): IDataValidatorsBase<T>;
     function IsNegative(): IDataValidatorsBase<T>;
     function IsNumeric(): IDataValidatorsBase<T>;
-    function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_pt_BR): IDataValidatorsBase<T>;
+    function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): IDataValidatorsBase<T>;
     function IsPositive(): IDataValidatorsBase<T>;
     function IsSSN(): IDataValidatorsBase<T>;
     function IsTime(): IDataValidatorsBase<T>;

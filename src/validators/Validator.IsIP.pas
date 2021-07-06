@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsIP;
+unit Validator.IsIP; // IP (Internet Protocol)
 
 interface
 

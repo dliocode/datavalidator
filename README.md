@@ -231,49 +231,58 @@ TDataValidator.Values
 
 ## Validators / Sanitizers
 
-| Validators | Sanitizers |
-| ------------ | ------------ |
-| Contains | NormalizeEmail |
-| Custom | RemoveAccents |
-| IsAlpha | Replace |
-| IsAlphaNumeric | ToBase64Decode |
-| IsBase64 | ToBase64Encode |
-| IsBetween | ToHTMLDecode |
-| IsBTCAddress | ToHTMLEncode |
-| IsCEP | ToMD5 |
-| IsCNPJ | ToInteger |
-| IsCPF | ToLowerCase |
-| IsCPFCNPJ | ToNumeric |
-| IsDate | ToUpperCase |
-| IsDateBetween | ToURLDecode |
-| IsDateEquals | ToURLEncode |
-| IsDateGreaterThan | Trim |
-| IsDateLessThan | TrimLeft |
-| IsEmail | TrimRight |
-| IsEmpty | |
-| IsEquals | |
-| IsEthereumAddress | |
-| IsFone | |
-| IsGreaterThan | |
-| IsHexadecimal | |
-| IsInteger | |
-| IsIP | |
-| IsJSON | |
-| IsLength | |
-| IsLessThan | |
-| IsLowercase | |
-| IsMACAddress | |
-| IsMD5 | |
-| IsNegative | |
-| IsNumeric | |
-| IsPositive | |
-| IsTime | |
-| IsTimeBetween | |
-| IsTimeEquals | |
-| IsTimeGreaterThan | |
-| IsTimeLessThan | |
-| IsUppercase | |
-| IsURL | |
-| IsUUID | |
-| IsZero | |
-| IsRequiredKey -> for JSON||
+|Validators for All|Validators for JSON|Sanitizers|
+| ------------ | ------------ | ------------ |
+|Contains|IsOptionalKey|NormalizeEmail|
+|IsAlpha|IsRequiredKey|RemoveAccents|
+|IsAlphaNumeric||Replace|
+|IsBase64||ToBase64Decode|
+|IsBetween||ToBase64Encode|
+|IsBetween||ToHTMLDecode|
+|IsBetween||ToHTMLEncode|
+|IsBetween||ToInteger|
+|IsBetween||ToLowerCase|
+|IsBetween||ToMD5|
+|IsBTCAddress||ToNumeric|
+|IsCEP||ToUpperCase|
+|IsCNPJ||ToURLDecode|
+|IsCPF||ToURLEncode|
+|IsCPFCNPJ||Trim|
+|IsDate||TrimLeft|
+|IsDateBetween||TrimRight|
+|IsDateEquals|||
+|IsDateGreaterThan|||
+|IsDateLessThan|||
+|IsEmail|||
+|IsEmpty|||
+|IsEquals|||
+|IsEthereumAddress|||
+|IsGreaterThan|||
+|IsHexadecimal|||
+|IsInteger|||
+|IsIP|||
+|IsJSON|||
+|IsLength|||
+|IsLessThan|||
+|IsLowercase|||
+|IsMACAddress|||
+|IsMD5|||
+|IsNegative|||
+|IsNumeric|||
+|IsPhoneNumber|||
+|IsPositive|||
+|IsSSN|||
+|IsTime|||
+|IsTimeBetween|||
+|IsTimeEquals|||
+|IsTimeGreaterThan|||
+|IsTimeLessThan|||
+|IsUppercase|||
+|IsURL|||
+|IsUUID|||
+|IsUUIDv1|||
+|IsUUIDv2|||
+|IsUUIDv3|||
+|IsUUIDv4|||
+|IsUUIDv5|||
+|IsZero|||

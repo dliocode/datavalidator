@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsCEP;
+unit Validator.IsCEP;  // (Brasil) CEP (Código de Endereçamento Postal)
 
 interface
 

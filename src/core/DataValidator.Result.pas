@@ -42,7 +42,7 @@ end;
 
 class function TDataValidatorResult.New(const AOK: Boolean; const ADataInformation: IValidatorInformation): IDataValidatorResult;
 begin
-  Result := TDataValidatorResult.Create(AOK, TDataValidatorInformations.New.Add(ADataInformation), []);
+  Result := TDataValidatorResult.Create(AOK, TDataValidatorInformations.Create.Add(ADataInformation), []);
 end;
 
 constructor TDataValidatorResult.Create(const AOK: Boolean; const ADataInformations: IDataValidatorInformations; const ADataValues: TArray<string>);

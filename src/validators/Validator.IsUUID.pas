@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsUUID;
+unit Validator.IsUUID; // UUID (Universally Unique Identifier)
 
 interface
 

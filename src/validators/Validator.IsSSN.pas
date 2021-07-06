@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsFone;
+unit Validator.IsSSN; // (EUA) Social Security Number
 
 interface
 
@@ -14,7 +14,7 @@ uses
   System.SysUtils, System.RegularExpressions;
 
 type
-  TValidatorIsFone = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsSSN = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Checked: IDataValidatorResult;
@@ -23,24 +23,24 @@ type
 
 implementation
 
-{ TValidatorIsFone }
+{ TValidatorIsSSN }
 
-constructor TValidatorIsFone.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsSSN.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsFone.Checked: IDataValidatorResult;
+function TValidatorIsSSN.Checked: IDataValidatorResult;
 var
-  R: Boolean;
   LValue: string;
+  R: Boolean;
 begin
   LValue := GetValueAsString;
   R := False;
 
   if not Trim(LValue).IsEmpty then
-    R := TRegEx.IsMatch(LValue, '^(\(\d{2}\)|\d{2})?\s?9?\d{4}-?\d{4}$');
+    R := TRegEx.IsMatch(LValue, '^(((?!666|000|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4})||((?!666|000|9\d{2})\d{3}(?!00)\d{2}(?!0{4})\d{4}))$');
 
   if FIsNot then
     R := not R;

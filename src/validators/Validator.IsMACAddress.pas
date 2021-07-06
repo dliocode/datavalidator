@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsMACAddress;
+unit Validator.IsMACAddress; // MAC (Media Access Control) address
 
 interface
 

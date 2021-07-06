@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsCPF;
+unit Validator.IsCPF; // (Brasil) Comprovante de Situação Cadastral
 
 interface
 
@@ -16,11 +16,9 @@ uses
 type
   TValidatorIsCPF = class(TDataValidatorItemBase, IDataValidatorItem)
   private
-    FMessage: string;
-    FExecute: TDataValidatorInformationExecute;
-
     function Validate(const ACPF: string): Boolean;
   public
+    function GetMessage: string;
     function Checked: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
@@ -33,6 +31,11 @@ constructor TValidatorIsCPF.Create(const AMessage: string; const AExecute: TData
 begin
   FMessage := AMessage;
   FExecute := AExecute;
+end;
+
+function TValidatorIsCPF.GetMessage: string;
+begin
+  Result := FMessage;
 end;
 
 function TValidatorIsCPF.Checked: IDataValidatorResult;

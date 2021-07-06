@@ -16,8 +16,6 @@ uses
 type
   TValidatorIsCPFCNPJ = class(TDataValidatorItemBase, IDataValidatorItem)
   private
-    FMessage: string;
-    FExecute: TDataValidatorInformationExecute;
     FValidatorCPF: IDataValidatorItem;
     FValidatorCNPJ: IDataValidatorItem;
   public

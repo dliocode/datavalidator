@@ -18,25 +18,25 @@ type
   private
     FListSchema: TList<IDataValidatorsBase<IDataValidatorSchema>>;
   public
-    function ListSchema: TList<IDataValidatorsBase<IDataValidatorSchema>>;
+    function ListSchema(): TList<IDataValidatorsBase<IDataValidatorSchema>>;
 
     constructor Create;
     destructor Destroy; override;
 
-    class function New: IDataValidatorsBase<IDataValidatorSchema>;
+    class function New(): IDataValidatorsBase<IDataValidatorSchema>;
   end;
 
 implementation
 
 { TDataValidatorSchema }
 
-class function TDataValidatorSchema.New: IDataValidatorsBase<IDataValidatorSchema>;
+class function TDataValidatorSchema.New(): IDataValidatorsBase<IDataValidatorSchema>;
 var
   LSchema: IDataValidatorSchema;
 begin
   LSchema := TDataValidatorSchema.Create;
 
-  LSchema.ListSchema.Add(TDataValidatorsBase<IDataValidatorSchema>.New(LSchema, ''));
+  LSchema.ListSchema.Add(TDataValidatorsBase<IDataValidatorSchema>.Create(LSchema, ''));
   Result := LSchema.ListSchema.Last;
 end;
 
@@ -52,7 +52,7 @@ begin
   inherited;
 end;
 
-function TDataValidatorSchema.ListSchema: TList<IDataValidatorsBase<IDataValidatorSchema>>;
+function TDataValidatorSchema.ListSchema(): TList<IDataValidatorsBase<IDataValidatorSchema>>;
 begin
   Result := FListSchema;
 end;

@@ -66,7 +66,7 @@ var
 begin
   LJSONPair := FJSON.Get(AName);
 
-  FListBase.Add(TDataValidatorsBase<IDataValidatorJSON>.New(Self, LJSONPair) as IDataValidatorsBaseJSON<IDataValidatorJSON>);
+  FListBase.Add(TDataValidatorsBase<IDataValidatorJSON>.Create(Self, LJSONPair) as IDataValidatorsBaseJSON<IDataValidatorJSON>);
   Result := FListBase.Last;
 end;
 
@@ -101,15 +101,15 @@ function TDataValidatorJSON.Check(const ACheckAll: Boolean): IDataValidatorResul
 var
   LOK: Boolean;
   LInfo: IDataValidatorInformations;
-  LValues: TArray<string>;
   I: Integer;
   LListValidatorItem: TList<IDataValidatorItem>;
   LValueSanitizer: TValue;
   J: Integer;
   LValidatorResult: IDataValidatorResult;
+  LValues: TArray<string>;
 begin
   LOK := True;
-  LInfo := TDataValidatorInformations.New;
+  LInfo := TDataValidatorInformations.Create;
 
   for I := 0 to Pred(FListBase.Count) do
   begin

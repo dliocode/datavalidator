@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsURL;
+unit Validator.IsURL; // URL (Uniform Resource Locator)
 
 interface
 

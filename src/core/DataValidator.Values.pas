@@ -29,14 +29,14 @@ type
     constructor Create;
     destructor Destroy; override;
 
-    class function New: IDataValidatorValuesBase;
+    class function New(): IDataValidatorValuesBase;
   end;
 
 implementation
 
 { TDataValidatorValues }
 
-class function TDataValidatorValues.New: IDataValidatorValuesBase;
+class function TDataValidatorValues.New(): IDataValidatorValuesBase;
 begin
   Result := TDataValidatorValues.Create;
 end;
@@ -56,7 +56,7 @@ end;
 
 function TDataValidatorValues.Validate(const AValue: string): IDataValidatorsBase<IDataValidatorValues>;
 begin
-  FListBase.Add(TDataValidatorsBase<IDataValidatorValues>.New(Self, AValue) as IDataValidatorsBase<IDataValidatorValues>);
+  FListBase.Add(TDataValidatorsBase<IDataValidatorValues>.Create(Self, AValue) as IDataValidatorsBase<IDataValidatorValues>);
   Result := FListBase.Last;
 end;
 
@@ -81,15 +81,15 @@ function TDataValidatorValues.Check(const ACheckAll: Boolean): IDataValidatorRes
 var
   LOK: Boolean;
   LInfo: IDataValidatorInformations;
-  LValues: TArray<string>;
   I: Integer;
   LListValidatorItem: TList<IDataValidatorItem>;
   LValueSanitizer: TValue;
   J: Integer;
   LValidatorResult: IDataValidatorResult;
+  LValues: TArray<string>;
 begin
   LOK := True;
-  LInfo := TDataValidatorInformations.New;
+  LInfo := TDataValidatorInformations.Create;
 
   for I := 0 to Pred(FListBase.Count) do
   begin
@@ -120,6 +120,8 @@ begin
     end;
 
     LValues := Concat(LValues, [ValueString(LValueSanitizer)]);
+
+    LListValidatorItem.Clear;
 
     if not LOK then
       if not ACheckAll then

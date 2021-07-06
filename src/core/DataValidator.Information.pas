@@ -43,18 +43,11 @@ type
 
     constructor Create;
     destructor Destroy; override;
-
-    class function New: IDataValidatorInformations;
   end;
 
 implementation
 
 { TDataValidatorInformations }
-
-class function TDataValidatorInformations.New: IDataValidatorInformations;
-begin
-  Result := TDataValidatorInformations.Create;
-end;
 
 constructor TDataValidatorInformations.Create;
 begin

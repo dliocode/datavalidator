@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsJSON;
+unit Validator.IsJSON; // JSON (JavaScript Object Notation)
 
 interface
 

@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsBTCAddress;
+unit Validator.IsBTCAddress; // BTC (Bitcoin) Adddress
 
 interface
 

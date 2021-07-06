@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsCNPJ;
+unit Validator.IsCNPJ; // (Brasil) Cadastro Nacional de Pessoas Jurídicas
 
 interface
 

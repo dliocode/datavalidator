@@ -35,7 +35,7 @@ type
     function GetValueAsString: string;
     procedure SetValueAdapter(const AValue: TValue);
   public
-    function GeTDataValidatorLocaleLanguage: TDataValidatorLocaleLanguage;
+    function GetDataValidatorLocaleLanguage: TDataValidatorLocaleLanguage;
     procedure SeTDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
 
     procedure SetIsNot(const AIsNot: Boolean);
@@ -48,7 +48,7 @@ implementation
 
 { TDataValidatorItemBase }
 
-function TDataValidatorItemBase.GeTDataValidatorLocaleLanguage: TDataValidatorLocaleLanguage;
+function TDataValidatorItemBase.GetDataValidatorLocaleLanguage: TDataValidatorLocaleLanguage;
 begin
   Result := FLocaleLanguage;
 end;

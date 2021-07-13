@@ -1,8 +1,12 @@
-program Model8;
+program Model9;
 
 uses
   DataValidator,
-  Horse, Horse.Jhonson, System.JSON, System.SysUtils, System.DateUtils;
+  Horse,
+  Horse.Jhonson,
+  System.JSON,
+  System.SysUtils,
+  System.DateUtils;
 
 function ValidateRegister(const AJSON: TJSONObject): IDataValidatorResult;
 begin
@@ -67,6 +71,7 @@ begin
     "cpf":"012.345.678-90"
 }
 
+
  THorse.Use(Jhonson());
 
   THorse.Post('/register',
@@ -74,7 +79,7 @@ begin
     var
       LBody: TJSONObject;
       LValidatorResult: IDataValidatorResult;
-      LResponseError: TJsonObject;
+      LResponse: TJsonObject;
       LReponseErrorCause: TJsonArray;
       I: Integer;
     begin
@@ -96,7 +101,12 @@ begin
       // Se tive tudo ok, já faz o retorno
       if LValidatorResult.OK then
       begin
-        Res.Status(201).Send('OK, registro feito com sucesso!');
+        LResponse := TJsonObject.Create;
+        LResponse.AddPair('error', TJSONBool.Create(False));
+        LResponse.AddPair('message', TJSONString.Create('Registrado com sucesso!'));
+        LResponse.AddPair('data', LBody.Clone as TJSONObject);
+
+        Res.Status(201).Send<TJSONObject>(LResponse);
         raise EHorseCallbackInterrupted.Create;
       end;
 
@@ -105,11 +115,11 @@ begin
       for I := 0 to Pred(LValidatorResult.Informations.Count) do
         LReponseErrorCause.Add(LValidatorResult.Informations.GetItem(I).Message);
 
-      LResponseError := TJsonObject.Create;
-      LResponseError.AddPair('error', TJSONBool.Create(True));
-      LResponseError.AddPair('causes', LReponseErrorCause);
+      LResponse := TJsonObject.Create;
+      LResponse.AddPair('error', TJSONBool.Create(True));
+      LResponse.AddPair('causes', LReponseErrorCause);
 
-      Res.Send<TJSONObject>(LResponseError);
+      Res.Send<TJSONObject>(LResponse);
     end);
 
   THorse.Listen(9000);

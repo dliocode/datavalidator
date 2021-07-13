@@ -94,7 +94,10 @@ type
     function Custom(const AExecute: TDataValidatorCustomExecute): IDataValidatorsBase<T>; overload;
 
     // Sanitizer
+    function CustomSanitizer(const ASanitizerItem: IDataSanitizerItem): IDataValidatorsBase<T>; overload;
+    function CustomSanitizer(const AExecute: TDataValidatorCustomSanitizerExecute): IDataValidatorsBase<T>; overload;
     function NormalizeEmail(const AAllLowercase: Boolean = True; const AGmailRemoveDots: Boolean = True): IDataValidatorsBase<T>;
+    function OnlyNumbers(): IDataValidatorsBase<T>;
     function RemoveAccents(): IDataValidatorsBase<T>;
     function Replace(const AOldValue: string; const ANewValue: string): IDataValidatorsBase<T>;
     function ToBase64Decode(): IDataValidatorsBase<T>;
@@ -131,16 +134,18 @@ type
 implementation
 
 uses
+  Sanitizer.Custom,
   Sanitizer.Base64.Decode,
   Sanitizer.Base64.Encode,
   Sanitizer.HTML.Decode,
   Sanitizer.HTML.Encode,
-  Sanitizer.MD5,
   Sanitizer.NormalizeEmail,
+  Sanitizer.OnlyNumbers,
   Sanitizer.RemoveAccents,
   Sanitizer.Replace,
   Sanitizer.ToInteger,
   Sanitizer.ToLowerCase,
+  Sanitizer.ToMD5,
   Sanitizer.ToNumeric,
   Sanitizer.ToUpperCase,
   Sanitizer.Trim,
@@ -549,9 +554,24 @@ end;
 
 // Sanitizer
 
+function TDataValidatorsBase<T>.CustomSanitizer(const ASanitizerItem: IDataSanitizerItem): IDataValidatorsBase<T>;
+begin
+  Result := Add(ASanitizerItem);
+end;
+
+function TDataValidatorsBase<T>.CustomSanitizer(const AExecute: TDataValidatorCustomSanitizerExecute): IDataValidatorsBase<T>;
+begin
+  Result := Add(TSanitizerCustom.Create(AExecute) as IDataSanitizerItem);
+end;
+
 function TDataValidatorsBase<T>.NormalizeEmail(const AAllLowercase: Boolean = True; const AGmailRemoveDots: Boolean = True): IDataValidatorsBase<T>;
 begin
   Result := Add(TSanitizerNormalizeEmail.Create(AAllLowercase, AGmailRemoveDots) as IDataSanitizerItem);
+end;
+
+function TDataValidatorsBase<T>.OnlyNumbers: IDataValidatorsBase<T>;
+begin
+  Result := Add(TSanitizerOnlyNumbers.Create as IDataSanitizerItem);
 end;
 
 function TDataValidatorsBase<T>.RemoveAccents(): IDataValidatorsBase<T>;
@@ -596,7 +616,7 @@ end;
 
 function TDataValidatorsBase<T>.ToMD5(): IDataValidatorsBase<T>;
 begin
-  Result := Add(TSanitizerMD5.Create as IDataSanitizerItem);
+  Result := Add(TSanitizerToMD5.Create as IDataSanitizerItem);
 end;
 
 function TDataValidatorsBase<T>.ToNumeric(): IDataValidatorsBase<T>;

@@ -5,16 +5,16 @@
   *************************************
 }
 
-unit Sanitizer.MD5;
+unit Sanitizer.OnlyNumbers;
 
 interface
 
 uses
   DataValidator.ItemBase.Sanitizer,
-  System.SysUtils, System.Hash;
+  System.SysUtils, System.RegularExpressions;
 
 type
-  TSanitizerMD5 = class(TDataValidatorItemBaseSanitizer)
+  TSanitizerOnlyNumbers = class(TDataValidatorItemBaseSanitizer)
   private
   public
     function Sanitize: TValue; override;
@@ -23,17 +23,17 @@ type
 
 implementation
 
-{ TSanitizerMD5 }
+{ TSanitizerOnlyNumbers }
 
-constructor TSanitizerMD5.Create;
+constructor TSanitizerOnlyNumbers.Create;
 begin
 end;
 
-function TSanitizerMD5.Sanitize: TValue;
+function TSanitizerOnlyNumbers.Sanitize: TValue;
 var
   LValue: TValue;
 begin
-  LValue := THashMD5.GetHashString(GetValueAsString);
+  LValue := TRegEx.Replace(GetValueAsString, '\D', '');
 
   SetValueAdapter(LValue);
 

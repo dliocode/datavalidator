@@ -17,6 +17,7 @@ type
 
   TDataValidatorInformationExecute = TProc;
   TDataValidatorCustomExecute = reference to function(const AValue: string): Boolean;
+  TDataValidatorCustomSanitizerExecute = reference to function(const AValue: string): string;
 
 implementation
 

@@ -82,7 +82,10 @@ type
     function Custom(const AExecute: TDataValidatorCustomExecute): IDataValidatorsBase<T>; overload;
 
     // Sanitizer
+    function CustomSanitizer(const ASanitizerItem: IDataSanitizerItem): IDataValidatorsBase<T>; overload;
+    function CustomSanitizer(const AExecute: TDataValidatorCustomSanitizerExecute): IDataValidatorsBase<T>; overload;
     function NormalizeEmail(const AAllLowercase: Boolean = True; const AGmailRemoveDots: Boolean = True): IDataValidatorsBase<T>;
+    function OnlyNumbers(): IDataValidatorsBase<T>;
     function RemoveAccents(): IDataValidatorsBase<T>;
     function Replace(const AOldValue: string; const ANewValue: string): IDataValidatorsBase<T>;
     function ToBase64Decode(): IDataValidatorsBase<T>;

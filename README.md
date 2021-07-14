@@ -221,7 +221,7 @@ TDataValidator.Values
   .&End
 ```
 
-#### Validators Especial
+#### Validators Especiais
 
 | Nome | Informação |
 | ------------ | ------------ |

@@ -10,38 +10,63 @@ unit DataValidator.Intf;
 interface
 
 uses
-  DataValidator.Base.Intf, DataValidator.Result.Intf, DataValidator.ItemBase.Intf;
+  DataValidator.Context.Intf, DataValidator.Result.Intf, DataValidator.JSON.Context.Intf;
 
 type
-  IDataValidatorValues = interface;
-  IDataValidatorJSON = interface;
-  IDataValidatorJSONBase = interface;
+  // Schema
+  IDataValidatorSchemaBase = interface;
+  IDataValidatorSchemaBaseContext = IDataValidatorContext<IDataValidatorSchemaBase>;
 
-  // Validator
-
-  IDataValidatorValuesBase = interface
-    ['{59B444A8-3DC0-4B75-B027-FEA19739FB4C}']
-    function Validate(const AValue: string): IDataValidatorsBase<IDataValidatorValues>;
-//    function Schema: IDataValidatorsBase<IDataValidatorSchema>;
+  IDataValidatorSchema = interface
+    ['{9F24DF06-AD48-4FBA-A83D-5410369B8CC9}']
+    function Validate: IDataValidatorSchemaBaseContext;
   end;
 
-  IDataValidatorValues = interface(IDataValidatorValuesBase)
+  IDataValidatorSchemaBase = interface(IDataValidatorSchemaBaseContext)
+    ['{C57BE351-C1DA-4368-9053-D9B71A2A9607}']
+    function &End: IDataValidatorSchemaContext;
+  end;
+
+  // Value
+  IDataValidatorValueBase = interface;
+  IDataValidatorValueBaseContext = IDataValidatorContext<IDataValidatorValueBase>;
+  IDataValidatorValueResult = interface;
+
+  IDataValidatorValue = interface
+    ['{1D7D5CB4-5188-4F45-8878-A0120A9C1EC2}']
+    function Validate(const AValue: string): IDataValidatorValueBaseContext;
+  end;
+
+  IDataValidatorValueBase = interface(IDataValidatorValueBaseContext)
+    ['{6FAD251E-6E4E-4359-B81D-EC08A0684489}']
+    function &End(): IDataValidatorValueResult;
+  end;
+
+  IDataValidatorValueResult = interface(IDataValidatorValue)
     ['{69331F14-D8A2-4E40-ADB4-D3195C59100E}']
-    function Checked: IDataValidatorResult;
-    function CheckedAll: IDataValidatorResult;
+    function Checked(): IDataValidatorResult;
+    function CheckedAll(): IDataValidatorResult;
   end;
 
-  // Validator JSON
+  // JSON
+  IDataValidatorJSONBase = interface;
+  IDataValidatorJSONBaseContext = IDataValidatorJSONContext<IDataValidatorJSONBase>;
+  IDataValidatorJSONResult = interface;
 
-  IDataValidatorJSONBase = interface
-    ['{846E4126-B5B8-47AA-8F79-06A403A129C3}']
-    function Validate(const AName: string): IDataValidatorsBaseJSON<IDataValidatorJSON>;
+  IDataValidatorJSON = interface
+    ['{8409957E-995E-40F6-99F4-6867EEEA2E78}']
+    function Validate(const AName: string): IDataValidatorJSONBaseContext;
   end;
 
-  IDataValidatorJSON = interface(IDataValidatorJSONBase)
-    ['{9D8CFF0F-FB49-4627-A7A4-851CAD97BC69}']
-    function Checked: IDataValidatorResult;
-    function CheckedAll: IDataValidatorResult;
+  IDataValidatorJSONBase = interface(IDataValidatorJSONBaseContext)
+    ['{0AE8315D-D7BF-48CF-8917-DB1AE2A0881B}']
+    function &End(): IDataValidatorJSONResult;
+  end;
+
+  IDataValidatorJSONResult = interface(IDataValidatorJSON)
+    ['{69331F14-D8A2-4E40-ADB4-D3195C59100E}']
+    function Checked(): IDataValidatorResult;
+    function CheckedAll(): IDataValidatorResult;
   end;
 
 implementation

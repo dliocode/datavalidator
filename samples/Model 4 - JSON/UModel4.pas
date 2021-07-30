@@ -18,7 +18,7 @@ type
     procedure btnValidateClick(Sender: TObject);
   private
     { Private declarations }
-    function SchemaNome(const AField: string): IDataValidatorSchema;
+    function SchemaNome(const AField: string): IDataValidatorSchemaContext;
   public
     { Public declarations }
   end;
@@ -46,27 +46,45 @@ begin
       TDataValidator.JSON(LJO)
 
         .Validate('nome')
-          .&Not.IsEmpty.WithMessage('NOME - Não pode ser vazio')
-          .IsAlpha().ToUpperCase
-          .AddSchema(SchemaNome('Nome'))
-          .RemoveAccents
+          .Value // Faz a validação somente dos valores dentro da Key nome
+            .&Not.IsEmpty.WithMessage('NOME - Não pode ser vazio')
+            .IsAlpha().ToUpperCase
+            .AddSchema(SchemaNome('Nome'))
+            .RemoveAccents
+          .&End
         .&End
 
         .Validate('base64')
-          .&Not.IsEmpty.WithMessage('BASE64 - Não pode ser vazio')
-          .IsBase64.WithMessage('BASE64 - Não é um base 64')
-          .ToBase64Decode.WithMessage('BASE64 - ToBase64Decode')
+          .Value // Faz a validação somente dos valores dentro da Key base64
+            .&Not.IsEmpty.WithMessage('BASE64 - Não pode ser vazio')
+            .IsBase64.WithMessage('BASE64 - Não é um base 64')
+            .ToBase64Decode.WithMessage('BASE64 - ToBase64Decode')
+          .&End
         .&End
 
         .Validate('casa')
-          .IsOptionalKey
-          .&Not.IsEmpty.WithMessage('CASA - Não pode ser vazio')
+          .Key  // Faz uma validação na key casa
+            .IsOptional
+          .&End
+          .Value // Faz a validação no valor dentro da Key casa
+            .&Not.IsEmpty.WithMessage('CASA - Não pode ser vazio')
+          .&End
         .&End
 
         .Validate('casa2')
-          .IsRequiredKey.WithMessage('É necessário a field casa2')
-//          .&Not.IsEmpty.WithMessage('CASA2 - Não pode ser vazio')
-          .IsAlpha()
+          .Key
+            .IsRequired.WithMessage('É necessário a field casa2')
+          .&End
+        .&End
+
+        .Validate('data_cadastro')
+          .Key
+            .IsRequired.WithMessage('É necessário a field data_cadastro')
+          .&End
+          .Value
+            .ToDate(False)
+            .IsDate(False)
+          .&End
         .&End
 
       .CheckedAll
@@ -78,15 +96,15 @@ begin
   end;
 end;
 
-function TForm1.SchemaNome(const AField: string): IDataValidatorSchema;
+function TForm1.SchemaNome(const AField: string): IDataValidatorSchemaContext;
 begin
   Result :=
-    TDataValidator
-    .Schema
-      .Trim
-      .&Not.IsEmpty.WithMessage(Format('Preencha o campo %s !', [AField])) // Não pode ser vazio
-      .IsLength(0, 10).WithMessage(Format('O campo %s deve conter no máximo 10 caracteres!', [AField]))
-      .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage(Format('O campo %s possui caracteres inválidos!', [AField]))
+    TDataValidator.Schema
+      .Validate
+        .Trim
+        .&Not.IsEmpty.WithMessage(Format('Preencha o campo %s !', [AField])) // Não pode ser vazio
+        .IsLength(0, 10).WithMessage(Format('O campo %s deve conter no máximo 10 caracteres!', [AField]))
+        .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage(Format('O campo %s possui caracteres inválidos!', [AField]))
     .&End;
 end;
 

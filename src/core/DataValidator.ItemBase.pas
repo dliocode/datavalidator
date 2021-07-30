@@ -11,7 +11,7 @@ interface
 
 uses
   DataValidator.Types, DataValidator.ItemBase.Intf, DataValidator.Result.Intf, DataValidator.Result, DataValidator.Information,
-  System.SysUtils, System.RTTI, System.JSON;
+  System.SysUtils, System.RTTI, System.JSON, System.StrUtils, System.TypInfo;
 
 type
   TJSONPair = System.JSON.TJSONPair;
@@ -36,7 +36,7 @@ type
     procedure SetValueAdapter(const AValue: TValue);
   public
     function GetDataValidatorLocaleLanguage: TDataValidatorLocaleLanguage;
-    procedure SeTDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
+    procedure SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
 
     procedure SetIsNot(const AIsNot: Boolean);
     procedure SetValue(const AValue: TValue);
@@ -53,7 +53,7 @@ begin
   Result := FLocaleLanguage;
 end;
 
-procedure TDataValidatorItemBase.SeTDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
+procedure TDataValidatorItemBase.SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
 begin
   FLocaleLanguage := ALocaleLanguage;
 end;
@@ -122,7 +122,10 @@ begin
         end
         else
           if LJSONGetValue is TJSONString then
-            FValue.AsType<TJSONPair>.JsonValue := TJSONString.Create(AValue.AsString);
+          begin
+            if not MatchText(string(AValue.TypeInfo.Name), ['TDateTime', 'TDate', 'TTime', 'TTimeStamp']) then
+              FValue.AsType<TJSONPair>.JsonValue := TJSONString.Create(AValue.AsString);
+          end;
 
       Exit;
     end;

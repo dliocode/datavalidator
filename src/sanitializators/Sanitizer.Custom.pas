@@ -10,8 +10,7 @@ unit Sanitizer.Custom;
 interface
 
 uses
-  DataValidator.Types, DataValidator.ItemBase.Sanitizer,
-  System.SysUtils, System.RegularExpressions;
+  DataValidator.Types, DataValidator.ItemBase.Sanitizer;
 
 type
   TSanitizerCustom = class(TDataValidatorItemBaseSanitizer)

@@ -6,8 +6,7 @@ program Model5;
 
 
 uses
-  DataValidator,
-  Model7 in '..\Model 7 - CMD Schema\Model7.pas';
+  DataValidator;
 
 function Valid(const AApelido: string; const AEmail: string): IDataValidatorResult;
 begin

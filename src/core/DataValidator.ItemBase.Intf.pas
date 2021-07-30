@@ -17,7 +17,7 @@ type
   IDataValidatorItemBase = interface
     ['{7A448738-20D6-439D-868C-F28D135B65D8}']
     function GetDataValidatorLocaleLanguage: TDataValidatorLocaleLanguage;
-    procedure SeTDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
+    procedure SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
     procedure SetIsNot(const AIsNot: Boolean);
 
     procedure SetValue(const AValue: TValue);

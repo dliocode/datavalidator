@@ -40,12 +40,12 @@ begin
   R := False;
 
   if not Trim(LValue).IsEmpty then
-    R := TRegEx.IsMatch(LValue, '^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$');
+    R := TRegEx.IsMatch(LValue, '^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.([a-zA-Z0-9_-]{2,})+$');
 
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.New(R, TDataValidatorInformation.New(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
 end;
 
 end.

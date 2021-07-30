@@ -14,7 +14,7 @@ uses
 
 type
   IDataValidatorResult = interface
-    ['{AE61F42C-0EEF-4369-A748-11B16AEAB644}']
+    ['{1527205B-B5F7-4058-B056-53C4F89EC8C9}']
     function OK: Boolean;
     function Informations: IDataValidatorInformationsResult;
     function Values: TArray<string>;

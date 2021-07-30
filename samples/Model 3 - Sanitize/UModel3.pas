@@ -20,7 +20,7 @@ type
     { Private declarations }
   public
     { Public declarations }
-    function Valid: IDataValidatorValues;
+    function Valid: IDataValidatorValueResult;
     procedure ShowResult(const AResult: IDataValidatorResult);
   end;
 
@@ -31,7 +31,7 @@ implementation
 
 {$R *.dfm}
 
-function TForm1.Valid: IDataValidatorValues;
+function TForm1.Valid: IDataValidatorValueResult;
 begin
   Result := TDataValidator.Values
 
@@ -73,6 +73,8 @@ begin
 
   Memo1.Text := AResult.Informations.Message;
   Memo1.Lines.Add(Format('Total errors: %d', [AResult.Informations.Count]));
+
+  AResult.Informations.GetItem(0).OnExecute; // Executa o que foi informado no validate execute
 end;
 
 end.

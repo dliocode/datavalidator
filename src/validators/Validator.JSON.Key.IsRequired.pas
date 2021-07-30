@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.JSON.IsRequiredKey;
+unit Validator.JSON.Key.IsRequired;
 
 interface
 
@@ -14,7 +14,7 @@ uses
   System.SysUtils;
 
 type
-  TDataValidatorJSONIsRequiredKey = class(TDataValidatorItemBase, IDataValidatorItem)
+  TDataValidatorJSONKeyIsRequired = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Checked: IDataValidatorResult;
@@ -23,18 +23,18 @@ type
 
 implementation
 
-{ TDataValidatorJSONIsRequiredKey }
+{ TDataValidatorJSONKeyIsRequired }
 
-constructor TDataValidatorJSONIsRequiredKey.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TDataValidatorJSONKeyIsRequired.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TDataValidatorJSONIsRequiredKey.Checked: IDataValidatorResult;
+function TDataValidatorJSONKeyIsRequired.Checked: IDataValidatorResult;
 var
   R: Boolean;
-  LValue : string;
+  LValue: string;
   LJSONPair: TJSONPair;
 begin
   R := True;
@@ -46,13 +46,11 @@ begin
 
     R := Assigned(LJSONPair);
   end;
-//  else
-//    R := not Trim(GetValueAsString).IsEmpty;
 
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.New(R, TDataValidatorInformation.New(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
 end;
 
 end.

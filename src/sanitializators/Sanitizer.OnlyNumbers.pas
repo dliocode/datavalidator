@@ -11,7 +11,7 @@ interface
 
 uses
   DataValidator.ItemBase.Sanitizer,
-  System.SysUtils, System.RegularExpressions;
+  System.RegularExpressions;
 
 type
   TSanitizerOnlyNumbers = class(TDataValidatorItemBaseSanitizer)

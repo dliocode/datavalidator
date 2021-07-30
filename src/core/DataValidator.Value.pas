@@ -5,46 +5,41 @@
   *************************************
 }
 
-unit DataValidator.JSON;
+unit DataValidator.Value;
 
 interface
 
 uses
   DataValidator.Intf, DataValidator.Result.Intf, DataValidator.Information.Intf, DataValidator.ItemBase.Intf, DataValidator.Context.Intf,
-  DataValidator.JSON.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase,
-  System.Generics.Collections, System.Rtti, System.JSON, System.SysUtils;
+  DataValidator.Value.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase,
+  System.Generics.Collections, System.Rtti, System.JSON;
 
 type
-  TDataValidatorJSON = class(TInterfacedObject, IDataValidatorJSON, IDataValidatorJSONResult)
+  TDataValidatorValue = class(TInterfacedObject, IDataValidatorValue, IDataValidatorValueResult)
   private
-    FJSON: TJSONObject;
-    FList: TList<IDataValidatorJSONBaseContext>;
+    FList: TList<IDataValidatorValueBaseContext>;
 
     function Check(const ACheckAll: Boolean): IDataValidatorResult;
   public
-    function Validate(const AName: string): IDataValidatorJSONBaseContext;
+    function Validate(const AValue: string): IDataValidatorValueBaseContext;
 
     function Checked: IDataValidatorResult;
     function CheckedAll: IDataValidatorResult;
 
-    constructor Create(const AJSON: TJSONObject);
+    constructor Create;
     destructor Destroy; override;
   end;
 
 implementation
 
-{ TDataValidatorJSON }
+{ TDataValidatorValue }
 
-constructor TDataValidatorJSON.Create(const AJSON: TJSONObject);
+constructor TDataValidatorValue.Create;
 begin
-  if not Assigned(AJSON) then
-    raise Exception.Create('JSON is nil');
-
-  FJSON := AJSON;
-  FList := TList<IDataValidatorJSONBaseContext>.Create;
+  FList := TList<IDataValidatorValueBaseContext>.Create;
 end;
 
-destructor TDataValidatorJSON.Destroy;
+destructor TDataValidatorValue.Destroy;
 begin
   FList.Clear;
   FList.DisposeOf;
@@ -52,27 +47,23 @@ begin
   inherited;
 end;
 
-function TDataValidatorJSON.Validate(const AName: string): IDataValidatorJSONBaseContext;
-var
-  LJSONPair: TJSONPair;
+function TDataValidatorValue.Validate(const AValue: string): IDataValidatorValueBaseContext;
 begin
-  LJSONPair := FJSON.Get(AName);
-
-  FList.Add(TDataValidatorJSONBase.Create(Self, LJSONPair));
+  FList.Add(TDataValidatorValueBase.Create(Self, AValue));
   Result := FList.Last;
 end;
 
-function TDataValidatorJSON.Checked: IDataValidatorResult;
+function TDataValidatorValue.Checked: IDataValidatorResult;
 begin
   Result := Check(False);
 end;
 
-function TDataValidatorJSON.CheckedAll: IDataValidatorResult;
+function TDataValidatorValue.CheckedAll: IDataValidatorResult;
 begin
   Result := Check(True);
 end;
 
-function TDataValidatorJSON.Check(const ACheckAll: Boolean): IDataValidatorResult;
+function TDataValidatorValue.Check(const ACheckAll: Boolean): IDataValidatorResult;
   function ValueString(const AValue: TValue): string;
   var
     LJSONPair: TJSONPair;

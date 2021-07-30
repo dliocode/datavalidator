@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsDate;
+unit Validator.IsDateTime;
 
 interface
 
@@ -14,7 +14,7 @@ uses
   System.SysUtils, System.DateUtils;
 
 type
-  TValidatorIsDate = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsDateTime = class(TDataValidatorItemBase, IDataValidatorItem)
   private
     FJSONISO8601ReturnUTC: Boolean;
   public
@@ -24,16 +24,16 @@ type
 
 implementation
 
-{ TValidatorIsDate }
+{ TValidatorIsDateTime }
 
-constructor TValidatorIsDate.Create(const AJSONISO8601ReturnUTC: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsDateTime.Create(const AJSONISO8601ReturnUTC: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsDate.Checked: IDataValidatorResult;
+function TValidatorIsDateTime.Checked: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -41,7 +41,7 @@ var
 begin
   LValue := GetValueAsString;
 
-  R := TryStrToDate(LValue, LDate);
+  R := TryStrToDateTime(LValue, LDate);
 
   if not R then
     R := TryISO8601ToDate(LValue, LDate, FJSONISO8601ReturnUTC);

@@ -24,25 +24,18 @@ type
     function Informations: IDataValidatorInformationsResult;
     function Values: TArray<string>;
 
-    constructor Create(const AOK: Boolean; const ADataInformations: IDataValidatorInformations; const ADataValues: TArray<string>);
+    constructor Create(const AOK: Boolean; const ADataInformation: IDataValidatorInformation); overload;
+    constructor Create(const AOK: Boolean; const ADataInformations: IDataValidatorInformations; const ADataValues: TArray<string>); overload;
     destructor Destroy; override;
-
-    class function New(const AOK: Boolean; const ADataInformation: IValidatorInformation): IDataValidatorResult; overload;
-    class function New(const AOK: Boolean; const ADataInformations: IDataValidatorInformations; const ADataValues: TArray<string> = []): IDataValidatorResult; overload;
   end;
 
 implementation
 
 { TDataValidatorResult }
 
-class function TDataValidatorResult.New(const AOK: Boolean; const ADataInformations: IDataValidatorInformations; const ADataValues: TArray<string> = []): IDataValidatorResult;
+constructor TDataValidatorResult.Create(const AOK: Boolean; const ADataInformation: IDataValidatorInformation);
 begin
-  Result := TDataValidatorResult.Create(AOK, ADataInformations, ADataValues);
-end;
-
-class function TDataValidatorResult.New(const AOK: Boolean; const ADataInformation: IValidatorInformation): IDataValidatorResult;
-begin
-  Result := TDataValidatorResult.Create(AOK, TDataValidatorInformations.Create.Add(ADataInformation), []);
+  Create(AOK, TDataValidatorInformations.Create.Add(ADataInformation), []);
 end;
 
 constructor TDataValidatorResult.Create(const AOK: Boolean; const ADataInformations: IDataValidatorInformations; const ADataValues: TArray<string>);
@@ -54,6 +47,7 @@ end;
 
 destructor TDataValidatorResult.Destroy;
 begin
+  FDataInformations := nil;
   inherited;
 end;
 

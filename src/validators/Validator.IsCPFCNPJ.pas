@@ -51,7 +51,7 @@ begin
   if not R then
     R := FValidatorCNPJ.Checked.OK;
 
-  Result := TDataValidatorResult.New(R, TDataValidatorInformation.New(GetValueAsString, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(GetValueAsString, FMessage, FExecute));
 end;
 
 end.

@@ -51,7 +51,7 @@ begin
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.New(R, TDataValidatorInformation.New(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
 end;
 
 function TValidatorIsCNPJ.Validate(const ACNPJ: string): Boolean;

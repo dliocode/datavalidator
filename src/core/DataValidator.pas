@@ -10,39 +10,43 @@ unit DataValidator;
 interface
 
 uses
-  DataValidator.Base.Intf, DataValidator.JSON.Intf, DataValidator.Values.Intf, DataValidator.Result.Intf,
-  DataValidator.JSON, DataValidator.Values, DataValidator.Schema, DataValidator.Types,
+  DataValidator.Intf, DataValidator.Context.Intf, DataValidator.Result.Intf,
+  DataValidator.Types, DataValidator.Schema, DataValidator.Value, DataValidator.JSON,
   System.JSON;
 
 type
-  IDataValidatorValues = DataValidator.Values.Intf.IDataValidatorValues;
-  IDataValidatorSchema = DataValidator.Base.Intf.IDataValidatorSchema;
-  IDataValidatorResult = DataValidator.Result.Intf.IDataValidatorResult;
   TDataValidatorLocaleLanguage = DataValidator.Types.TDataValidatorLocaleLanguage;
 
+  IDataValidatorSchemaContext = DataValidator.Context.Intf.IDataValidatorSchemaContext;
+  IDataValidatorValueResult = DataValidator.Intf.IDataValidatorValueResult;
+  IDataValidatorJSONResult = DataValidator.Intf.IDataValidatorJSONResult;
+  IDataValidatorResult = DataValidator.Result.Intf.IDataValidatorResult;
+
   TDataValidator = class
+  private
   public
-    class function Schema: IDataValidatorsBase<IDataValidatorSchema>;
-    class function Values: IDataValidatorValuesBase;
-    class function JSON(const AJSON: TJSONObject): IDataValidatorJSONBase;
+    class function Schema: IDataValidatorSchema;
+    class function Values: IDataValidatorValue;
+    class function JSON(const AJSON: TJSONObject): IDataValidatorJSON;
   end;
+
 implementation
 
 { TDataValidator }
 
-class function TDataValidator.Schema: IDataValidatorsBase<IDataValidatorSchema>;
+class function TDataValidator.Schema: IDataValidatorSchema;
 begin
-  Result := TDataValidatorSchema.New;
+  Result := TDataValidatorSchema.Create();
 end;
 
-class function TDataValidator.Values: IDataValidatorValuesBase;
+class function TDataValidator.Values: IDataValidatorValue;
 begin
-  Result := TDataValidatorValues.New;
+  Result := TDataValidatorValue.Create();
 end;
 
-class function TDataValidator.JSON(const AJSON: TJSONObject): IDataValidatorJSONBase;
+class function TDataValidator.JSON(const AJSON: TJSONObject): IDataValidatorJSON;
 begin
-  Result := TDataValidatorJSON.New(AJSON);
+  Result := TDataValidatorJSON.Create(AJSON);
 end;
 
 end.

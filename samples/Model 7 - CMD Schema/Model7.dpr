@@ -8,11 +8,11 @@ uses
   DataValidator,
   System.SysUtils;
 
-function SchemaNome(const AField: string): IDataValidatorSchema;
+function SchemaNome(const AField: string): IDataValidatorSchemaContext;
 begin
   Result :=
-  TDataValidator
-    .Schema
+  TDataValidator.Schema
+    .Validate
       .Trim
       .&Not.IsEmpty.WithMessage('Preencha o campo %s !', [AField]) // Não pode ser vazio
       .IsLength(2, 10).WithMessage('O campo %s deve conter entre 2 a 10 caracteres!', [AField])
@@ -20,11 +20,11 @@ begin
     .&End;
 end;
 
-function SchemaEmail(const AField: string): IDataValidatorSchema;
+function SchemaEmail(const AField: string): IDataValidatorSchemaContext;
 begin
   Result :=
-  TDataValidator
-    .Schema
+  TDataValidator.Schema
+    .Validate
       .Trim
       .&Not.IsEmpty.WithMessage('O %s não pode ser vazio!',[AField])
       .IsLength(2, 999).WithMessage('O campo %s deve ter mais de 6 caracteres!', [AField])

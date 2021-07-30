@@ -5,16 +5,16 @@
   *************************************
 }
 
-unit Validator.IsRequired;
+unit Validator.JSON.Value.IsArray;
 
 interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils;
+  System.JSON;
 
 type
-  TValidatorIsRequired = class(TDataValidatorItemBase, IDataValidatorItem)
+  TDataValidatorJSONValueIsArray = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Checked: IDataValidatorResult;
@@ -23,35 +23,35 @@ type
 
 implementation
 
-{ TValidatorIsRequired }
+{ TDataValidatorJSONValueIsArray }
 
-constructor TValidatorIsRequired.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TDataValidatorJSONValueIsArray.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsRequired.Checked: IDataValidatorResult;
+function TDataValidatorJSONValueIsArray.Checked: IDataValidatorResult;
 var
   R: Boolean;
-  LValue : string;
+  LValue: string;
   LJSONPair: TJSONPair;
 begin
+  R := False;
   LValue := GetValueAsString;
 
   if FValue.IsType<TJSONPair> then
   begin
     LJSONPair := FValue.AsType<TJSONPair>;
 
-    R := Assigned(LJSONPair);
-  end
-  else
-    R := not Trim(GetValueAsString).IsEmpty;
+    if Assigned(LJSONPair) then
+      R := LJSONPair.JsonValue is TJSONArray;
+  end;
 
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.New(R, TDataValidatorInformation.New(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
 end;
 
 end.

@@ -11,10 +11,10 @@ interface
 
 uses
   DataValidator.Types, DataValidator.Information.Intf,
-  System.Classes;
+  System.Classes, System.Generics.Collections;
 
 type
-  TDataValidatorInformation = class(TInterfacedObject, IValidatorInformation)
+  TDataValidatorInformation = class(TInterfacedObject, IDataValidatorInformation)
   private
     FValue: Variant;
     FMessage: string;
@@ -26,18 +26,18 @@ type
     procedure OnExecute;
 
     constructor Create(const AValue: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    destructor Destroy; override;
 
-    class function New(const AValue: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil): IValidatorInformation;
   end;
 
   TDataValidatorInformations = class(TInterfacedObject, IDataValidatorInformations)
   private
-    FList: IInterfaceList;
+    FList: TList<IDataValidatorInformation>;
   public
-    function Add(const ADataInformation: IValidatorInformation): IDataValidatorInformations; overload;
+    function Add(const ADataInformation: IDataValidatorInformation): IDataValidatorInformations; overload;
     function Add(const ADataInformations: IDataValidatorInformations): IDataValidatorInformations; overload;
 
-    function GetItem(const Index: Integer): IValidatorInformation;
+    function GetItem(const Index: Integer): IDataValidatorInformation;
     function Count: Integer;
     function Message: string;
 
@@ -52,16 +52,18 @@ implementation
 constructor TDataValidatorInformations.Create;
 begin
   inherited;
-  FList := TInterfaceList.Create;
+  FList := TList<IDataValidatorInformation>.Create;
 end;
 
 destructor TDataValidatorInformations.Destroy;
 begin
   FList.Clear;
+  FList.DisposeOf;
+
   inherited;
 end;
 
-function TDataValidatorInformations.Add(const ADataInformation: IValidatorInformation): IDataValidatorInformations;
+function TDataValidatorInformations.Add(const ADataInformation: IDataValidatorInformation): IDataValidatorInformations;
 begin
   Result := Self;
   FList.Add(ADataInformation);
@@ -77,9 +79,9 @@ begin
     FList.Add(ADataInformations.GetItem(I));
 end;
 
-function TDataValidatorInformations.GetItem(const Index: Integer): IValidatorInformation;
+function TDataValidatorInformations.GetItem(const Index: Integer): IDataValidatorInformation;
 begin
-  Result := FList.Items[Index] as IValidatorInformation;
+  Result := FList.Items[Index];
 end;
 
 function TDataValidatorInformations.Count: Integer;
@@ -105,16 +107,16 @@ end;
 
 { TDataValidatorInformation }
 
-class function TDataValidatorInformation.New(const AValue: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil): IValidatorInformation;
-begin
-  Result := TDataValidatorInformation.Create(AValue, AMessage, AExecute);
-end;
-
 constructor TDataValidatorInformation.Create(const AValue: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FValue := AValue;
   FMessage := AMessage;
   FExecute := AExecute;
+end;
+
+destructor TDataValidatorInformation.Destroy;
+begin
+  inherited;
 end;
 
 function TDataValidatorInformation.Value: string;

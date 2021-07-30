@@ -105,23 +105,6 @@
             <Form>Form1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\..\src\core\DataValidator.Base.Intf.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.Base.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.Information.Intf.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.Information.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.Intf.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.ItemBase.Intf.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.ItemBase.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.ItemBase.Sanitizer.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.JSON.Intf.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.JSON.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.Result.Intf.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.Result.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.Schema.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.Types.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.Values.Intf.pas"/>
-        <DCCReference Include="..\..\src\core\DataValidator.Values.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

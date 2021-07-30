@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsCEP;  // (Brasil) CEP (Código de Endereçamento Postal)
+unit Validator.IsCEP; // (Brasil) CEP (Código de Endereçamento Postal)
 
 interface
 
@@ -45,7 +45,7 @@ begin
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.New(R, TDataValidatorInformation.New(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
 end;
 
 end.

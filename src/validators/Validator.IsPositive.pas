@@ -39,13 +39,16 @@ begin
   LValue := GetValueAsString;
   R := False;
 
-  if not Trim(LValue).IsEmpty then
-    R := VarCompareValue(LValue, 0) = vrGreaterThan;
+  try
+    if not Trim(LValue).IsEmpty then
+      R := VarCompareValue(LValue, 0) = vrGreaterThan;
+  except
+  end;
 
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.New(R, TDataValidatorInformation.New(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
 end;
 
 end.

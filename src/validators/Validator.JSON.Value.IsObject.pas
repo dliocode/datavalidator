@@ -5,16 +5,16 @@
   *************************************
 }
 
-unit Validator.IsZero;
+unit Validator.JSON.Value.IsObject;
 
 interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils, System.Variants;
+  System.JSON;
 
 type
-  TValidatorIsZero = class(TDataValidatorItemBase, IDataValidatorItem)
+  TDataValidatorJSONValueIsObject = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Checked: IDataValidatorResult;
@@ -23,26 +23,29 @@ type
 
 implementation
 
-{ TValidatorIsZero }
+{ TDataValidatorJSONValueIsObject }
 
-constructor TValidatorIsZero.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TDataValidatorJSONValueIsObject.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsZero.Checked: IDataValidatorResult;
+function TDataValidatorJSONValueIsObject.Checked: IDataValidatorResult;
 var
-  LValue: string;
   R: Boolean;
+  LValue: string;
+  LJSONPair: TJSONPair;
 begin
-  LValue := GetValueAsString;
   R := False;
+  LValue := GetValueAsString;
 
-  try
-    if not Trim(LValue).IsEmpty then
-      R := VarCompareValue(LValue, 0) = vrEqual;
-  except
+  if FValue.IsType<TJSONPair> then
+  begin
+    LJSONPair := FValue.AsType<TJSONPair>;
+
+    if Assigned(LJSONPair) then
+      R := LJSONPair.JsonValue is TJSONObject;
   end;
 
   if FIsNot then

@@ -37,6 +37,10 @@ Adicione as seguintes pastas ao seu projeto, em *Project > Options > Delphi Comp
 ../datavalidator/src/validators
 ```
 
+#### Samples
+  * Veja alguns exemplos: [samples](https://github.com/dliocode/datavalidator/tree/main/samples)
+
+
 ## Como usar
 
 #### **Uses necessária**
@@ -52,7 +56,7 @@ uses DataValidator;
 
 ##### Modo: Values
 
-- No modo value, o valor informado no **_validate_** é o que será analisado! 
+- No modo values, o valor informado no **_validate_** é o que será analisado! 
 
 ```
 var
@@ -96,31 +100,47 @@ begin
     TDataValidator.JSON(AJO)
 
     .Validate('apelido')
-      .Trim
-      .&Not.IsEmpty.WithMessage('Você não informou o seu apelido!')
-      .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu apelido deve conter apenas letras!')
-      .IsLength(1, 10).WithMessage('O apelido deve ter no máximo 10 caracteres!')
+      .Value
+        .Trim
+        .&Not.IsEmpty.WithMessage('Você não informou o seu apelido!')
+        .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu apelido deve conter apenas letras!')
+        .IsLength(1, 10).WithMessage('O apelido deve ter no máximo 10 caracteres!')
+      .&End        
     .&End
 
     .Validate('email')
-      .Trim
-      .&Not.IsEmpty.WithMessage('Você não informou o seu e-mail!')
-      .IsEmail.WithMessage('Não é um e-mail válido!')
-      .NormalizeEmail
+      .Value
+        .Trim
+        .&Not.IsEmpty.WithMessage('Você não informou o seu e-mail!')
+        .IsEmail.WithMessage('Não é um e-mail válido!')
+        .NormalizeEmail
+      .&End      
     .&End
 
-    .Validate('login').IsRequiredKey.WithMessage('É obrigatório ter a Key "login" no JSON.') // Obriga
-      .Trim
-      .&Not.IsEmpty.WithMessage('Você não informou o login!')
-      .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu login deve conter apenas letras!')
-      .IsLength(1, 10).WithMessage('O login deve ter no máximo 10 caracteres!')
+    .Validate('login')
+      .Key // Faz a validação somente da key
+        .IsRequired.WithMessage('É obrigatório ter a Key "login" no JSON.')
+      .&End
+
+      .Value // Faz a validação somente do valor dentro da Key 'login'
+        .Trim
+        .&Not.IsEmpty.WithMessage('Você não informou o login!')
+        .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu login deve conter apenas letras!')
+        .IsLength(1, 10).WithMessage('O login deve ter no máximo 10 caracteres!')
+      .&End      
     .&End
 
-    .Validate('nome').IsOptionalKey // É opcional - se existir a Key "nome" ele faz a validação
-      .Trim
-      .&Not.IsEmpty.WithMessage('Você não informou o nome!')
-      .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu nome deve conter apenas letras!')
-      .IsLength(1, 10).WithMessage('O nome deve ter no máximo 10 caracteres!')
+    .Validate('nome')
+      .Key
+        .IsOptionalKey // É opcional - se existir a Key "nome" ele faz a validação
+      .&End  
+
+      .Value      
+        .Trim
+        .&Not.IsEmpty.WithMessage('Você não informou o nome!')
+        .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu nome deve conter apenas letras!')
+        .IsLength(1, 10).WithMessage('O nome deve ter no máximo 10 caracteres!')
+      .&End      
     .&End
 
     .CheckedAll;
@@ -154,14 +174,14 @@ begin
 - **CheckedAll**: Faz a verificação de todos os **_validate_**!
 
 #### **Validação Schema**
-- É uma forma de criar uma validação e conseguir reutilizar a mesma validação em outros **_validate_**.
+- É uma forma de criar um esqueleto de validação e conseguir reutilizar em outras validações.
 
 ```
-function SchemaNome(const AField: string): IDataValidatorSchema;
+function SchemaNome(const AField: string): IDataValidatorSchemaContext;
 begin
   Result :=
-  TDataValidator
-    .Schema
+  TDataValidator.Schema
+    .Validate
       .Trim
       .&Not.IsEmpty.WithMessage('Preencha o campo %s !', [AField]) // Não pode ser vazio
       .IsLength(2, 10).WithMessage('O campo %s deve conter entre 2 a 10 caracteres!', [AField])
@@ -169,11 +189,11 @@ begin
     .&End;
 end;
 
-function SchemaEmail(const AField: string): IDataValidatorSchema;
+function SchemaEmail(const AField: string): IDataValidatorSchemaContext;
 begin
   Result :=
-  TDataValidator
-    .Schema
+  TDataValidator.Schema
+    .Validate
       .Trim
       .&Not.IsEmpty.WithMessage('O %s não pode ser vazio!',[AField])
       .IsLength(2, 999).WithMessage('O campo %s deve ter mais de 6 caracteres!', [AField])
@@ -226,63 +246,61 @@ TDataValidator.Values
 | Nome | Informação |
 | ------------ | ------------ |
 | Not | Quando usado esse validador, ele nega o resultado do validador. <br /> Ex: **Validate('email').&Not.IsEmpty** <br /> Se entende que o valor não deve ser vazio.|
-| Execute | Define o que deve ser executado se aquele **_validate_** não passar na validação. |
-| WithMessage | Define a mensagem do erro |
+| Execute | Define o que deve ser executado se aquele **_validate_** não passar na validação. A execução dessa procedure é forma manual. <br> Ex: <br> CheckedAll.Informations.GetItem(0).OnExecute;|
+| WithMessage | Define a mensagem do error |
 
 ## Validators / Sanitizers
 
-|Validators for All|Validators for JSON|Sanitizers|
-| ------------ | ------------ | ------------ |
-|Contains|IsOptionalKey|NormalizeEmail|
-|IsAlpha|IsRequiredKey|RemoveAccents|
-|IsAlphaNumeric||Replace|
-|IsBase64||ToBase64Decode|
-|IsBetween||ToBase64Encode|
-|IsBetween||ToHTMLDecode|
-|IsBetween||ToHTMLEncode|
-|IsBetween||ToInteger|
-|IsBetween||ToLowerCase|
-|IsBetween||ToMD5|
-|IsBTCAddress||ToNumeric|
-|IsCEP||ToUpperCase|
-|IsCNPJ||ToURLDecode|
-|IsCPF||ToURLEncode|
-|IsCPFCNPJ||Trim|
-|IsDate||TrimLeft|
-|IsDateBetween||TrimRight|
-|IsDateEquals|||
-|IsDateGreaterThan|||
-|IsDateLessThan|||
-|IsEmail|||
-|IsEmpty|||
-|IsEquals|||
-|IsEthereumAddress|||
-|IsGreaterThan|||
-|IsHexadecimal|||
-|IsInteger|||
-|IsIP|||
-|IsJSON|||
-|IsLength|||
-|IsLessThan|||
-|IsLowercase|||
-|IsMACAddress|||
-|IsMD5|||
-|IsNegative|||
-|IsNumeric|||
-|IsPhoneNumber|||
-|IsPositive|||
-|IsSSN|||
-|IsTime|||
-|IsTimeBetween|||
-|IsTimeEquals|||
-|IsTimeGreaterThan|||
-|IsTimeLessThan|||
-|IsUppercase|||
-|IsURL|||
-|IsUUID|||
-|IsUUIDv1|||
-|IsUUIDv2|||
-|IsUUIDv3|||
-|IsUUIDv4|||
-|IsUUIDv5|||
-|IsZero|||
+|Validação para values  |Validação JSON (Key/Value)    |Sanitizers para Valus |
+| ------------  	      | ------------  	                | ------------  	  |
+|CustomValue            |(Key) IsOptional                 |CustomSanitizer	  |
+|Contains       	      |(Key) IsRequired	                |NormalizeEmail     |
+|IsAlpha        	      |(Value) IsArray                  |OnlyNumbers   		  |
+|IsAlphaNumeric 	      |(Value) IsObject                 |RemoveAccents      |
+|IsBase64       	      |(Value) + Validação para values  |Replace            |
+|IsBetween      	      |                                 |ToBase64Decode     |
+|IsBTCAddress   		    |                                 |ToBase64Encode     |
+|IsCEP          		    |                                 |ToDate             |
+|IsCNPJ         		    |                                 |ToDateTime         |
+|IsCPF          		    |                                 |ToHTMLDecode	      |
+|IsCPFCNPJ      		    |                                 |ToHTMLEncode	      |
+|IsDate         	      |                                 |ToInteger			    |
+|IsDateBetween  	      |                                 |ToLowerCase		    |
+|IsDateEquals     	    |                                 |ToMD5				 	    |
+|IsDateGreaterThan	    |                                 |ToNumeric     	    |
+|IsDateLessThan		      |                                 |ToTime             |
+|IsDateTime			        |                                 |ToUpperCase	      |
+|IsEmail			          |                                 |ToURLDecode        |
+|IsEmpty			          |                                 |ToURLEncode		    |
+|IsEquals			          |                                 |Trim			          |
+|IsEthereumAddress	    |                                 |TrimLeft      	    |
+|IsGreaterThan		      |                                 |TrimRight          |
+|IsHexadecimal		      |                                 |                   |
+|IsInteger			        |                                 |                   |
+|IsIP				            |                                 |					          |
+|IsJSON				          |                                 |					          |
+|IsLength			          |                                 |					          |
+|IsLessThan			        |                                 |					          |
+|IsLowercase		        |                                 |					          |
+|IsMACAddress		        |                                 |					          |
+|IsMD5				          |                                 |					          |
+|IsNegative			        |                                 |					          |
+|IsNumeric			        |                                 |					          |
+|IsPhoneNumber		      |                                 |					          |
+|IsPositive			        |                                 |					          |
+|IsSSN			            |                                 |					          |
+|IsTime				          |                                 |					          |
+|IsTimeBetween		      |                                 |					          |
+|IsTimeEquals		        |                                 |					          |
+|IsTimeGreaterThan	    |                                 |					          |
+|IsTimeLessThan		      |                                 |					          |
+|IsUppercase		        |                                 |					          |
+|IsURL				          |                                 |					          |
+|IsUUID				          |                                 |					          |
+|IsUUIDv1			          |                                 |					          |
+|IsUUIDv2			          |                                 |					          |
+|IsUUIDv3			          |                                 |					          |
+|IsUUIDv4			          |                                 |					          |
+|IsUUIDv5			          |                                 |					          |
+|IsZero				          |                                 |					          |
+|                       |                                 |					          |

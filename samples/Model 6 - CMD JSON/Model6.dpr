@@ -15,31 +15,47 @@ begin
     TDataValidator.JSON(AJO)
 
     .Validate('apelido')
-      .Trim
-      .&Not.IsEmpty.WithMessage('Você não informou o seu apelido!')
-      .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu apelido deve conter apenas letras!')
-      .IsLength(1, 10).WithMessage('O apelido deve ter no máximo 10 caracteres!')
+      .Value
+        .Trim
+        .&Not.IsEmpty.WithMessage('Você não informou o seu apelido!')
+        .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu apelido deve conter apenas letras!')
+        .IsLength(1, 10).WithMessage('O apelido deve ter no máximo 10 caracteres!')
+      .&End
     .&End
 
     .Validate('email')
-      .Trim
-      .&Not.IsEmpty.WithMessage('Você não informou o seu e-mail!')
-      .IsEmail.WithMessage('Não é um e-mail válido!')
-      .NormalizeEmail
+      .Value
+        .Trim
+        .&Not.IsEmpty.WithMessage('Você não informou o seu e-mail!')
+        .IsEmail.WithMessage('Não é um e-mail válido!')
+        .NormalizeEmail
+      .&End
     .&End
 
-    .Validate('login').IsRequiredKey.WithMessage('É obrigatório ter a Key "login" no JSON.') // Obriga
-      .Trim
-      .&Not.IsEmpty.WithMessage('Você não informou o login!')
-      .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu login deve conter apenas letras!')
-      .IsLength(1, 10).WithMessage('O login deve ter no máximo 10 caracteres!')
+    .Validate('login')
+      .Key
+        .IsRequired.WithMessage('É obrigatório ter a Key "login" no JSON.') // Obriga
+      .&End
+
+      .Value
+        .Trim
+        .&Not.IsEmpty.WithMessage('Você não informou o login!')
+        .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu login deve conter apenas letras!')
+        .IsLength(1, 10).WithMessage('O login deve ter no máximo 10 caracteres!')
+      .&End
     .&End
 
-    .Validate('nome').IsOptionalKey // É opcional - se existir a Key "nome" ele faz a validação
-      .Trim
-      .&Not.IsEmpty.WithMessage('Você não informou o nome!')
-      .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu nome deve conter apenas letras!')
-      .IsLength(1, 10).WithMessage('O nome deve ter no máximo 10 caracteres!')
+    .Validate('nome')
+      .Key
+        .IsOptional // É opcional - se existir a Key "nome" ele faz a validação
+      .&End
+
+      .Value
+        .Trim
+        .&Not.IsEmpty.WithMessage('Você não informou o nome!')
+        .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Seu nome deve conter apenas letras!')
+        .IsLength(1, 10).WithMessage('O nome deve ter no máximo 10 caracteres!')
+      .&End
     .&End
 
     .CheckedAll;

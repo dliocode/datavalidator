@@ -11,24 +11,26 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils, System.DateUtils, System.Variants, System.Types;
+  System.SysUtils, System.DateUtils, System.Types;
 
 type
   TValidatorIsDateGreaterThan = class(TDataValidatorItemBase, IDataValidatorItem)
   private
     FCompareDate: TDate;
+    FJSONISO8601ReturnUTC: Boolean;
   public
     function Checked: IDataValidatorResult;
-    constructor Create(const ACompareDate: TDate; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const ACompareDate: TDate; const AJSONISO8601ReturnUTC: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
 { TValidatorIsDateGreaterThan }
 
-constructor TValidatorIsDateGreaterThan.Create(const ACompareDate: TDate; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsDateGreaterThan.Create(const ACompareDate: TDate; const AJSONISO8601ReturnUTC: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FCompareDate := ACompareDate;
+  FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;
   FMessage := AMessage;
   FExecute := AExecute;
 end;
@@ -40,15 +42,19 @@ var
   LDate: TDateTime;
 begin
   LValue := GetValueAsString;
-  R := False;
 
-  if TryStrToDate(VarToStr(LValue), LDate) then
+  R := TryStrToDate(LValue, LDate);
+
+  if not R then
+    R := TryISO8601ToDate(LValue, LDate, FJSONISO8601ReturnUTC);
+
+  if R then
     R := CompareDate(LDate, FCompareDate) = GreaterThanValue;
 
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.New(R, TDataValidatorInformation.New(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
 end;
 
 end.

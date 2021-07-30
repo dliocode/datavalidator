@@ -28,7 +28,7 @@ type
     { Private declarations }
   public
     { Public declarations }
-    function Valid: IDataValidatorValues;
+    function Valid: IDataValidatorValueResult;
     procedure ShowResult(const AResult: IDataValidatorResult);
   end;
 
@@ -63,7 +63,7 @@ begin
   AResult.Informations.GetItem(0).OnExecute;
 end;
 
-function TForm1.Valid: IDataValidatorValues;
+function TForm1.Valid: IDataValidatorValueResult;
 begin
   Result :=
 

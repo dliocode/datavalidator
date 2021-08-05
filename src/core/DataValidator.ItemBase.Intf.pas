@@ -10,10 +10,12 @@ unit DataValidator.ItemBase.Intf;
 interface
 
 uses
-  DataValidator.Types, DataValidator.Result.Intf,
+  DataValidator.Types, DataValidator.Result.Intf, DataValidator.Information.Intf,
   System.RTTI;
 
 type
+  TDataValidatorInformationExecute = DataValidator.Information.Intf.TDataValidatorInformationExecute;
+
   IDataValidatorItemBase = interface
     ['{7A448738-20D6-439D-868C-F28D135B65D8}']
     function GetDataValidatorLocaleLanguage: TDataValidatorLocaleLanguage;

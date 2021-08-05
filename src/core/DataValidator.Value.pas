@@ -11,7 +11,6 @@ interface
 
 uses
   DataValidator.Intf, DataValidator.Result.Intf, DataValidator.Information.Intf, DataValidator.ItemBase.Intf, DataValidator.Context.Intf,
-  DataValidator.Value.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase,
   System.Generics.Collections, System.Rtti, System.JSON;
 
 type
@@ -31,6 +30,9 @@ type
   end;
 
 implementation
+
+uses
+  DataValidator.Value.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase;
 
 { TDataValidatorValue }
 
@@ -85,11 +87,9 @@ var
   LOK: Boolean;
   LInfo: IDataValidatorInformations;
   I: Integer;
-
   LListValidatorItem: TList<IDataValidatorItem>;
   LValidatorItem: IDataValidatorItem;
   LValueSanitizer: TValue;
-
   J: Integer;
   LValidatorResult: IDataValidatorResult;
   LValues: TArray<string>;

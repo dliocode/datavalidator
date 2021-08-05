@@ -17,17 +17,23 @@ uses
 type
   TDataValidatorLocaleLanguage = DataValidator.Types.TDataValidatorLocaleLanguage;
 
-  IDataValidatorSchemaContext = DataValidator.Context.Intf.IDataValidatorSchemaContext;
+  IDataValidatorSchema = DataValidator.Intf.IDataValidatorSchema;
+  IDataValidatorValue = DataValidator.Intf.IDataValidatorValue;
+  IDataValidatorJSON = DataValidator.Intf.IDataValidatorJSON;
+
   IDataValidatorValueResult = DataValidator.Intf.IDataValidatorValueResult;
   IDataValidatorJSONResult = DataValidator.Intf.IDataValidatorJSONResult;
+
   IDataValidatorResult = DataValidator.Result.Intf.IDataValidatorResult;
+  IDataValidatorSchemaContext = DataValidator.Context.Intf.IDataValidatorSchemaContext;
 
   TDataValidator = class
   private
   public
     class function Schema: IDataValidatorSchema;
     class function Values: IDataValidatorValue;
-    class function JSON(const AJSON: TJSONObject): IDataValidatorJSON;
+    class function JSON(const AJSON: TJSONObject): IDataValidatorJSON; overload;
+    class function JSON(const AJSON: TJSONArray): IDataValidatorJSON; overload;
   end;
 
 implementation
@@ -45,6 +51,11 @@ begin
 end;
 
 class function TDataValidator.JSON(const AJSON: TJSONObject): IDataValidatorJSON;
+begin
+  Result := TDataValidatorJSON.Create(AJSON);
+end;
+
+class function TDataValidator.JSON(const AJSON: TJSONArray): IDataValidatorJSON;
 begin
   Result := TDataValidatorJSON.Create(AJSON);
 end;

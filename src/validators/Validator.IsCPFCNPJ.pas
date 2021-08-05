@@ -39,19 +39,27 @@ end;
 function TValidatorIsCPFCNPJ.Checked: IDataValidatorResult;
 var
   R: Boolean;
+  LResult : IDataValidatorResult;
+  LValue: string;
 begin
   FValidatorCPF.SetIsNot(FIsNot);
   FValidatorCPF.SetValue(FValue);
 
-  FValidatorCNPJ.SetIsNot(FIsNot);
-  FValidatorCNPJ.SetValue(FValue);
-
-  R := FValidatorCPF.Checked.OK;
+  LResult := FValidatorCPF.Checked;
+  R := LResult.OK;
+  LValue := LResult.Values[0];
 
   if not R then
-    R := FValidatorCNPJ.Checked.OK;
+  begin
+    FValidatorCNPJ.SetIsNot(FIsNot);
+    FValidatorCNPJ.SetValue(FValue);
 
-  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(GetValueAsString, FMessage, FExecute));
+    LResult := FValidatorCNPJ.Checked;
+    R := LResult.OK;
+    LValue := LResult.Values[0];
+  end;
+
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
 end;
 
 end.

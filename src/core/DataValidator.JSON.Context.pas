@@ -10,10 +10,9 @@ unit DataValidator.JSON.Context;
 interface
 
 uses
-  DataValidator.JSON.Context.Intf,
+  DataValidator.JSON.Context.Intf, DataValidator.ItemBase.Intf,
   DataValidator.Types, DataValidator.Context,
-  System.JSON, DataValidator.ItemBase.Intf, DataValidator.Context.Intf,
-  System.Generics.Collections;
+  System.JSON, System.Generics.Collections;
 
 type
   TDataValidatorJSONContext<T: IInterface> = class(TDataValidatorContext<IDataValidatorJSONContextValue<T>>, IDataValidatorJSONContext<T>, IDataValidatorJSONContextKey<T>, IDataValidatorJSONContextValue<T>)
@@ -47,7 +46,8 @@ implementation
 
 uses
   Validator.JSON.Value.IsArray,
-  Validator.JSON.Value.IsObject, Validator.JSON.Key.IsRequired;
+  Validator.JSON.Value.IsObject,
+  Validator.JSON.Key.IsRequired;
 
 { TDataValidatorJSONContext<T> }
 

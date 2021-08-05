@@ -37,7 +37,9 @@ type
     // Values
     function CustomValue(const AValidatorItem: IDataValidatorItem): T; overload;
     function CustomValue(const AExecute: TDataValidatorCustomExecute): T; overload;
-    function Contains(const AValueContains: string; const ACaseSensitive: Boolean = False): T;
+    function CustomValue(const AExecute: TDataValidatorCustomMessageExecute): T; overload;
+    function Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
+    function Contains(const AValueContains: string; const ACaseSensitive: Boolean = False): T; overload;
     function IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsAlphaNumeric(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsBase64(): T;
@@ -60,7 +62,8 @@ type
     function IsDateTime(const AJSONISO8601ReturnUTC: Boolean = True): T;
     function IsEmail(): T;
     function IsEmpty(): T;
-    function IsEquals(const AValueEquals: string; const ACaseSensitive: Boolean = False): T;
+    function IsEquals(const AValueEquals: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
+    function IsEquals(const AValueEquals: string; const ACaseSensitive: Boolean = False): T; overload;
     function IsEthereumAddress(): T;
     function IsGreaterThan(const AValueGreaterThan: Integer): T;
     function IsHexadecimal(): T;
@@ -263,12 +266,29 @@ end;
 
 function TDataValidatorContext<T>.CustomValue(const AExecute: TDataValidatorCustomExecute): T;
 begin
-  Result := Add(TValidatorCustom.Create(AExecute, 'Value false!'));
+  Result := Add(TValidatorCustom.Create(AExecute, nil, 'Value false!'));
+end;
+
+function TDataValidatorContext<T>.CustomValue(const AExecute: TDataValidatorCustomMessageExecute): T;
+begin
+  Result := Add(TValidatorCustom.Create(nil, AExecute, 'Value false!'));
+end;
+
+function TDataValidatorContext<T>.Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean): T;
+var
+  LValue: string;
+  LMessage: string;
+begin
+  LMessage := '';
+  for LValue in AValueContains do
+    LMessage := LMessage + LValue + ' ';
+
+  Result := Add(TValidatorContains.Create(AValueContains, ACaseSensitive, Format('Value not contains %s!', [LMessage])));
 end;
 
 function TDataValidatorContext<T>.Contains(const AValueContains: string; const ACaseSensitive: Boolean): T;
 begin
-  Result := Add(TValidatorContains.Create(AValueContains, ACaseSensitive, Format('Value not contains %s!', [AValueContains])));
+  Result := Contains([AValueContains], ACaseSensitive);
 end;
 
 function TDataValidatorContext<T>.IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage): T;
@@ -381,9 +401,21 @@ begin
   Result := Add(TValidatorIsEmpty.Create('Value is not empty!'));
 end;
 
+function TDataValidatorContext<T>.IsEquals(const AValueEquals: TArray<string>; const ACaseSensitive: Boolean): T;
+var
+  LValue: string;
+  LMessage: string;
+begin
+  LMessage := '';
+  for LValue in AValueEquals do
+    LMessage := LMessage + LValue + ' ';
+
+  Result := Add(TValidatorIsEquals.Create(AValueEquals, ACaseSensitive, Format('Value is not equals %s!', [LMessage])));
+end;
+
 function TDataValidatorContext<T>.IsEquals(const AValueEquals: string; const ACaseSensitive: Boolean): T;
 begin
-  Result := Add(TValidatorIsEquals.Create(AValueEquals, ACaseSensitive, Format('Value is not equals %s!', [AValueEquals])));
+  Result := IsEquals([AValueEquals], ACaseSensitive);
 end;
 
 function TDataValidatorContext<T>.IsEthereumAddress: T;

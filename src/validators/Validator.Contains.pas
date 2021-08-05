@@ -11,23 +11,23 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils;
+  System.SysUtils, System.StrUtils;
 
 type
   TValidatorContains = class(TDataValidatorItemBase, IDataValidatorItem)
   private
-    FValueContains: string;
+    FValueContains: TArray<string>;
     FCaseSensitive: Boolean;
   public
     function Checked: IDataValidatorResult;
-    constructor Create(const AValueContains: string; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const AValueContains: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
 { TValidatorContains }
 
-constructor TValidatorContains.Create(const AValueContains: string; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorContains.Create(const AValueContains: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute);
 begin
   FValueContains := AValueContains;
   FCaseSensitive := ACaseSensitive;
@@ -39,13 +39,21 @@ function TValidatorContains.Checked: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
+  I: Integer;
 begin
   LValue := GetValueAsString;
+  R := False;
 
-  if FCaseSensitive then
-    R := Pos(FValueContains, LValue) > 0
-  else
-    R := Pos(LowerCase(FValueContains), LowerCase(LValue)) > 0;
+  for I := Low(FValueContains) to High(FValueContains) do
+  begin
+    if FCaseSensitive then
+      R := Pos(FValueContains[I], LValue) > 0
+    else
+      R := Pos(LowerCase(FValueContains[I]), LowerCase(LValue)) > 0;
+
+    if R then
+      Break;
+  end;
 
   if FIsNot then
     R := not R;

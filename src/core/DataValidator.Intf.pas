@@ -69,6 +69,11 @@ type
     function CheckedAll(): IDataValidatorResult;
   end;
 
+  IDataValidatorJSONValueName = interface
+    ['{AE29455D-802F-4527-9E17-546A28091809}']
+    function GetName: string;
+  end;
+
 implementation
 
 end.

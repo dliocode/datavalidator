@@ -19,7 +19,8 @@ type
 
   TDataValidatorLocaleLanguage = DataValidator.Types.TDataValidatorLocaleLanguage;
   TDataValidatorCustomExecute = DataValidator.Types.TDataValidatorCustomExecute;
-  TDataValidatorInformationExecute = DataValidator.Types.TDataValidatorInformationExecute;
+  TDataValidatorCustomMessageExecute = DataValidator.Types.TDataValidatorCustomMessageExecute;
+  TDataValidatorInformationExecute = DataValidator.ItemBase.Intf.TDataValidatorInformationExecute;
   IDataValidatorItem = DataValidator.ItemBase.Intf.IDataValidatorItem;
   IDataValidatorResult = DataValidator.Result.Intf.IDataValidatorResult;
   TDataValidatorResult = DataValidator.Result.TDataValidatorResult;

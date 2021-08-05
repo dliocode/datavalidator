@@ -10,7 +10,7 @@ unit DataValidator.Result;
 interface
 
 uses
-  DataValidator.Result.Intf, DataValidator.Information.Intf, DataValidator.Information,
+  DataValidator.Result.Intf, DataValidator.Information.Intf,
   System.SysUtils;
 
 type
@@ -30,6 +30,9 @@ type
   end;
 
 implementation
+
+uses
+   DataValidator.Information;
 
 { TDataValidatorResult }
 

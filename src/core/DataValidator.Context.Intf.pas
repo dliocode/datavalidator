@@ -56,7 +56,9 @@ type
     ['{F61EA315-86CA-4807-B1A1-F9030FADB844}']
     function CustomValue(const ADataItem: IDataValidatorItem): T; overload;
     function CustomValue(const AExecute: TDataValidatorCustomExecute): T; overload;
-    function Contains(const AValueContains: string; const ACaseSensitive: Boolean = False): T;
+    function CustomValue(const AExecute: TDataValidatorCustomMessageExecute): T; overload;
+    function Contains(const AValueContains: string; const ACaseSensitive: Boolean = False): T; overload;
+    function Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsAlphaNumeric(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsBase64(): T;
@@ -79,7 +81,8 @@ type
     function IsDateTime(const AJSONISO8601ReturnUTC: Boolean = True): T;
     function IsEmail(): T;
     function IsEmpty(): T;
-    function IsEquals(const AValueEquals: string; const ACaseSensitive: Boolean = False): T;
+    function IsEquals(const AValueEquals: string; const ACaseSensitive: Boolean = False): T; overload;
+    function IsEquals(const AValueEquals: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function IsEthereumAddress(): T;
     function IsGreaterThan(const AValueGreaterThan: Integer): T;
     function IsHexadecimal(): T;

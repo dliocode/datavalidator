@@ -17,18 +17,20 @@ type
   TValidatorCustom = class(TDataValidatorItemBase, IDataValidatorItem)
   private
     FCustomExecute: TDataValidatorCustomExecute;
+    FCustomMessageExecute: TDataValidatorCustomMessageExecute;
   public
     function Checked: IDataValidatorResult;
-    constructor Create(const ACustomExecute: TDataValidatorCustomExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const ACustomExecute: TDataValidatorCustomExecute; const ACustomMessageExecute: TDataValidatorCustomMessageExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
 { TValidatorCustom }
 
-constructor TValidatorCustom.Create(const ACustomExecute: TDataValidatorCustomExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorCustom.Create(const ACustomExecute: TDataValidatorCustomExecute; const ACustomMessageExecute: TDataValidatorCustomMessageExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FCustomExecute := ACustomExecute;
+  FCustomMessageExecute := ACustomMessageExecute;
   FMessage := AMessage;
   FExecute := AExecute;
 end;
@@ -44,6 +46,12 @@ begin
   if Assigned(FCustomExecute) then
     try
       R := FCustomExecute(LValue);
+    except
+    end;
+
+  if Assigned(FCustomMessageExecute) then
+    try
+      R := FCustomMessageExecute(LValue, FMessage);
     except
     end;
 

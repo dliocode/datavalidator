@@ -10,7 +10,7 @@ unit DataValidator.Schema;
 interface
 
 uses
-  DataValidator.Intf, DataValidator.Schema.Base;
+  DataValidator.Intf;
 
 type
   TDataValidatorSchema = class(TInterfacedObject, IDataValidatorSchema)
@@ -23,6 +23,9 @@ type
   end;
 
 implementation
+
+uses
+  DataValidator.Schema.Base;
 
 { TDataValidatorSchema }
 

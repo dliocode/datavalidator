@@ -303,4 +303,3 @@ TDataValidator.Values
 |IsUUIDv4			          |                                 |					          |
 |IsUUIDv5			          |                                 |					          |
 |IsZero				          |                                 |					          |
-|                       |                                 |					          |

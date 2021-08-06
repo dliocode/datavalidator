@@ -11,7 +11,7 @@ interface
 
 uses
   DataValidator.Types, DataValidator.Information.Intf,
-  System.Classes, System.Generics.Collections;
+  System.Classes, System.Generics.Collections, System.SysUtils;
 
 type
   TDataValidatorInformation = class(TInterfacedObject, IDataValidatorInformation)
@@ -99,7 +99,7 @@ begin
     for I := 0 to Pred(Count) do
       LSL.Add(GetItem(I).Message);
 
-    Result := LSL.Text;
+    Result := Trim(LSL.Text);
   finally
     LSL.DisposeOf
   end;

@@ -42,6 +42,8 @@ type
     function &End(): T;
     function IsArray(): IDataValidatorJSONContextValue<T>;
     function IsObject(): IDataValidatorJSONContextValue<T>;
+    function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
+    function MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
   end;
 
 implementation

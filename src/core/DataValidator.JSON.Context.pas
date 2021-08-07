@@ -12,7 +12,7 @@ interface
 uses
   DataValidator.JSON.Context.Intf, DataValidator.ItemBase.Intf,
   DataValidator.Types, DataValidator.Context,
-  System.JSON, System.Generics.Collections;
+  System.JSON, System.Generics.Collections, System.SysUtils;
 
 type
   TDataValidatorJSONContext<T: IInterface> = class(TDataValidatorContext<IDataValidatorJSONContextValue<T>>, IDataValidatorJSONContext<T>, IDataValidatorJSONContextKey<T>, IDataValidatorJSONContextValue<T>)
@@ -35,6 +35,9 @@ type
     // Value
     function IsArray(): IDataValidatorJSONContextValue<T>;
     function IsObject(): IDataValidatorJSONContextValue<T>;
+    function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
+    function MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
+
 
     function &End(): T;
 
@@ -45,9 +48,11 @@ type
 implementation
 
 uses
+  Validator.JSON.Key.IsRequired,
   Validator.JSON.Value.IsArray,
   Validator.JSON.Value.IsObject,
-  Validator.JSON.Key.IsRequired;
+  Validator.JSON.Value.MinItems,
+  Validator.JSON.Value.MaxItems;
 
 { TDataValidatorJSONContext<T> }
 
@@ -122,6 +127,18 @@ function TDataValidatorJSONContext<T>.IsObject: IDataValidatorJSONContextValue<T
 begin
   Result := Self;
   Add(TDataValidatorJSONValueIsObject.Create('Value not is JSONObject!'));
+end;
+
+function TDataValidatorJSONContext<T>.MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONValueMinItems.Create(AMinItems, Format('Its size is less than %d!', [AMinItems])));
+end;
+
+function TDataValidatorJSONContext<T>.MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONValueMaxItems.Create(AMaxItems, Format('Its size is greater than %d!', [AMaxItems])));
 end;
 
 function TDataValidatorJSONContext<T>.&End: T;

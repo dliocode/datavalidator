@@ -127,6 +127,7 @@ end;
 
 function TDataValidatorJSONContext<T>.CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessageExecute): IDataValidatorJSONContextValue<T>;
 begin
+  Result := Self;
   Add(TValidatorJSONValueCustom.Create(nil, AExecute, 'Value is false!'));
 end;
 

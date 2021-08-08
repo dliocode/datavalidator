@@ -251,16 +251,16 @@ TDataValidator.Values
 
 ## Validators / Sanitizers
 
-|Validação para values  |Validação JSON (Key/Value)    |Sanitizers para Valus |
+|Validação para values  |Validação JSON (Key/Value)       |Sanitizers para Valus |
 | ------------  	      | ------------  	                | ------------  	  |
 |CustomValue            |(Key) IsOptional                 |CustomSanitizer	  |
 |Contains       	      |(Key) IsRequired	                |NormalizeEmail     |
-|IsAlpha        	      |(Value) IsArray                  |OnlyNumbers   		  |
-|IsAlphaNumeric 	      |(Value) IsObject                 |RemoveAccents      |
-|IsBase64       	      |(Value) + Validação para values  |Replace            |
-|IsBetween      	      |                                 |ToBase64Decode     |
-|IsBTCAddress   		    |                                 |ToBase64Encode     |
-|IsCEP          		    |                                 |ToDate             |
+|IsAlpha        	      |(Value) CustomJSONValue          |OnlyNumbers   		  |
+|IsAlphaNumeric 	      |(Value) IsArray                  |RemoveAccents      |
+|IsBase64       	      |(Value) IsObject                 |Replace            |
+|IsBetween      	      |(Value) MinItems                 |ToBase64Decode     |
+|IsBTCAddress   		    |(Value) MaxItems                 |ToBase64Encode     |
+|IsCEP          		    |(Value) + Validação para values  |ToDate             |
 |IsCNPJ         		    |                                 |ToDateTime         |
 |IsCPF          		    |                                 |ToHTMLDecode	      |
 |IsCPFCNPJ      		    |                                 |ToHTMLEncode	      |
@@ -303,3 +303,4 @@ TDataValidator.Values
 |IsUUIDv4			          |                                 |					          |
 |IsUUIDv5			          |                                 |					          |
 |IsZero				          |                                 |					          |
+|RegexIsMatch	          |                                 |					          |

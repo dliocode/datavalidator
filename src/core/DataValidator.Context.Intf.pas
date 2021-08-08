@@ -113,6 +113,7 @@ type
     function IsUUIDv4(): T;
     function IsUUIDv5(): T;
     function IsZero(): T;
+    function RegexIsMatch(const ARegex: string): T;
 
     function &Not(): T;
   end;

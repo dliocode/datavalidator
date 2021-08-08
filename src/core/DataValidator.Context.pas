@@ -20,9 +20,7 @@ type
     [weak]
     FOwner: T;
     FValue: TValue;
-
     FList: TList<IDataValidatorItem>;
-
     FMessage: string;
     FExecute: TDataValidatorInformationExecute;
     FIsNot: Boolean;
@@ -94,6 +92,7 @@ type
     function IsUUIDv4(): T;
     function IsUUIDv5(): T;
     function IsZero(): T;
+    function RegexIsMatch(const ARegex: string): T;
 
     function &Not(): T;
 
@@ -205,7 +204,8 @@ uses
   Validator.IsUppercase,
   Validator.IsURL,
   Validator.IsUUID,
-  Validator.IsZero;
+  Validator.IsZero,
+  Validator.Regex.IsMatch;
 
 { TDataValidatorContext<T> }
 
@@ -566,6 +566,11 @@ end;
 function TDataValidatorContext<T>.IsZero: T;
 begin
   Result := Add(TValidatorIsZero.Create('Value is not zero!'));
+end;
+
+function TDataValidatorContext<T>.RegexIsMatch(const ARegex: string): T;
+begin
+  Result := Add(TValidatorRegexIsMatch.Create(ARegex, 'Value is not match!'));
 end;
 
 function TDataValidatorContext<T>.&Not: T;

@@ -18,8 +18,12 @@ type
   TValue = System.RTTI.TValue;
 
   TDataValidatorLocaleLanguage = DataValidator.Types.TDataValidatorLocaleLanguage;
+
   TDataValidatorCustomExecute = DataValidator.Types.TDataValidatorCustomExecute;
   TDataValidatorCustomMessageExecute = DataValidator.Types.TDataValidatorCustomMessageExecute;
+  TDataValidatorCustomJSONValueExecute = DataValidator.Types.TDataValidatorCustomJSONValueExecute;
+  TDataValidatorCustomJSONValueMessageExecute = DataValidator.Types.TDataValidatorCustomJSONValueMessageExecute;
+
   TDataValidatorInformationExecute = DataValidator.ItemBase.Intf.TDataValidatorInformationExecute;
   IDataValidatorItem = DataValidator.ItemBase.Intf.IDataValidatorItem;
   IDataValidatorResult = DataValidator.Result.Intf.IDataValidatorResult;
@@ -91,7 +95,7 @@ begin
     LJSONPair := FValue.AsType<TJSONPair>;
 
     if Assigned(LJSONPair) then
-      Result := LJSONPair.JsonValue.Value;
+      Result := LJSONPair.JsonValue.ToString.Trim(['"']);
   end
   else
     Result := FValue.AsString;

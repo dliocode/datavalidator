@@ -40,6 +40,8 @@ type
   IDataValidatorJSONContextValue<T> = interface(IDataValidatorJSONContextValueContext<T>)
     ['{320BD31E-810F-4EB6-A8C4-C17CA2C186DB}']
     function &End(): T;
+    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueExecute): IDataValidatorJSONContextValue<T>; overload;
+    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessageExecute): IDataValidatorJSONContextValue<T>; overload;
     function IsArray(): IDataValidatorJSONContextValue<T>;
     function IsObject(): IDataValidatorJSONContextValue<T>;
     function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;

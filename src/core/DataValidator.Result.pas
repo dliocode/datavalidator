@@ -37,8 +37,15 @@ uses
 { TDataValidatorResult }
 
 constructor TDataValidatorResult.Create(const AOK: Boolean; const ADataInformation: IDataValidatorInformation);
+var
+  LValue: string;
 begin
-  Create(AOK, TDataValidatorInformations.Create.Add(ADataInformation), []);
+  LValue := '';
+
+  if Assigned(ADataInformation) then
+    LValue := ADataInformation.Value;
+
+  Create(AOK, TDataValidatorInformations.Create.Add(ADataInformation), [LValue]);
 end;
 
 constructor TDataValidatorResult.Create(const AOK: Boolean; const ADataInformations: IDataValidatorInformations; const ADataValues: TArray<string>);

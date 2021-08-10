@@ -38,7 +38,8 @@ implementation
 
 uses
   DataValidator.Information.Intf, DataValidator.ItemBase.Intf, DataValidator.Context.Intf,
-  DataValidator.JSON.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase;
+  DataValidator.JSON.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase,
+  Validator.JSON.Key.IsOptional, Validator.IsOptional;
 
 { TDataValidatorJSON }
 
@@ -140,12 +141,18 @@ begin
 
         if not LValidatorResult.OK then
         begin
+          if (LValidatorItem is TDataValidatorJSONKeyIsOptional) or (LValidatorItem is TValidatorIsOptional) then
+            Continue;
+
           LOK := False;
           LInfo.Add(LValidatorResult.Informations as IDataValidatorInformations);
 
           if not ACheckAll then
             Break;
-        end;
+        end
+        else
+          if (LValidatorItem is TDataValidatorJSONKeyIsOptional) or (LValidatorItem is TValidatorIsOptional) then
+            Break
       end;
 
       LValues := Concat(LValues, [TValueToString(LValueSanitizer)]);
@@ -208,12 +215,18 @@ begin
 
           if not LValidatorResult.OK then
           begin
+            if (LValidatorItem is TDataValidatorJSONKeyIsOptional) or (LValidatorItem is TValidatorIsOptional) then
+              Continue;
+
             LOK := False;
             LInfo.Add(LValidatorResult.Informations as IDataValidatorInformations);
 
             if not ACheckAll then
               Break;
-          end;
+          end
+          else
+            if (LValidatorItem is TDataValidatorJSONKeyIsOptional) or (LValidatorItem is TValidatorIsOptional) then
+              Break
         end;
 
         LValues := Concat(LValues, [TValueToString(LValueSanitizer)]);

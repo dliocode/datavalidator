@@ -286,6 +286,7 @@ TDataValidator.Values
 |IsMD5				          |                                 |					          |
 |IsNegative			        |                                 |					          |
 |IsNumeric			        |                                 |					          |
+|IsOptional		          |                                 |					          |
 |IsPhoneNumber		      |                                 |					          |
 |IsPositive			        |                                 |					          |
 |IsSSN			            |                                 |					          |

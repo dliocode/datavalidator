@@ -32,7 +32,8 @@ type
 implementation
 
 uses
-  DataValidator.Value.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase;
+  DataValidator.Value.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase,
+  Validator.IsOptional;
 
 { TDataValidatorValue }
 
@@ -119,12 +120,18 @@ begin
 
       if not LValidatorResult.OK then
       begin
+        if LValidatorItem is TValidatorIsOptional then
+          Continue;
+
         LOK := False;
         LInfo.Add(LValidatorResult.Informations as IDataValidatorInformations);
 
         if not ACheckAll then
           Break;
-      end;
+      end
+      else
+        if LValidatorItem is TValidatorIsOptional then
+          Break
     end;
 
     LValues := Concat(LValues, [ValueString(LValueSanitizer)]);

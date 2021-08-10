@@ -23,10 +23,8 @@ type
     FMessage: string;
     FExecute: TDataValidatorInformationExecute;
     FIsNot: Boolean;
-    FIsOptional: Boolean;
   protected
     FValue: TValue;
-    procedure SetOptional(const AValue: Boolean);
     function Add(const AValidatorItem: IDataValidatorItem; const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US; const AModeSchema: Boolean = False): T;
   public
     // Schema
@@ -77,6 +75,7 @@ type
     function IsNumeric(): T;
     function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPositive(): T;
+    function IsOptional(): T;
     function IsSSN(): T;
     function IsTime(const AJSONISO8601ReturnUTC: Boolean = True): T;
     function IsTimeBetween(const AValueA: TTime; const AValueB: TTime; const AJSONISO8601ReturnUTC: Boolean = True): T;
@@ -194,6 +193,7 @@ uses
   Validator.IsMD5,
   Validator.IsNegative,
   Validator.IsNumeric,
+  Validator.IsOptional,
   Validator.IsPositive,
   Validator.IsSSN,
   Validator.IsTime,
@@ -228,7 +228,6 @@ begin
   FMessage := '';
   FExecute := nil;
   FIsNot := False;
-  FIsOptional := False;
 end;
 
 destructor TDataValidatorContext<T>.Destroy;
@@ -483,6 +482,11 @@ begin
   Result := Add(TValidatorIsNumeric.Create('Value is not numeric!'));
 end;
 
+function TDataValidatorContext<T>.IsOptional: T;
+begin
+  Result := Add(TValidatorIsOptional.Create('Value is optional!'));
+end;
+
 function TDataValidatorContext<T>.IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage): T;
 begin
   Result := Add(TValidatorIsPhoneNumber.Create('Value is not phone number!'), ALocaleLanguage);
@@ -735,13 +739,6 @@ function TDataValidatorContext<T>.Add(const AValidatorItem: IDataValidatorItem; 
 begin
   Result := FOwner;
 
-  if FIsOptional then
-  begin
-    FList.Add(AValidatorItem);
-    FList.Remove(FList.Last);
-    Exit;
-  end;
-
   AValidatorItem.SetDataValidatorLocaleLanguage(ALocaleLanguage);
   AValidatorItem.SetExecute(FExecute);
   AValidatorItem.SetMessage(FMessage);
@@ -753,11 +750,6 @@ begin
   end;
 
   FList.Add(AValidatorItem);
-end;
-
-procedure TDataValidatorContext<T>.SetOptional(const AValue: Boolean);
-begin
-  FIsOptional := AValue;
 end;
 
 end.

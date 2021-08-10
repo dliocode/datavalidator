@@ -48,6 +48,7 @@ type
 implementation
 
 uses
+  Validator.JSON.Key.IsOptional,
   Validator.JSON.Key.IsRequired,
   Validator.JSON.Value.Custom,
   Validator.JSON.Value.IsArray,
@@ -80,17 +81,9 @@ begin
 end;
 
 function TDataValidatorJSONContext<T>.IsOptional: IDataValidatorJSONContextKey<T>;
-var
-  LValidatorRequiredKey: IDataValidatorItem;
-  LIsOptional: Boolean;
 begin
   Result := Self;
-
-  LValidatorRequiredKey := TDataValidatorJSONKeyIsRequired.Create('Key is required!');
-  LValidatorRequiredKey.SetValue(FValue);
-  LIsOptional := not LValidatorRequiredKey.Checked.OK;
-
-  SetOptional(LIsOptional);
+  Add(TDataValidatorJSONKeyIsOptional.Create('Key is optional!'));
 end;
 
 function TDataValidatorJSONContext<T>.IsRequired: IDataValidatorJSONContextKey<T>;

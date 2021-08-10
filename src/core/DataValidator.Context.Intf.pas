@@ -98,6 +98,7 @@ type
     function IsNumeric(): T;
     function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPositive(): T;
+    function IsOptional(): T;
     function IsSSN(): T;
     function IsTime(const AJSONISO8601ReturnUTC: Boolean = True): T;
     function IsTimeBetween(const AValueA: TTime; const AValueB: TTime; const AJSONISO8601ReturnUTC: Boolean = True): T;

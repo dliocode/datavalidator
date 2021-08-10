@@ -18,12 +18,12 @@ type
   private
     [weak]
     FResult: IDataValidatorJSONResult;
-    FName: string;
+    FName: TArray<string>;
   public
     function &End(): IDataValidatorJSONResult;
-    function GetName: string;
+    function GetName: TArray<string>;
 
-    constructor Create(const AResult: IDataValidatorJSONResult; const AName: string; const AValue: TJSONPair); reintroduce;
+    constructor Create(const AResult: IDataValidatorJSONResult; const AName: TArray<string>; const AValue: TJSONPair); reintroduce;
     destructor Destroy; override;
   end;
 
@@ -31,7 +31,7 @@ implementation
 
 { TDataValidatorJSONBase }
 
-constructor TDataValidatorJSONBase.Create(const AResult: IDataValidatorJSONResult; const AName: string; const AValue: TJSONPair);
+constructor TDataValidatorJSONBase.Create(const AResult: IDataValidatorJSONResult; const AName: TArray<string>; const AValue: TJSONPair);
 begin
   inherited Create(Self, AValue);
   FResult := AResult;
@@ -48,7 +48,7 @@ begin
   Result := FResult;
 end;
 
-function TDataValidatorJSONBase.GetName: string;
+function TDataValidatorJSONBase.GetName: TArray<string>;
 begin
   Result := FName;
 end;

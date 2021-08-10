@@ -55,7 +55,8 @@ type
 
   IDataValidatorJSON = interface
     ['{8409957E-995E-40F6-99F4-6867EEEA2E78}']
-    function Validate(const AName: string): IDataValidatorJSONBaseContext;
+    function Validate(const AName: string): IDataValidatorJSONBaseContext; overload;
+    function Validate(const AName: TArray<string>): IDataValidatorJSONBaseContext; overload;
   end;
 
   IDataValidatorJSONBase = interface(IDataValidatorJSONBaseContext)
@@ -71,7 +72,7 @@ type
 
   IDataValidatorJSONValueName = interface
     ['{AE29455D-802F-4527-9E17-546A28091809}']
-    function GetName: string;
+    function GetName: TArray<string>;
   end;
 
 implementation

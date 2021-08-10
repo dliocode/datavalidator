@@ -19,13 +19,13 @@ type
   private
     [weak]
     FOwner: T;
-    FValue: TValue;
     FList: TList<IDataValidatorItem>;
     FMessage: string;
     FExecute: TDataValidatorInformationExecute;
     FIsNot: Boolean;
     FIsOptional: Boolean;
   protected
+    FValue: TValue;
     procedure SetOptional(const AValue: Boolean);
     function Add(const AValidatorItem: IDataValidatorItem; const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US; const AModeSchema: Boolean = False): T;
   public

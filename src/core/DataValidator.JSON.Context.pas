@@ -19,7 +19,6 @@ type
   strict private
   [weak]
     FOwner: T;
-    FValue: TJSONPair;
   public
     function Key(): IDataValidatorJSONContextKey<T>;
     function Value(): IDataValidatorJSONContextValue<T>;
@@ -61,9 +60,8 @@ uses
 constructor TDataValidatorJSONContext<T>.Create(const AOwner: T; const AValue: TJSONPair);
 begin
   FOwner := AOwner;
-  FValue := AValue;
 
-  inherited Create(Self, FValue);
+  inherited Create(Self, AValue);
 end;
 
 destructor TDataValidatorJSONContext<T>.Destroy;

@@ -40,7 +40,7 @@ begin
   R := False;
 
   if not Trim(LValue).IsEmpty then
-    R := TRegEx.IsMatch(LValue, '^[\d]{2}\.?[\d]{3}\-?[\d]{3}$');
+    R := TRegEx.IsMatch(LValue, '^(\d{5}\-\d{3})|(\d{8})$');
 
   if FIsNot then
     R := not R;

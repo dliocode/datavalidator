@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsAlpha;
+unit Validator.IsPassportNumber;
 
 interface
 
@@ -14,7 +14,7 @@ uses
   System.SysUtils, System.RegularExpressions;
 
 type
-  TValidatorIsAlpha = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsPassportNumber = class(TDataValidatorItemBase, IDataValidatorItem)
   private
     function GetPattern: string;
   public
@@ -24,15 +24,15 @@ type
 
 implementation
 
-{ TValidatorIsAlpha }
+{ TValidatorIsPassportNumber }
 
-constructor TValidatorIsAlpha.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsPassportNumber.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsAlpha.Checked: IDataValidatorResult;
+function TValidatorIsPassportNumber.Checked: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -49,23 +49,23 @@ begin
   Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
 end;
 
-function TValidatorIsAlpha.GetPattern: string;
+function TValidatorIsPassportNumber.GetPattern: string;
 begin
   case FLocaleLanguage of
     TDataValidatorLocaleLanguage.tl_en_US:
-      Result := '^[A-Za-z\s]+$';
+      Result := '^\d{9}$';
     TDataValidatorLocaleLanguage.tl_de_DE:
-      Result := '^[A-ZÄÖÜßa-zäöüß\s]+$';
+      Result := '^[CFGHJKLMNPRTVWXYZ0-9]{9}$';
     TDataValidatorLocaleLanguage.tl_fr_FR:
-      Result := '^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸa-zàâæçéèêëïîôœùûüÿ\s]+$';
+      Result := '^\d{2}[A-Z]{2}\d{5}$';
     TDataValidatorLocaleLanguage.tl_it_IT:
-      Result := '^[A-ZÀÉÈÌÎÓÒÙa-zàéèìîóòù\s]+$';
+      Result := '^[A-Z0-9]{2}\d{7}$';
     TDataValidatorLocaleLanguage.tl_es_ES:
-      Result := '^[A-ZÁÉÍÑÓÚÜa-záéíñóúü\s]+$';
+      Result := '^[A-Z0-9]{2}([A-Z0-9]?)\d{6}$';
     TDataValidatorLocaleLanguage.tl_ru_RU:
-      Result := '^[А-ЯЁа-яё\s]+$';
+      Result := '^\d{2}\d{2}\d{6}$';
     TDataValidatorLocaleLanguage.tl_pt_BR:
-      Result := '^[A-ZÃÁÀÂÄÇÉÊËÍÏÕÓÔÖÚÜa-zãáàâäçéêëíïõóôöúü\s]+$';
+      Result := '^[A-Z]{2}\d{6}$';
   end;
 end;
 

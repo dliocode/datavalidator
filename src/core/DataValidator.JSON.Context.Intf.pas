@@ -10,7 +10,7 @@ unit DataValidator.JSON.Context.Intf;
 interface
 
 uses
-  DataValidator.Context.Intf, DataValidator.Types, DataValidator.Result.Intf;
+  DataValidator.Context.Intf, DataValidator.Types;
 
 type
   IDataValidatorJSONContextKey<T> = interface;

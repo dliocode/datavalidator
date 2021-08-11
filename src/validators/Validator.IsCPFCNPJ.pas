@@ -39,7 +39,7 @@ end;
 function TValidatorIsCPFCNPJ.Checked: IDataValidatorResult;
 var
   R: Boolean;
-  LResult : IDataValidatorResult;
+  LResult: IDataValidatorResult;
   LValue: string;
 begin
   FValidatorCPF.SetIsNot(FIsNot);

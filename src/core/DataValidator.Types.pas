@@ -10,8 +10,8 @@ unit DataValidator.Types;
 interface
 
 uses
-  DataValidator.Result.Intf,
-  System.SysUtils, System.JSON;
+
+  System.JSON;
 
 type
   TDataValidatorLocaleLanguage = (tl_en_US, tl_de_DE, tl_fr_FR, tl_it_IT, tl_es_ES, tl_ru_RU, tl_pt_BR);

@@ -32,7 +32,7 @@ type
 implementation
 
 uses
-   DataValidator.Information;
+  DataValidator.Information;
 
 { TDataValidatorResult }
 

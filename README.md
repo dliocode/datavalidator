@@ -257,38 +257,50 @@ TDataValidator.Values
 |Contains       	      |(Key) IsRequired	                |NormalizeEmail     |
 |IsAlpha        	      |(Value) CustomJSONValue          |OnlyNumbers   		  |
 |IsAlphaNumeric 	      |(Value) IsArray                  |RemoveAccents      |
-|IsBase64       	      |(Value) IsObject                 |Replace            |
-|IsBetween      	      |(Value) MinItems                 |ToBase64Decode     |
-|IsBTCAddress   		    |(Value) MaxItems                 |ToBase64Encode     |
-|IsCEP          		    |(Value) + Validação para values  |ToDate             |
-|IsCNPJ         		    |                                 |ToDateTime         |
-|IsCPF          		    |                                 |ToHTMLDecode	      |
-|IsCPFCNPJ      		    |                                 |ToHTMLEncode	      |
-|IsDate         	      |                                 |ToInteger			    |
-|IsDateBetween  	      |                                 |ToLowerCase		    |
-|IsDateEquals     	    |                                 |ToMD5				 	    |
-|IsDateGreaterThan	    |                                 |ToNumeric     	    |
-|IsDateLessThan		      |                                 |ToTime             |
-|IsDateTime			        |                                 |ToUpperCase	      |
-|IsEmail			          |                                 |ToURLDecode        |
-|IsEmpty			          |                                 |ToURLEncode		    |
-|IsEquals			          |                                 |Trim			          |
-|IsEthereumAddress	    |                                 |TrimLeft      	    |
-|IsGreaterThan		      |                                 |TrimRight          |
-|IsHexadecimal		      |                                 |                   |
-|IsInteger			        |                                 |                   |
+|IsAscii         	      |(Value) IsObject                 |Replace            |
+|IsBase32        	      |(Value) MinItems                 |ToBase64Decode     |
+|IsBase58        	      |(Value) MaxItems                 |ToBase64Encode     |
+|IsBase64       	      |(Value) + Validação para values  |ToDate             |
+|IsBetween      	      |                                 |ToDateTime         |
+|IsBoolean       		    |                                 |ToHTMLDecode	      |
+|IsBTCAddress   		    |                                 |ToHTMLEncode	      |
+|IsCEP          		    |                                 |ToInteger			    |
+|IsCNPJ         		    |                                 |ToLowerCase		    |
+|IsCPF          		    |                                 |ToMD5				 	    |
+|IsCPFCNPJ      		    |                                 |ToNumeric     	    |
+|IsDate         	      |                                 |ToTime             |
+|IsDateBetween  	      |                                 |ToUpperCase	      |
+|IsDateEquals     	    |                                 |ToURLDecode        |
+|IsDateGreaterThan	    |                                 |ToURLEncode		    |
+|IsDateLessThan		      |                                 |Trim			          |
+|IsDateTime			        |                                 |TrimLeft      	    |
+|IsEmail			          |                                 |TrimRight          |
+|IsEmpty			          |                                 |                   |
+|IsEquals			          |                                 |                   |
+|IsEthereumAddress	    |                                 |					          |
+|IsGreaterThan		      |                                 |					          |
+|IsHexadecimal		      |                                 |					          |
+|IsHexColor			        |                                 |					          |
+|IsInteger			        |                                 |					          |
 |IsIP				            |                                 |					          |
+|IsISO8601              |                                 |					          |
 |IsJSON				          |                                 |					          |
 |IsLength			          |                                 |					          |
 |IsLessThan			        |                                 |					          |
+|IsLocale    		        |                                 |					          |
 |IsLowercase		        |                                 |					          |
 |IsMACAddress		        |                                 |					          |
+|IsMagnetURI 	          |                                 |					          |
 |IsMD5				          |                                 |					          |
+|IsMimeType  	          |                                 |					          |
 |IsNegative			        |                                 |					          |
 |IsNumeric			        |                                 |					          |
 |IsOptional		          |                                 |					          |
+|IsOctal     	          |                                 |					          |
+|IsPassportNumber       |                                 |					          |
 |IsPhoneNumber		      |                                 |					          |
 |IsPositive			        |                                 |					          |
+|IsRGBColor   	        |                                 |					          |
 |IsSSN			            |                                 |					          |
 |IsTime				          |                                 |					          |
 |IsTimeBetween		      |                                 |					          |

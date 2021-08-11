@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsBase64;
+unit Validator.IsOctal;
 
 interface
 
@@ -14,7 +14,7 @@ uses
   System.SysUtils, System.RegularExpressions;
 
 type
-  TValidatorIsBase64 = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsOctal = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Checked: IDataValidatorResult;
@@ -23,15 +23,15 @@ type
 
 implementation
 
-{ TValidatorIsBase64 }
+{ TValidatorIsOctal }
 
-constructor TValidatorIsBase64.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsOctal.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsBase64.Checked: IDataValidatorResult;
+function TValidatorIsOctal.Checked: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -40,8 +40,7 @@ begin
   R := False;
 
   if not Trim(LValue).IsEmpty then
-    if (Length(LValue) mod 4) <> 0 then
-      R := TRegEx.IsMatch(LValue, '^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$');
+    R := TRegEx.IsMatch(LValue, '^(0o)?[0-7]+$');
 
   if FIsNot then
     R := not R;

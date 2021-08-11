@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsBase64;
+unit Validator.IsBase32;
 
 interface
 
@@ -14,7 +14,7 @@ uses
   System.SysUtils, System.RegularExpressions;
 
 type
-  TValidatorIsBase64 = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsBase32 = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Checked: IDataValidatorResult;
@@ -23,15 +23,15 @@ type
 
 implementation
 
-{ TValidatorIsBase64 }
+{ TValidatorIsBase32 }
 
-constructor TValidatorIsBase64.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsBase32.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsBase64.Checked: IDataValidatorResult;
+function TValidatorIsBase32.Checked: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -40,8 +40,8 @@ begin
   R := False;
 
   if not Trim(LValue).IsEmpty then
-    if (Length(LValue) mod 4) <> 0 then
-      R := TRegEx.IsMatch(LValue, '^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$');
+    if (Length(LValue) mod 8) = 0 then
+      R := TRegEx.IsMatch(LValue, '^[A-Z2-7]+=*$');
 
   if FIsNot then
     R := not R;

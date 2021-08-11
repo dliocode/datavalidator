@@ -5,7 +5,7 @@
   *************************************
 }
 
-unit Validator.IsBase64;
+unit Validator.IsMagnetURI;
 
 interface
 
@@ -14,7 +14,7 @@ uses
   System.SysUtils, System.RegularExpressions;
 
 type
-  TValidatorIsBase64 = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsMagnetURI = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Checked: IDataValidatorResult;
@@ -23,15 +23,15 @@ type
 
 implementation
 
-{ TValidatorIsBase64 }
+{ TValidatorIsMagnetURI }
 
-constructor TValidatorIsBase64.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsMagnetURI.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsBase64.Checked: IDataValidatorResult;
+function TValidatorIsMagnetURI.Checked: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -40,8 +40,7 @@ begin
   R := False;
 
   if not Trim(LValue).IsEmpty then
-    if (Length(LValue) mod 4) <> 0 then
-      R := TRegEx.IsMatch(LValue, '^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$');
+    R := TRegEx.IsMatch(LValue, '^magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32,40}&dn=.+&tr=.+$');
 
   if FIsNot then
     R := not R;

@@ -5,16 +5,16 @@
   *************************************
 }
 
-unit Validator.IsBase64;
+unit Validator.IsBoolean;
 
 interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils, System.RegularExpressions;
+  System.SysUtils;
 
 type
-  TValidatorIsBase64 = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsBoolean = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Checked: IDataValidatorResult;
@@ -23,15 +23,15 @@ type
 
 implementation
 
-{ TValidatorIsBase64 }
+{ TValidatorIsBoolean }
 
-constructor TValidatorIsBase64.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsBoolean.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsBase64.Checked: IDataValidatorResult;
+function TValidatorIsBoolean.Checked: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -39,9 +39,7 @@ begin
   LValue := GetValueAsString;
   R := False;
 
-  if not Trim(LValue).IsEmpty then
-    if (Length(LValue) mod 4) <> 0 then
-      R := TRegEx.IsMatch(LValue, '^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$');
+  TryStrToBool(LValue, R);
 
   if FIsNot then
     R := not R;

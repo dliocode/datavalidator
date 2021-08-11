@@ -57,9 +57,9 @@ begin
     TDataValidatorLocaleLanguage.tl_de_DE:
       Result := '^[0-9A-ZÄÖÜßa-zäöüß\s]+$';
     TDataValidatorLocaleLanguage.tl_fr_FR:
-      Result := '[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸa-zàâæçéèêëïîôœùûüÿ\s]+$';
+      Result := '^[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸa-zàâæçéèêëïîôœùûüÿ\s]+$';
     TDataValidatorLocaleLanguage.tl_it_IT:
-      Result := '[0-9A-ZÀÉÈÌÎÓÒÙa-zàéèìîóòù\s]+$';
+      Result := '^[0-9A-ZÀÉÈÌÎÓÒÙa-zàéèìîóòù\s]+$';
     TDataValidatorLocaleLanguage.tl_es_ES:
       Result := '^[0-9A-ZÁÉÍÑÓÚÜa-záéíñóúü\s]+$';
     TDataValidatorLocaleLanguage.tl_ru_RU:

@@ -10,7 +10,7 @@ unit DataValidator.Information;
 interface
 
 uses
-  DataValidator.Types, DataValidator.Information.Intf,
+  DataValidator.Information.Intf,
   System.Classes, System.Generics.Collections, System.SysUtils;
 
 type

@@ -38,6 +38,9 @@ type
     function Contains(const AValueContains: string; const ACaseSensitive: Boolean = False): T; overload;
     function IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsAlphaNumeric(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
+    function IsAscii(): T;
+    function IsBase32(): T;
+    function IsBase58(): T;
     function IsBase64(): T;
     function IsBetween(const AValueA: Integer; const AValueB: Integer): T; overload;
     function IsBetween(const AValueA: Int64; const AValueB: Int64): T; overload;
@@ -45,6 +48,7 @@ type
     function IsBetween(const AValueA: Extended; const AValueB: Extended): T; overload;
     function IsBetween(const AValueA: Single; const AValueB: Single): T; overload;
     function IsBetween(const AValueA: UInt64; const AValueB: UInt64): T; overload;
+    function IsBoolean(): T;
     function IsBTCAddress(): T;
     function IsCEP(): T;
     function IsCNPJ(): T;
@@ -63,19 +67,27 @@ type
     function IsEthereumAddress(): T;
     function IsGreaterThan(const AValueGreaterThan: Integer): T;
     function IsHexadecimal(): T;
+    function IsHexColor(): T;
     function IsInteger(): T;
     function IsIP(): T;
+    function IsISO8601(): T;
     function IsJSON(): T;
     function IsLength(const AMin: Integer; const AMax: Integer): T;
     function IsLessThan(const AValueLessThan: Integer): T;
+    function IsLocale(): T;
     function IsLowercase(): T;
     function IsMACAddress(): T;
+    function IsMagnetURI(): T;
     function IsMD5(): T;
+    function IsMimeType(): T;
     function IsNegative(): T;
     function IsNumeric(): T;
+    function IsOctal(): T;
+    function IsOptional(): T;
+    function IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPositive(): T;
-    function IsOptional(): T;
+    function IsRGBColor(): T;
     function IsSSN(): T;
     function IsTime(const AJSONISO8601ReturnUTC: Boolean = True): T;
     function IsTimeBetween(const AValueA: TTime; const AValueB: TTime; const AJSONISO8601ReturnUTC: Boolean = True): T;
@@ -163,8 +175,12 @@ uses
   Validator.Custom,
   Validator.IsAlpha,
   Validator.IsAlphaNumeric,
+  Validator.IsAscii,
+  Validator.IsBase32,
+  Validator.IsBase58,
   Validator.IsBase64,
   Validator.IsBetween,
+  Validator.IsBoolean,
   Validator.IsBTCAddress,
   Validator.IsCEP,
   Validator.IsCNPJ,
@@ -183,18 +199,26 @@ uses
   Validator.IsPhoneNumber,
   Validator.IsGreaterThan,
   Validator.IsHexadecimal,
+  Validator.IsHexColor,
   Validator.IsInteger,
   Validator.IsIP,
+  Validator.IsISO8601,
   Validator.IsJSON,
   Validator.IsLength,
   Validator.IsLessThan,
+  Validator.IsLocale,
   Validator.IsLowercase,
   Validator.IsMACAddress,
+  Validator.IsMagnetURI,
   Validator.IsMD5,
+  Validator.IsMimeType,
   Validator.IsNegative,
   Validator.IsNumeric,
+  Validator.IsOctal,
   Validator.IsOptional,
+  Validator.IsPassportNumber,
   Validator.IsPositive,
+  Validator.IsRGBColor,
   Validator.IsSSN,
   Validator.IsTime,
   Validator.IsTimeBetween,
@@ -300,6 +324,21 @@ begin
   Result := Add(TValidatorIsAlphaNumeric.Create('Value is not alphanumeric!'), ALocaleLanguage);
 end;
 
+function TDataValidatorContext<T>.IsAscii: T;
+begin
+  Result := Add(TValidatorIsAscii.Create('Value is not ascii!'));
+end;
+
+function TDataValidatorContext<T>.IsBase32: T;
+begin
+  Result := Add(TValidatorIsBase32.Create('Value is not base32!'));
+end;
+
+function TDataValidatorContext<T>.IsBase58: T;
+begin
+  Result := Add(TValidatorIsBase58.Create('Value is not base58!'));
+end;
+
 function TDataValidatorContext<T>.IsBase64: T;
 begin
   Result := Add(TValidatorIsBase64.Create('Value is not base64!'));
@@ -333,6 +372,11 @@ end;
 function TDataValidatorContext<T>.IsBetween(const AValueA, AValueB: UInt64): T;
 begin
   Result := Add(TValidatorIsBetween.Create(AValueA, AValueB, Format('Value is not between %s and %s!', [VarToStr(AValueA), VarToStr(AValueB)])));
+end;
+
+function TDataValidatorContext<T>.IsBoolean: T;
+begin
+  Result := Add(TValidatorIsBoolean.Create('Value is not boolean!'));
 end;
 
 function TDataValidatorContext<T>.IsBTCAddress: T;
@@ -432,6 +476,11 @@ begin
   Result := Add(TValidatorIsHexadecimal.Create('Value is not hexadecimal!'));
 end;
 
+function TDataValidatorContext<T>.IsHexColor: T;
+begin
+  Result := Add(TValidatorIsHexColor.Create('Value is not HexColor!'));
+end;
+
 function TDataValidatorContext<T>.IsInteger: T;
 begin
   Result := Add(TValidatorIsInteger.Create('Value is not integer!'));
@@ -440,6 +489,11 @@ end;
 function TDataValidatorContext<T>.IsIP: T;
 begin
   Result := Add(TValidatorIsIP.Create('Value is not IP (Internet Protocol)!'));
+end;
+
+function TDataValidatorContext<T>.IsISO8601: T;
+begin
+  Result := Add(TValidatorIsISO8601.Create('Value is not in the format ISO8601!'));
 end;
 
 function TDataValidatorContext<T>.IsJSON: T;
@@ -457,6 +511,11 @@ begin
   Result := Add(TValidatorIsLessThan.Create(AValueLessThan, Format('Value is not less than %d!', [AValueLessThan])));
 end;
 
+function TDataValidatorContext<T>.IsLocale: T;
+begin
+  Result := Add(TValidatorIsLocale.Create('Value is not locale!'));
+end;
+
 function TDataValidatorContext<T>.IsLowercase: T;
 begin
   Result := Add(TValidatorIsLowercase.Create('Value is not lowercase!'));
@@ -467,9 +526,19 @@ begin
   Result := Add(TValidatorIsMACAddress.Create('Value is not MAC (Media Access Control) address!'));
 end;
 
+function TDataValidatorContext<T>.IsMagnetURI: T;
+begin
+  Result := Add(TValidatorIsMagnetURI.Create('Value is not Magnet URI!'));
+end;
+
 function TDataValidatorContext<T>.IsMD5: T;
 begin
   Result := Add(TValidatorIsMD5.Create('Value is not MD5!'));
+end;
+
+function TDataValidatorContext<T>.IsMimeType: T;
+begin
+  Result := Add(TValidatorIsMimeType.Create('Value is not MimeType!'));
 end;
 
 function TDataValidatorContext<T>.IsNegative: T;
@@ -482,9 +551,19 @@ begin
   Result := Add(TValidatorIsNumeric.Create('Value is not numeric!'));
 end;
 
+function TDataValidatorContext<T>.IsOctal: T;
+begin
+  Result := Add(TValidatorIsOctal.Create('Value not is octal!'));
+end;
+
 function TDataValidatorContext<T>.IsOptional: T;
 begin
   Result := Add(TValidatorIsOptional.Create('Value is optional!'));
+end;
+
+function TDataValidatorContext<T>.IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage): T;
+begin
+  Result := Add(TValidatorIsPassportNumber.Create('Value is not passport number!'), ALocaleLanguage);
 end;
 
 function TDataValidatorContext<T>.IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage): T;
@@ -495,6 +574,11 @@ end;
 function TDataValidatorContext<T>.IsPositive: T;
 begin
   Result := Add(TValidatorIsPositive.Create('Value is not positive!'));
+end;
+
+function TDataValidatorContext<T>.IsRGBColor: T;
+begin
+  Result := Add(TValidatorIsRGBColor.Create('Value is not RGB Color (Red, Green, Blue)!'));
 end;
 
 function TDataValidatorContext<T>.IsSSN: T;
@@ -574,7 +658,7 @@ end;
 
 function TDataValidatorContext<T>.RegexIsMatch(const ARegex: string): T;
 begin
-  Result := Add(TValidatorRegexIsMatch.Create(ARegex, 'Value is not match!'));
+  Result := Add(TValidatorRegexIsMatch.Create(ARegex, 'Value not match!'));
 end;
 
 function TDataValidatorContext<T>.&Not: T;

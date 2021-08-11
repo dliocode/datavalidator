@@ -5,16 +5,16 @@
   *************************************
 }
 
-unit Validator.IsBase64;
+unit Validator.IsISO8601; // https://en.wikipedia.org/wiki/ISO_8601
 
 interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils, System.RegularExpressions;
+  System.SysUtils, System.DateUtils;
 
 type
-  TValidatorIsBase64 = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsISO8601 = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Checked: IDataValidatorResult;
@@ -23,25 +23,25 @@ type
 
 implementation
 
-{ TValidatorIsBase64 }
+{ TValidatorIsISO8601 }
 
-constructor TValidatorIsBase64.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsISO8601.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsBase64.Checked: IDataValidatorResult;
+function TValidatorIsISO8601.Checked: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
+  LDateTime: TDateTime;
 begin
   LValue := GetValueAsString;
   R := False;
 
   if not Trim(LValue).IsEmpty then
-    if (Length(LValue) mod 4) <> 0 then
-      R := TRegEx.IsMatch(LValue, '^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$');
+    R := TryISO8601ToDate(LValue, LDateTime);
 
   if FIsNot then
     R := not R;

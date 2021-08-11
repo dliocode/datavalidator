@@ -11,7 +11,7 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils, System.StrUtils;
+  System.SysUtils;
 
 type
   TValidatorContains = class(TDataValidatorItemBase, IDataValidatorItem)

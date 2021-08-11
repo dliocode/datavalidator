@@ -20,7 +20,8 @@ type
 
     function Check(const ACheckAll: Boolean): IDataValidatorResult;
   public
-    function Validate(const AValue: string): IDataValidatorValueBaseContext;
+    function Validate(const AValue: string): IDataValidatorValueBaseContext; overload;
+    function Validate(const AValue: TArray<string>): IDataValidatorValueBaseContext; overload;
 
     function Checked: IDataValidatorResult;
     function CheckedAll: IDataValidatorResult;
@@ -51,6 +52,11 @@ begin
 end;
 
 function TDataValidatorValue.Validate(const AValue: string): IDataValidatorValueBaseContext;
+begin
+  Result := Validate([AValue]);
+end;
+
+function TDataValidatorValue.Validate(const AValue: TArray<string>): IDataValidatorValueBaseContext;
 begin
   FList.Add(TDataValidatorValueBase.Create(Self, AValue));
   Result := FList.Last;
@@ -89,9 +95,11 @@ var
   LInfo: IDataValidatorInformations;
   I: Integer;
   LListValidatorItem: TList<IDataValidatorItem>;
-  LValidatorItem: IDataValidatorItem;
-  LValueSanitizer: TValue;
+  LValue: TArray<string>;
   J: Integer;
+  LValueSanitizer: TValue;
+  K: Integer;
+  LValidatorItem: IDataValidatorItem;
   LValidatorResult: IDataValidatorResult;
   LValues: TArray<string>;
 begin
@@ -101,40 +109,49 @@ begin
   for I := 0 to Pred(FList.Count) do
   begin
     LListValidatorItem := (FList.Items[I] as IDataValidatorContextBase<IDataValidatorItem>).GetItem;
-    LValueSanitizer := (FList.Items[I] as IDataValidatorContextBase<IDataValidatorItem>).GetValue;
+    LValue := (FList.Items[I] as IDataValidatorValueValues).GetValues;
 
-    for J := 0 to Pred(LListValidatorItem.Count) do
+    for J := 0 to Pred(Length(LValue)) do
     begin
-      LValidatorItem := LListValidatorItem.Items[J];
+      LValueSanitizer := LValue[J];
 
-      if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
+      for K := 0 to Pred(LListValidatorItem.Count) do
       begin
+        LValidatorItem := LListValidatorItem.Items[K];
+
+        if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
+        begin
+          LValidatorItem.SetValue(LValueSanitizer);
+          LValueSanitizer := (LValidatorItem as TDataValidatorItemBaseSanitizer).Sanitize;
+          Continue;
+        end;
+
         LValidatorItem.SetValue(LValueSanitizer);
-        LValueSanitizer := (LValidatorItem as TDataValidatorItemBaseSanitizer).Sanitize;
-        Continue;
+
+        LValidatorResult := LValidatorItem.Checked;
+
+        if not LValidatorResult.OK then
+        begin
+          if LValidatorItem is TValidatorIsOptional then
+            Continue;
+
+          LOK := False;
+          LInfo.Add(LValidatorResult.Informations as IDataValidatorInformations);
+
+          if not ACheckAll then
+            Break;
+        end
+        else
+          if LValidatorItem is TValidatorIsOptional then
+            Break
       end;
 
-      LValidatorItem.SetValue(LValueSanitizer);
+      LValues := Concat(LValues, [ValueString(LValueSanitizer)]);
 
-      LValidatorResult := LValidatorItem.Checked;
-
-      if not LValidatorResult.OK then
-      begin
-        if LValidatorItem is TValidatorIsOptional then
-          Continue;
-
-        LOK := False;
-        LInfo.Add(LValidatorResult.Informations as IDataValidatorInformations);
-
+      if not LOK then
         if not ACheckAll then
           Break;
-      end
-      else
-        if LValidatorItem is TValidatorIsOptional then
-          Break
     end;
-
-    LValues := Concat(LValues, [ValueString(LValueSanitizer)]);
 
     if not LOK then
       if not ACheckAll then

@@ -5,16 +5,16 @@
   *************************************
 }
 
-unit Validator.IsCEP; // (Brasil) CEP (Código de Endereçamento Postal)
+unit Validator.IsPort;
 
 interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils, System.RegularExpressions;
+  System.Math;
 
 type
-  TValidatorIsCEP = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsPort = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Checked: IDataValidatorResult;
@@ -23,24 +23,22 @@ type
 
 implementation
 
-{ TValidatorIsCEP }
+{ TValidatorIsPort }
 
-constructor TValidatorIsCEP.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsPort.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsCEP.Checked: IDataValidatorResult;
+function TValidatorIsPort.Checked: IDataValidatorResult;
 var
-  LValue: string;
+  LValue: Variant;
   R: Boolean;
 begin
   LValue := GetValueAsString;
-  R := False;
 
-  if not Trim(LValue).IsEmpty then
-    R := TRegEx.IsMatch(LValue, '^(\d{5}\-\d{3})|(\d{8})$');
+  R := InRange(LValue, 0, 65535);
 
   if FIsNot then
     R := not R;

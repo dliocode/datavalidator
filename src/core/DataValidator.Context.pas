@@ -34,8 +34,10 @@ type
     function CustomValue(const AValidatorItem: IDataValidatorItem): T; overload;
     function CustomValue(const AExecute: TDataValidatorCustomExecute): T; overload;
     function CustomValue(const AExecute: TDataValidatorCustomMessageExecute): T; overload;
-    function Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function Contains(const AValueContains: string; const ACaseSensitive: Boolean = False): T; overload;
+    function Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
+    function EndsWith(const AValueEndsWith: string; const ACaseSensitive: Boolean = False): T; overload;
+    function EndsWith(const AValueEndsWith: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsAlphaNumeric(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsAscii(): T;
@@ -50,7 +52,6 @@ type
     function IsBetween(const AValueA: UInt64; const AValueB: UInt64): T; overload;
     function IsBoolean(): T;
     function IsBTCAddress(): T;
-    function IsCEP(): T;
     function IsCNPJ(): T;
     function IsCPF(): T;
     function IsCPFCNPJ(): T;
@@ -78,6 +79,7 @@ type
     function IsISO8601(): T;
     function IsJSON(): T;
     function IsJWT(): T;
+    function IsLatLong(const ACheckDMS: Boolean = False): T;
     function IsLength(const AMin: Integer; const AMax: Integer): T;
     function IsLessThan(const AValueLessThan: Integer): T;
     function IsLocale(): T;
@@ -92,7 +94,9 @@ type
     function IsOptional(): T;
     function IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
+    function IsPort(): T;
     function IsPositive(): T;
+    function IsPostalCode(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsRGBColor(): T;
     function IsSSN(): T;
     function IsTime(const AJSONISO8601ReturnUTC: Boolean = True): T;
@@ -110,6 +114,8 @@ type
     function IsUUIDv5(): T;
     function IsZero(): T;
     function RegexIsMatch(const ARegex: string): T;
+    function StartsWith(const AValueStartsWith: string; const ACaseSensitive: Boolean = False): T; overload;
+    function StartsWith(const AValueStartsWith: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
 
     function &Not(): T;
 
@@ -179,6 +185,7 @@ uses
   Sanitizer.URL.Encode,
   Validator.Contains,
   Validator.Custom,
+  Validator.EndsWith,
   Validator.IsAlpha,
   Validator.IsAlphaNumeric,
   Validator.IsAscii,
@@ -188,7 +195,7 @@ uses
   Validator.IsBetween,
   Validator.IsBoolean,
   Validator.IsBTCAddress,
-  Validator.IsCEP,
+  Validator.IsPostalCode,
   Validator.IsCNPJ,
   Validator.IsCPF,
   Validator.IsCPFCNPJ,
@@ -212,6 +219,7 @@ uses
   Validator.IsISO8601,
   Validator.IsJSON,
   Validator.IsJWT,
+  Validator.IsLatLong,
   Validator.IsLength,
   Validator.IsLessThan,
   Validator.IsLocale,
@@ -225,6 +233,7 @@ uses
   Validator.IsOctal,
   Validator.IsOptional,
   Validator.IsPassportNumber,
+  Validator.IsPort,
   Validator.IsPositive,
   Validator.IsRGBColor,
   Validator.IsSSN,
@@ -237,7 +246,8 @@ uses
   Validator.IsURL,
   Validator.IsUUID,
   Validator.IsZero,
-  Validator.Regex.IsMatch;
+  Validator.Regex.IsMatch,
+  Validator.StartsWith;
 
 { TDataValidatorContext<T> }
 
@@ -305,6 +315,11 @@ begin
   Result := Add(TValidatorCustom.Create(nil, AExecute, 'Value false!'));
 end;
 
+function TDataValidatorContext<T>.Contains(const AValueContains: string; const ACaseSensitive: Boolean): T;
+begin
+  Result := Contains([AValueContains], ACaseSensitive);
+end;
+
 function TDataValidatorContext<T>.Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean): T;
 var
   LValue: string;
@@ -317,9 +332,21 @@ begin
   Result := Add(TValidatorContains.Create(AValueContains, ACaseSensitive, Format('Value not contains %s!', [LMessage])));
 end;
 
-function TDataValidatorContext<T>.Contains(const AValueContains: string; const ACaseSensitive: Boolean): T;
+function TDataValidatorContext<T>.EndsWith(const AValueEndsWith: string; const ACaseSensitive: Boolean = False): T;
 begin
-  Result := Contains([AValueContains], ACaseSensitive);
+  Result := EndsWith([AValueEndsWith], ACaseSensitive);
+end;
+
+function TDataValidatorContext<T>.EndsWith(const AValueEndsWith: TArray<string>; const ACaseSensitive: Boolean = False): T;
+var
+  LValue: string;
+  LMessage: string;
+begin
+  LMessage := '';
+  for LValue in AValueEndsWith do
+    LMessage := LMessage + LValue + ' ';
+
+  Result := Add(TValidatorEndsWith.Create(AValueEndsWith, ACaseSensitive, Format('Value does not end with %s!', [LMessage])));
 end;
 
 function TDataValidatorContext<T>.IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage): T;
@@ -392,9 +419,9 @@ begin
   Result := Add(TValidatorIsBTCAddress.Create('Value is not BTC (Bitcoin) Adddress!'));
 end;
 
-function TDataValidatorContext<T>.IsCEP: T;
+function TDataValidatorContext<T>.IsPostalCode(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
 begin
-  Result := Add(TValidatorIsCEP.Create('Value is not CEP (Código de Endereçamento Postal)!'));
+  Result := Add(TValidatorIsPostalCode.Create('Value is not postal code!'), ALocaleLanguage);
 end;
 
 function TDataValidatorContext<T>.IsCNPJ: T;
@@ -539,6 +566,11 @@ begin
   Result := Add(TValidatorIsJWT.Create('Value is not JWT (JSON Web Token)!'));
 end;
 
+function TDataValidatorContext<T>.IsLatLong(const ACheckDMS: Boolean): T;
+begin
+  Result := Add(TValidatorIsLatLong.Create(ACheckDMS, 'Value is not JWT (JSON Web Token)!'));
+end;
+
 function TDataValidatorContext<T>.IsLength(const AMin, AMax: Integer): T;
 begin
   Result := Add(TValidatorIsLength.Create(AMin, AMax, Format('Value required length min(%d) and max(%d)!', [AMin, AMax])));
@@ -607,6 +639,11 @@ end;
 function TDataValidatorContext<T>.IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage): T;
 begin
   Result := Add(TValidatorIsPhoneNumber.Create('Value is not phone number!'), ALocaleLanguage);
+end;
+
+function TDataValidatorContext<T>.IsPort: T;
+begin
+  Result := Add(TValidatorIsPort.Create('Value is not positive!'));
 end;
 
 function TDataValidatorContext<T>.IsPositive: T;
@@ -697,6 +734,23 @@ end;
 function TDataValidatorContext<T>.RegexIsMatch(const ARegex: string): T;
 begin
   Result := Add(TValidatorRegexIsMatch.Create(ARegex, 'Value not match!'));
+end;
+
+function TDataValidatorContext<T>.StartsWith(const AValueStartsWith: string; const ACaseSensitive: Boolean = False): T;
+begin
+  Result := StartsWith([AValueStartsWith], ACaseSensitive);
+end;
+
+function TDataValidatorContext<T>.StartsWith(const AValueStartsWith: TArray<string>; const ACaseSensitive: Boolean = False): T;
+var
+  LValue: string;
+  LMessage: string;
+begin
+  LMessage := '';
+  for LValue in AValueStartsWith do
+    LMessage := LMessage + LValue + ' ';
+
+  Result := Add(TValidatorStartsWith.Create(AValueStartsWith, ACaseSensitive, Format('Value does not start with %s!', [LMessage])));
 end;
 
 function TDataValidatorContext<T>.&Not: T;

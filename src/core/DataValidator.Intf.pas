@@ -34,7 +34,8 @@ type
 
   IDataValidatorValue = interface
     ['{1D7D5CB4-5188-4F45-8878-A0120A9C1EC2}']
-    function Validate(const AValue: string): IDataValidatorValueBaseContext;
+    function Validate(const AValue: string): IDataValidatorValueBaseContext; overload;
+    function Validate(const AValue: TArray<string>): IDataValidatorValueBaseContext; overload;
   end;
 
   IDataValidatorValueBase = interface(IDataValidatorValueBaseContext)
@@ -46,6 +47,11 @@ type
     ['{69331F14-D8A2-4E40-ADB4-D3195C59100E}']
     function Checked(): IDataValidatorResult;
     function CheckedAll(): IDataValidatorResult;
+  end;
+
+  IDataValidatorValueValues = interface
+    ['{AE29455D-802F-4527-9E17-546A28091809}']
+    function GetValues: TArray<string>;
   end;
 
   // JSON

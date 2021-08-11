@@ -59,6 +59,8 @@ type
     function CustomValue(const AExecute: TDataValidatorCustomMessageExecute): T; overload;
     function Contains(const AValueContains: string; const ACaseSensitive: Boolean = False): T; overload;
     function Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
+    function EndsWith(const AValueEndsWith: string; const ACaseSensitive: Boolean = False): T; overload;
+    function EndsWith(const AValueEndsWith: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsAlphaNumeric(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsAscii(): T;
@@ -73,7 +75,6 @@ type
     function IsBetween(const AValueA: UInt64; const AValueB: UInt64): T; overload;
     function IsBoolean(): T;
     function IsBTCAddress(): T;
-    function IsCEP(): T;
     function IsCNPJ(): T;
     function IsCPF(): T;
     function IsCPFCNPJ(): T;
@@ -101,6 +102,7 @@ type
     function IsISO8601(): T;
     function IsJSON(): T;
     function IsJWT(): T;
+    function IsLatLong(const ACheckDMS: Boolean = False): T;
     function IsLength(const AMin: Integer; const AMax: Integer): T;
     function IsLessThan(const AValueLessThan: Integer): T;
     function IsLocale(): T;
@@ -115,7 +117,9 @@ type
     function IsOptional(): T;
     function IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
+    function IsPort(): T;
     function IsPositive(): T;
+    function IsPostalCode(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsRGBColor(): T;
     function IsSSN(): T;
     function IsTime(const AJSONISO8601ReturnUTC: Boolean = True): T;
@@ -133,6 +137,8 @@ type
     function IsUUIDv5(): T;
     function IsZero(): T;
     function RegexIsMatch(const ARegex: string): T;
+    function StartsWith(const AValueStartsWith: string; const ACaseSensitive: Boolean = False): T; overload;
+    function StartsWith(const AValueStartsWith: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
 
     function &Not(): T;
   end;

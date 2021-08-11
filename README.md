@@ -255,16 +255,16 @@ TDataValidator.Values
 | ------------  	      | ------------  	                | ------------  	  |
 |CustomValue            |(Key) IsOptional                 |CustomSanitizer	  |
 |Contains       	      |(Key) IsRequired	                |NormalizeEmail     |
-|IsAlpha        	      |(Value) CustomJSONValue          |OnlyNumbers   		  |
-|IsAlphaNumeric 	      |(Value) IsArray                  |RemoveAccents      |
-|IsAscii         	      |(Value) IsObject                 |Replace            |
-|IsBase32        	      |(Value) MinItems                 |ToBase64Decode     |
-|IsBase58        	      |(Value) MaxItems                 |ToBase64Encode     |
-|IsBase64       	      |(Value) + Validação para values  |ToDate             |
-|IsBetween      	      |                                 |ToDateTime         |
-|IsBoolean       		    |                                 |ToHTMLDecode	      |
-|IsBTCAddress   		    |                                 |ToHTMLEncode	      |
-|IsCEP          		    |                                 |ToInteger			    |
+|EndsWith        	      |(Value) CustomJSONValue          |OnlyNumbers   		  |
+|IsAlpha        	      |(Value) IsArray                  |RemoveAccents      |
+|IsAlphaNumeric 	      |(Value) IsObject                 |Replace            |
+|IsAscii         	      |(Value) MinItems                 |ToBase64Decode     |
+|IsBase32        	      |(Value) MaxItems                 |ToBase64Encode     |
+|IsBase58        	      |(Value) + Validação para values  |ToDate             |
+|IsBase64       	      |                                 |ToDateTime         |
+|IsBetween      	      |                                 |ToHTMLDecode	      |
+|IsBoolean       		    |                                 |ToHTMLEncode	      |
+|IsBTCAddress   		    |                                 |ToInteger			    |
 |IsCNPJ         		    |                                 |ToLowerCase		    |
 |IsCPF          		    |                                 |ToMD5				 	    |
 |IsCPFCNPJ      		    |                                 |ToNumeric     	    |
@@ -291,6 +291,7 @@ TDataValidator.Values
 |IsISO8601              |                                 |					          |
 |IsJSON				          |                                 |					          |
 |IsJWT				          |                                 |					          |
+|IsLatLong		          |                                 |					          |
 |IsLength			          |                                 |					          |
 |IsLessThan			        |                                 |					          |
 |IsLocale    		        |                                 |					          |
@@ -305,7 +306,9 @@ TDataValidator.Values
 |IsOctal     	          |                                 |					          |
 |IsPassportNumber       |                                 |					          |
 |IsPhoneNumber		      |                                 |					          |
+|IsPort   			        |                                 |					          |
 |IsPositive			        |                                 |					          |
+|IsPostalCode  	        |                                 |					          |
 |IsRGBColor   	        |                                 |					          |
 |IsSSN			            |                                 |					          |
 |IsTime				          |                                 |					          |
@@ -323,3 +326,4 @@ TDataValidator.Values
 |IsUUIDv5			          |                                 |					          |
 |IsZero				          |                                 |					          |
 |RegexIsMatch	          |                                 |					          |
+|StartsWith  	          |                                 |					          |

@@ -125,13 +125,13 @@ end;
 function TDataValidatorJSONContext<T>.IsArray: IDataValidatorJSONContextValue<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONValueIsArray.Create('Value not is JSONArray!'));
+  Add(TDataValidatorJSONValueIsArray.Create('Value not is JSON Array!'));
 end;
 
 function TDataValidatorJSONContext<T>.IsObject: IDataValidatorJSONContextValue<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONValueIsObject.Create('Value not is JSONObject!'));
+  Add(TDataValidatorJSONValueIsObject.Create('Value not is JSON Object!'));
 end;
 
 function TDataValidatorJSONContext<T>.MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;

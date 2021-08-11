@@ -14,22 +14,22 @@ uses
   System.SysUtils, System.RegularExpressions;
 
 type
-  TUUIDVersion = (tuAll, tuV1, tuV2, tuV3, tuV4, tuV5);
+  TTypeUUID = (tuAll, tuV1, tuV2, tuV3, tuV4, tuV5);
 
   TValidatorIsUUID = class(TDataValidatorItemBase, IDataValidatorItem)
   private
-    FVersion: TUUIDVersion;
+    FVersion: TTypeUUID;
     function GetPattern: string;
   public
     function Checked: IDataValidatorResult;
-    constructor Create(const AVersion: TUUIDVersion; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const AVersion: TTypeUUID; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
 { TValidatorIsUUID }
 
-constructor TValidatorIsUUID.Create(const AVersion: TUUIDVersion; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsUUID.Create(const AVersion: TTypeUUID; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FVersion := AVersion;
   FMessage := AMessage;
@@ -58,7 +58,7 @@ var
   LVersion: string;
 begin
   if FVersion = tuAll then
-    LVersion := Format('[1-%d]', [Integer(High(TUUIDVersion))])
+    LVersion := Format('[1-%d]', [Integer(High(TTypeUUID))])
   else
     LVersion := Format('%d', [Integer(FVersion)]);
 

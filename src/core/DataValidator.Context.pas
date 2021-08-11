@@ -66,12 +66,18 @@ type
     function IsEquals(const AValueEquals: string; const ACaseSensitive: Boolean = False): T; overload;
     function IsEthereumAddress(): T;
     function IsGreaterThan(const AValueGreaterThan: Integer): T;
+    function IsGTIN(): T;
+    function IsGTIN8(): T;
+    function IsGTIN12(): T;
+    function IsGTIN13(): T;
+    function IsGTIN14(): T;
     function IsHexadecimal(): T;
     function IsHexColor(): T;
     function IsInteger(): T;
     function IsIP(): T;
     function IsISO8601(): T;
     function IsJSON(): T;
+    function IsJWT(): T;
     function IsLength(const AMin: Integer; const AMax: Integer): T;
     function IsLessThan(const AValueLessThan: Integer): T;
     function IsLocale(): T;
@@ -198,12 +204,14 @@ uses
   Validator.IsEthereumAddress,
   Validator.IsPhoneNumber,
   Validator.IsGreaterThan,
+  Validator.IsGTIN,
   Validator.IsHexadecimal,
   Validator.IsHexColor,
   Validator.IsInteger,
   Validator.IsIP,
   Validator.IsISO8601,
   Validator.IsJSON,
+  Validator.IsJWT,
   Validator.IsLength,
   Validator.IsLessThan,
   Validator.IsLocale,
@@ -471,6 +479,31 @@ begin
   Result := Add(TValidatorIsGreaterThan.Create(AValueGreaterThan, Format('Value is not greate than %d!', [AValueGreaterThan])));
 end;
 
+function TDataValidatorContext<T>.IsGTIN: T;
+begin
+  Result := Add(TValidatorIsGTIN.Create(TTypeGTIN.tgAll, 'Value is not GTIN (Global Trade Item Number)!'));
+end;
+
+function TDataValidatorContext<T>.IsGTIN8: T;
+begin
+  Result := Add(TValidatorIsGTIN.Create(TTypeGTIN.tg8, 'Value is not GTIN-8 (Global Trade Item Number)!'));
+end;
+
+function TDataValidatorContext<T>.IsGTIN12: T;
+begin
+  Result := Add(TValidatorIsGTIN.Create(TTypeGTIN.tg12, 'Value is not GTIN-12 (Global Trade Item Number)!'));
+end;
+
+function TDataValidatorContext<T>.IsGTIN13: T;
+begin
+  Result := Add(TValidatorIsGTIN.Create(TTypeGTIN.tg13, 'Value is not GTIN-13 (Global Trade Item Number)!'));
+end;
+
+function TDataValidatorContext<T>.IsGTIN14: T;
+begin
+  Result := Add(TValidatorIsGTIN.Create(TTypeGTIN.tg14, 'Value is not GTIN-14 (Global Trade Item Number)!'));
+end;
+
 function TDataValidatorContext<T>.IsHexadecimal: T;
 begin
   Result := Add(TValidatorIsHexadecimal.Create('Value is not hexadecimal!'));
@@ -499,6 +532,11 @@ end;
 function TDataValidatorContext<T>.IsJSON: T;
 begin
   Result := Add(TValidatorIsJSON.Create('Value is not JSON (JavaScript Object Notation)!'));
+end;
+
+function TDataValidatorContext<T>.IsJWT: T;
+begin
+  Result := Add(TValidatorIsJWT.Create('Value is not JWT (JSON Web Token)!'));
 end;
 
 function TDataValidatorContext<T>.IsLength(const AMin, AMax: Integer): T;
@@ -623,32 +661,32 @@ end;
 
 function TDataValidatorContext<T>.IsUUID: T;
 begin
-  Result := Add(TValidatorIsUUID.Create(TUUIDVersion.tuAll, 'Value is not UUID (Universally Unique Identifier)!'));
+  Result := Add(TValidatorIsUUID.Create(TTypeUUID.tuAll, 'Value is not UUID (Universally Unique Identifier)!'));
 end;
 
 function TDataValidatorContext<T>.IsUUIDv1: T;
 begin
-  Result := Add(TValidatorIsUUID.Create(TUUIDVersion.tuV1, 'Value is not UUID (Universally Unique Identifier) v1!'));
+  Result := Add(TValidatorIsUUID.Create(TTypeUUID.tuV1, 'Value is not UUIDv1 (Universally Unique Identifier)!'));
 end;
 
 function TDataValidatorContext<T>.IsUUIDv2: T;
 begin
-  Result := Add(TValidatorIsUUID.Create(TUUIDVersion.tuV2, 'Value is not UUID (Universally Unique Identifier) v2!'));
+  Result := Add(TValidatorIsUUID.Create(TTypeUUID.tuV2, 'Value is not UUIDv2 (Universally Unique Identifier)!'));
 end;
 
 function TDataValidatorContext<T>.IsUUIDv3: T;
 begin
-  Result := Add(TValidatorIsUUID.Create(TUUIDVersion.tuV3, 'Value is not UUID (Universally Unique Identifier) v3!'));
+  Result := Add(TValidatorIsUUID.Create(TTypeUUID.tuV3, 'Value is not UUIDv3 (Universally Unique Identifier)!'));
 end;
 
 function TDataValidatorContext<T>.IsUUIDv4: T;
 begin
-  Result := Add(TValidatorIsUUID.Create(TUUIDVersion.tuV4, 'Value is not UUID (Universally Unique Identifier) v4!'));
+  Result := Add(TValidatorIsUUID.Create(TTypeUUID.tuV4, 'Value is not UUIDv4 (Universally Unique Identifier)!'));
 end;
 
 function TDataValidatorContext<T>.IsUUIDv5: T;
 begin
-  Result := Add(TValidatorIsUUID.Create(TUUIDVersion.tuV5, 'Value is not UUID (Universally Unique Identifier) v5!'));
+  Result := Add(TValidatorIsUUID.Create(TTypeUUID.tuV5, 'Value is not UUIDv5 (Universally Unique Identifier)!'));
 end;
 
 function TDataValidatorContext<T>.IsZero: T;

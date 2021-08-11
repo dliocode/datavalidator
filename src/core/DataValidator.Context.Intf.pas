@@ -89,12 +89,18 @@ type
     function IsEquals(const AValueEquals: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function IsEthereumAddress(): T;
     function IsGreaterThan(const AValueGreaterThan: Integer): T;
+    function IsGTIN(): T;
+    function IsGTIN8(): T;
+    function IsGTIN12(): T;
+    function IsGTIN13(): T;
+    function IsGTIN14(): T;
     function IsHexadecimal(): T;
     function IsHexColor(): T;
     function IsInteger(): T;
     function IsIP(): T;
     function IsISO8601(): T;
     function IsJSON(): T;
+    function IsJWT(): T;
     function IsLength(const AMin: Integer; const AMax: Integer): T;
     function IsLessThan(const AValueLessThan: Integer): T;
     function IsLocale(): T;

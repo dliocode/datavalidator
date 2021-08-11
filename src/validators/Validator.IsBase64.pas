@@ -11,7 +11,7 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils, System.RegularExpressions;
+  System.SysUtils, System.RegularExpressions, System.NetEncoding;
 
 type
   TValidatorIsBase64 = class(TDataValidatorItemBase, IDataValidatorItem)
@@ -40,8 +40,16 @@ begin
   R := False;
 
   if not Trim(LValue).IsEmpty then
-    if (Length(LValue) mod 4) <> 0 then
-      R := TRegEx.IsMatch(LValue, '^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$');
+  begin
+    R := TRegEx.IsMatch(LValue, '^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$');
+
+    if not R then
+      try
+        LValue := TNetEncoding.Base64.Decode(LValue);
+        R := True;
+      except
+      end;
+  end;
 
   if FIsNot then
     R := not R;

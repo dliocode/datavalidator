@@ -11,7 +11,7 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.Math;
+  System.Math, System.SysUtils;
 
 type
   TValidatorIsBetween = class(TDataValidatorItemBase, IDataValidatorItem)
@@ -19,7 +19,7 @@ type
     FValueA: TValue;
     FValueB: TValue;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
 
     constructor Create(const AValueA: TValue; const AValueB: TValue; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil); overload;
   end;
@@ -36,7 +36,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsBetween.Checked: IDataValidatorResult;
+function TValidatorIsBetween.Check: IDataValidatorResult;
 var
   LValue: Variant;
   LValueA: Variant;
@@ -44,10 +44,18 @@ var
   R: Boolean;
 begin
   LValue := GetValueAsString;
-  LValueA := FValueA.AsVariant;
-  LValueB := FValueB.AsVariant;
+  R := False;
 
-  R := InRange(LValue, LValueA, LValueB);
+  if not Trim(LValue).IsEmpty then
+  begin
+    LValueA := FValueA.AsVariant;
+    LValueB := FValueB.AsVariant;
+
+    try
+      R := InRange(LValue, LValueA, LValueB);
+    except
+    end;
+  end;
 
   if FIsNot then
     R := not R;

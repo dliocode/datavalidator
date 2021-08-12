@@ -58,7 +58,7 @@ begin
       .&End
     .&End
 
-    .CheckedAll;
+    .CheckAll;
 end;
 
 var

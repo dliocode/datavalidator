@@ -31,13 +31,21 @@ end;
 
 function TSanitizerHTMLEncode.Sanitize: TValue;
 var
-  LValue: TValue;
+  LValue: string;
+  LValueEncode: string;
 begin
-  LValue := THTMLEncoding.HTML.Encode(GetValueAsString);
+  LValue := GetValueAsString;
 
-  SetValueAdapter(LValue);
+  try
+    LValueEncode := THTMLEncoding.HTML.Encode(LValue);
+  except
+    LValueEncode := LValue;
+  end;
+
+  SetValueAdapter(LValueEncode);
 
   Result := FValue;
 end;
+
 
 end.

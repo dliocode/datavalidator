@@ -17,7 +17,7 @@ type
   TValidatorIsLocale = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -31,7 +31,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsLocale.Checked: IDataValidatorResult;
+function TValidatorIsLocale.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;

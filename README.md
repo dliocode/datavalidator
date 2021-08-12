@@ -80,7 +80,7 @@ begin
       .NormalizeEmail
   .&End
 
-  .CheckedAll;  
+  .CheckAll;  
 ```
 
 ##### Modo: JSON
@@ -143,7 +143,7 @@ begin
       .&End      
     .&End
 
-    .CheckedAll;
+    .CheckAll;
 ```
 
 
@@ -168,10 +168,10 @@ begin
     Result := LResult.Informations.Count;
 ```
 
-#### Diferença de Checked e CheckedAll
+#### Diferença de Check e CheckAll
 
-- **Checked**: Faz a verificação de todos os **_validate_**, mas se houver um item com retorno **_false_** ele interrompe a verificação!
-- **CheckedAll**: Faz a verificação de todos os **_validate_**!
+- **Check**: Faz a verificação de todos os **_validate_**, mas se houver um item com retorno **_false_** ele interrompe, retornando uma única mensagem de erro se tiver!
+- **CheckAll**: Faz a verificação de todos os **_validate_**, retornando todas mensagens de erro se tiver!
 
 #### **Validação Schema**
 - É uma forma de criar um esqueleto de validação e conseguir reutilizar em outras validações.
@@ -221,7 +221,7 @@ begin
     .AddSchema(SchemaEmail('E-mail de confirmação'))
   .&End
 
-  .CheckedAll;
+  .CheckAll;
 
   Readln;  
 end.
@@ -246,7 +246,7 @@ TDataValidator.Values
 | Nome | Informação |
 | ------------ | ------------ |
 | Not | Quando usado esse validador, ele nega o resultado do validador. <br /> Ex: **Validate('email').&Not.IsEmpty** <br /> Se entende que o valor não deve ser vazio.|
-| Execute | Define o que deve ser executado se aquele **_validate_** não passar na validação. A execução dessa procedure é forma manual. <br> Ex: <br> CheckedAll.Informations.GetItem(0).OnExecute;|
+| Execute | Define o que deve ser executado se aquele **_validate_** não passar na validação. A execução dessa procedure é forma manual. <br> Ex: <br> CheckAll.Informations.GetItem(0).OnExecute;|
 | WithMessage | Define a mensagem do error |
 
 ## Validators / Sanitizers

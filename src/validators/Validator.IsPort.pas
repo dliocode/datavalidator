@@ -11,13 +11,13 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.Math;
+  System.Math, System.SysUtils;
 
 type
   TValidatorIsPort = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -31,14 +31,19 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsPort.Checked: IDataValidatorResult;
+function TValidatorIsPort.Check: IDataValidatorResult;
 var
   LValue: Variant;
   R: Boolean;
 begin
   LValue := GetValueAsString;
+  R := False;
 
-  R := InRange(LValue, 0, 65535);
+  try
+    if not Trim(LValue).IsEmpty then
+      R := InRange(LValue, 0, 65535);
+  except
+  end;
 
   if FIsNot then
     R := not R;

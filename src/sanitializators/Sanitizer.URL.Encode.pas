@@ -32,10 +32,17 @@ end;
 function TSanitizerURLEncode.Sanitize: TValue;
 var
   LValue: string;
+  LValueEncode: string;
 begin
-  LValue := THTMLEncoding.URL.Encode(GetValueAsString);
+  LValue := GetValueAsString;
 
-  SetValueAdapter(LValue);
+  try
+    LValueEncode := THTMLEncoding.URL.Encode(LValue);
+  except
+    LValueEncode := LValue;
+  end;
+
+  SetValueAdapter(LValueEncode);
 
   Result := FValue;
 end;

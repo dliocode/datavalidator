@@ -19,7 +19,7 @@ type
     FCustomExecute: TDataValidatorCustomExecute;
     FCustomMessageExecute: TDataValidatorCustomMessageExecute;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const ACustomExecute: TDataValidatorCustomExecute; const ACustomMessageExecute: TDataValidatorCustomMessageExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -35,7 +35,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorCustom.Checked: IDataValidatorResult;
+function TValidatorCustom.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;

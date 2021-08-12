@@ -91,7 +91,8 @@ type
     function IsNegative(): T;
     function IsNumeric(): T;
     function IsOctal(): T;
-    function IsOptional(): T;
+    function IsOptional(): T; overload;
+    function IsOptional(const AExecute: TDataValidatorCustomExecute): T; overload;
     function IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPort(): T;
@@ -628,7 +629,12 @@ end;
 
 function TDataValidatorContext<T>.IsOptional: T;
 begin
-  Result := Add(TValidatorIsOptional.Create('Value is optional!'));
+  Result := Add(TValidatorIsOptional.Create(nil, 'Value is optional!'));
+end;
+
+function TDataValidatorContext<T>.IsOptional(const AExecute: TDataValidatorCustomExecute): T;
+begin
+  Result := Add(TValidatorIsOptional.Create(AExecute, 'Value is optional!'));
 end;
 
 function TDataValidatorContext<T>.IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage): T;

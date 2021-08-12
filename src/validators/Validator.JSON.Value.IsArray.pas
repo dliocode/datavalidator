@@ -11,13 +11,13 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.JSON;
+  System.JSON, System.SysUtils;
 
 type
   TDataValidatorJSONValueIsArray = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -31,22 +31,23 @@ begin
   FExecute := AExecute;
 end;
 
-function TDataValidatorJSONValueIsArray.Checked: IDataValidatorResult;
+function TDataValidatorJSONValueIsArray.Check: IDataValidatorResult;
 var
-  R: Boolean;
   LValue: string;
+  R: Boolean;
   LJSONPair: TJSONPair;
 begin
-  R := False;
   LValue := GetValueAsString;
+  R := False;
 
-  if FValue.IsType<TJSONPair> then
-  begin
-    LJSONPair := FValue.AsType<TJSONPair>;
+  if not Trim(LValue).IsEmpty then
+    if FValue.IsType<TJSONPair> then
+    begin
+      LJSONPair := FValue.AsType<TJSONPair>;
 
-    if Assigned(LJSONPair) then
-      R := LJSONPair.JsonValue is TJSONArray;
-  end;
+      if Assigned(LJSONPair) then
+        R := LJSONPair.JsonValue is TJSONArray;
+    end;
 
   if FIsNot then
     R := not R;

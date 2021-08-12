@@ -22,7 +22,7 @@ type
     function GetPattern: string;
     function CalculateCheckDigit(const AValue: string): Integer;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AGTINType: TTypeGTIN; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -37,7 +37,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsGTIN.Checked: IDataValidatorResult;
+function TValidatorIsGTIN.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;

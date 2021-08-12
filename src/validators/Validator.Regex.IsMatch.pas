@@ -18,7 +18,7 @@ type
   private
     FRegex: string;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const ARegex: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -33,7 +33,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorRegexIsMatch.Checked: IDataValidatorResult;
+function TValidatorRegexIsMatch.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;

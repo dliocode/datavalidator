@@ -18,7 +18,7 @@ type
   private
     function Validate(const ACNPJ: string): Boolean;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -32,7 +32,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsCNPJ.Checked: IDataValidatorResult;
+function TValidatorIsCNPJ.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;

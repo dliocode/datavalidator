@@ -19,7 +19,7 @@ type
     FValueContains: TArray<string>;
     FCaseSensitive: Boolean;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AValueContains: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -35,7 +35,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorContains.Checked: IDataValidatorResult;
+function TValidatorContains.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -44,16 +44,17 @@ begin
   LValue := GetValueAsString;
   R := False;
 
-  for I := Low(FValueContains) to High(FValueContains) do
-  begin
-    if FCaseSensitive then
-      R := Pos(FValueContains[I], LValue) > 0
-    else
-      R := Pos(LowerCase(FValueContains[I]), LowerCase(LValue)) > 0;
+  if not Trim(LValue).IsEmpty then
+    for I := Low(FValueContains) to High(FValueContains) do
+    begin
+      if FCaseSensitive then
+        R := Pos(FValueContains[I], LValue) > 0
+      else
+        R := Pos(LowerCase(FValueContains[I]), LowerCase(LValue)) > 0;
 
-    if R then
-      Break;
-  end;
+      if R then
+        Break;
+    end;
 
   if FIsNot then
     R := not R;

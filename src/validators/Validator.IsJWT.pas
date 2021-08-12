@@ -18,7 +18,7 @@ type
   private
     FValidatorBase64: IDataValidatorItem;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -33,7 +33,7 @@ begin
   FValidatorBase64 := TValidatorIsBase64.Create('Value is not base64!');
 end;
 
-function TValidatorIsJWT.Checked: IDataValidatorResult;
+function TValidatorIsJWT.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -61,7 +61,7 @@ begin
 
         // Valid Base64
         FValidatorBase64.SetValue(LSplit[I]);
-        LResult := FValidatorBase64.Checked;
+        LResult := FValidatorBase64.Check;
         R := LResult.OK;
 
         if not R then

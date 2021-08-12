@@ -55,7 +55,7 @@ end;
 
 procedure TForm1.btnSanitizeClick(Sender: TObject);
 begin
-  ShowResult(Valid.CheckedAll);
+  ShowResult(Valid.CheckAll);
 end;
 
 procedure TForm1.ShowResult(const AResult: IDataValidatorResult);

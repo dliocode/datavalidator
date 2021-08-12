@@ -29,7 +29,7 @@ type
 
   IDataValidatorItem = interface(IDataValidatorItemBase)
     ['{277F2E2E-BBA1-4823-8DCC-8D4FD399CF02}']
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
   end;
 
   IDataSanitizerItem = interface(IDataValidatorItem)

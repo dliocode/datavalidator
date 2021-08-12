@@ -31,11 +31,18 @@ end;
 
 function TSanitizerBase64Decode.Sanitize: TValue;
 var
-  LValue: TValue;
+  LValue: string;
+  LValueDecode: string;
 begin
-  LValue := TNetEncoding.Base64.Decode(GetValueAsString);
+  LValue := GetValueAsString;
 
-  SetValueAdapter(LValue);
+  try
+    LValueDecode := TNetEncoding.Base64.Decode(LValue);
+  except
+    LValueDecode := LValue;
+  end;
+
+  SetValueAdapter(LValueDecode);
 
   Result := FValue;
 end;

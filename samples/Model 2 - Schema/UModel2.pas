@@ -37,12 +37,12 @@ implementation
 
 procedure TForm1.btnValidarClick(Sender: TObject);
 begin
-  ShowResult(Valid.Checked);
+  ShowResult(Valid.Check);
 end;
 
 procedure TForm1.btnValidarTodosClick(Sender: TObject);
 begin
-  ShowResult(Valid.CheckedAll);
+  ShowResult(Valid.CheckAll);
 end;
 
 function TForm1.SchemaNome(const AField: string): IDataValidatorSchemaContext;

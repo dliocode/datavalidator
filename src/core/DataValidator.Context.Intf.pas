@@ -114,7 +114,8 @@ type
     function IsNegative(): T;
     function IsNumeric(): T;
     function IsOctal(): T;
-    function IsOptional(): T;
+    function IsOptional(): T; overload;
+    function IsOptional(const AExecute: TDataValidatorCustomExecute): T; overload;
     function IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPort(): T;

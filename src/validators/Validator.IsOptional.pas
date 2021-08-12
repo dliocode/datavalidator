@@ -16,28 +16,34 @@ uses
 type
   TValidatorIsOptional = class(TDataValidatorItemBase, IDataValidatorItem)
   private
+    FOptionalExecute: TDataValidatorCustomExecute;
   public
-    function Checked: IDataValidatorResult;
-    constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    function Check: IDataValidatorResult;
+    constructor Create(const AOptionalExecute: TDataValidatorCustomExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
 { TValidatorIsOptional }
 
-constructor TValidatorIsOptional.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsOptional.Create(const AOptionalExecute: TDataValidatorCustomExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  FOptionalExecute := AOptionalExecute;
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsOptional.Checked: IDataValidatorResult;
+function TValidatorIsOptional.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
 begin
   LValue := GetValueAsString;
-  R := LValue.IsEmpty;
+
+  if Assigned(FOptionalExecute) then
+    R := FOptionalExecute(LValue)
+  else
+    R := LValue.IsEmpty;
 
   if FIsNot then
     R := not R;

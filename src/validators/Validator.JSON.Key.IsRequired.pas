@@ -17,7 +17,7 @@ type
   TDataValidatorJSONKeyIsRequired = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -31,21 +31,22 @@ begin
   FExecute := AExecute;
 end;
 
-function TDataValidatorJSONKeyIsRequired.Checked: IDataValidatorResult;
+function TDataValidatorJSONKeyIsRequired.Check: IDataValidatorResult;
 var
-  R: Boolean;
   LValue: string;
+  R: Boolean;
   LJSONPair: TJSONPair;
 begin
-  R := True;
   LValue := GetValueAsString;
+  R := True;
 
-  if FValue.IsType<TJSONPair> then
-  begin
-    LJSONPair := FValue.AsType<TJSONPair>;
+  if not Trim(LValue).IsEmpty then
+    if FValue.IsType<TJSONPair> then
+    begin
+      LJSONPair := FValue.AsType<TJSONPair>;
 
-    R := Assigned(LJSONPair);
-  end;
+      R := Assigned(LJSONPair);
+    end;
 
   if FIsNot then
     R := not R;

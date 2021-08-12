@@ -19,7 +19,7 @@ type
     function Validate(const ACPF: string): Boolean;
   public
     function GetMessage: string;
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -38,7 +38,7 @@ begin
   Result := FMessage;
 end;
 
-function TValidatorIsCPF.Checked: IDataValidatorResult;
+function TValidatorIsCPF.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;

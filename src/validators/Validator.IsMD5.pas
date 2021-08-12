@@ -17,7 +17,7 @@ type
   TValidatorIsMD5 = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -31,7 +31,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsMD5.Checked: IDataValidatorResult;
+function TValidatorIsMD5.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;

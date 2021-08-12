@@ -38,6 +38,7 @@ var
   LDate: TDateTime;
 begin
   LValue := Trim(GetValueAsString);
+  LValue := LValue.Replace('\','');
 
   R := TryStrToDate(LValue, LDate);
 

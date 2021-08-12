@@ -90,7 +90,7 @@ begin
       .&End
     .&End
 
-    .CheckedAll;
+    .CheckAll;
 end;
 
 begin

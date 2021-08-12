@@ -28,7 +28,7 @@ begin
       .NormalizeEmail
     .&End
 
-    .CheckedAll;
+    .CheckAll;
 end;
 
 var

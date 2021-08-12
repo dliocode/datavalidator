@@ -18,7 +18,7 @@ type
   private
     FCheckDMS: Boolean;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const ACheckDMS: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -33,7 +33,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsLatLong.Checked: IDataValidatorResult;
+function TValidatorIsLatLong.Check: IDataValidatorResult;
 const
   C_LAT = '^\(?[+-]?(90(\.0+)?|[1-8]?\d(\.\d+)?)$';
   C_LONG = '^\s?[+-]?(180(\.0+)?|1[0-7]\d(\.\d+)?|\d{1,2}(\.\d+)?)\)?$';

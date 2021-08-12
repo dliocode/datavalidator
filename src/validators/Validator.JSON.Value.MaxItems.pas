@@ -11,14 +11,14 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.JSON;
+  System.JSON, System.SysUtils;
 
 type
   TDataValidatorJSONValueMaxItems = class(TDataValidatorItemBase, IDataValidatorItem)
   private
     FMaxItems: Integer;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMaxItems: Integer; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -33,28 +33,29 @@ begin
   FExecute := AExecute;
 end;
 
-function TDataValidatorJSONValueMaxItems.Checked: IDataValidatorResult;
+function TDataValidatorJSONValueMaxItems.Check: IDataValidatorResult;
 var
-  R: Boolean;
   LValue: string;
+  R: Boolean;
   LJSONPair: TJSONPair;
 begin
-  R := False;
   LValue := GetValueAsString;
+  R := False;
 
-  if FValue.IsType<TJSONPair> then
-  begin
-    LJSONPair := FValue.AsType<TJSONPair>;
-
-    if Assigned(LJSONPair) then
+  if not Trim(LValue).IsEmpty then
+    if FValue.IsType<TJSONPair> then
     begin
-      if LJSONPair.JsonValue is TJSONArray then
-        R := (LJSONPair.JsonValue as TJSONArray).Count <= FMaxItems
-      else
-        if LJSONPair.JsonValue is TJSONObject then
-          R := (LJSONPair.JsonValue as TJSONObject).Count <= FMaxItems
+      LJSONPair := FValue.AsType<TJSONPair>;
+
+      if Assigned(LJSONPair) then
+      begin
+        if LJSONPair.JsonValue is TJSONArray then
+          R := (LJSONPair.JsonValue as TJSONArray).Count <= FMaxItems
+        else
+          if LJSONPair.JsonValue is TJSONObject then
+            R := (LJSONPair.JsonValue as TJSONObject).Count <= FMaxItems
+      end;
     end;
-  end;
 
   if FIsNot then
     R := not R;

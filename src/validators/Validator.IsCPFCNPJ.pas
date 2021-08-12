@@ -19,7 +19,7 @@ type
     FValidatorCPF: IDataValidatorItem;
     FValidatorCNPJ: IDataValidatorItem;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -36,7 +36,7 @@ begin
   FValidatorCNPJ := TValidatorIsCNPJ.Create(AMessage, AExecute);
 end;
 
-function TValidatorIsCPFCNPJ.Checked: IDataValidatorResult;
+function TValidatorIsCPFCNPJ.Check: IDataValidatorResult;
 var
   R: Boolean;
   LResult: IDataValidatorResult;
@@ -45,7 +45,7 @@ begin
   FValidatorCPF.SetIsNot(FIsNot);
   FValidatorCPF.SetValue(FValue);
 
-  LResult := FValidatorCPF.Checked;
+  LResult := FValidatorCPF.Check;
   R := LResult.OK;
   LValue := LResult.Values[0];
 
@@ -54,7 +54,7 @@ begin
     FValidatorCNPJ.SetIsNot(FIsNot);
     FValidatorCNPJ.SetValue(FValue);
 
-    LResult := FValidatorCNPJ.Checked;
+    LResult := FValidatorCNPJ.Check;
     R := LResult.OK;
     LValue := LResult.Values[0];
   end;

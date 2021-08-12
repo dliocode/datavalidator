@@ -19,7 +19,7 @@ type
     FCustomJSONValueExecute: TDataValidatorCustomJSONValueExecute;
     FCustomJSONValueMessageExecute: TDataValidatorCustomJSONValueMessageExecute;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(
       const ACustomJSONObjectExecute: TDataValidatorCustomJSONValueExecute; const ACustomJSONObjectMessageExecute: TDataValidatorCustomJSONValueMessageExecute;
       const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
@@ -40,7 +40,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorJSONValueCustom.Checked: IDataValidatorResult;
+function TValidatorJSONValueCustom.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -50,19 +50,20 @@ begin
   R := False;
 
   try
-    if FValue.IsType<TJSONPair> then
-    begin
-      LJSONPair := FValue.AsType<TJSONPair>;
+    if not Trim(LValue).IsEmpty then
+      if FValue.IsType<TJSONPair> then
+      begin
+        LJSONPair := FValue.AsType<TJSONPair>;
 
-      if Assigned(LJSONPair) then
-        if Assigned(FCustomJSONValueExecute) then
-          R := FCustomJSONValueExecute(LJSONPair.JsonValue)
-        else
-          if Assigned(FCustomJSONValueMessageExecute) then
-            R := FCustomJSONValueMessageExecute(LJSONPair.JsonValue, FMessage);
+        if Assigned(LJSONPair) then
+          if Assigned(FCustomJSONValueExecute) then
+            R := FCustomJSONValueExecute(LJSONPair.JsonValue)
+          else
+            if Assigned(FCustomJSONValueMessageExecute) then
+              R := FCustomJSONValueMessageExecute(LJSONPair.JsonValue, FMessage);
 
-      LValue := GetValueAsString;
-    end;
+        LValue := GetValueAsString;
+      end;
   except
   end;
 

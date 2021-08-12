@@ -19,7 +19,7 @@ type
     FValueEquals: TArray<string>;
     FCaseSensitive: Boolean;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AValueEquals: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -35,7 +35,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsEquals.Checked: IDataValidatorResult;
+function TValidatorIsEquals.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -44,16 +44,17 @@ begin
   LValue := GetValueAsString;
   R := False;
 
-  for I := Low(FValueEquals) to High(FValueEquals) do
-  begin
-    if FCaseSensitive then
-      R := VarCompareValue(LValue, FValueEquals[I]) = vrEqual
-    else
-      R := VarCompareValue(LowerCase(LValue), LowerCase(FValueEquals[I])) = vrEqual;
+  if not Trim(LValue).IsEmpty then
+    for I := Low(FValueEquals) to High(FValueEquals) do
+    begin
+      if FCaseSensitive then
+        R := VarCompareValue(LValue, FValueEquals[I]) = vrEqual
+      else
+        R := VarCompareValue(LowerCase(LValue), LowerCase(FValueEquals[I])) = vrEqual;
 
-    if R then
-      Break;
-  end;
+      if R then
+        Break;
+    end;
 
   if FIsNot then
     R := not R;

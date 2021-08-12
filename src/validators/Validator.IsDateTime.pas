@@ -18,7 +18,7 @@ type
   private
     FJSONISO8601ReturnUTC: Boolean;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AJSONISO8601ReturnUTC: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -33,18 +33,24 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsDateTime.Checked: IDataValidatorResult;
+function TValidatorIsDateTime.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
   LDate: TDateTime;
 begin
   LValue := GetValueAsString;
+  R := False;
 
-  R := TryStrToDateTime(LValue, LDate);
+  if not Trim(LValue).IsEmpty then
+  begin
+    LValue := LValue.Replace('\','');
 
-  if not R then
-    R := TryISO8601ToDate(LValue, LDate, FJSONISO8601ReturnUTC);
+    R := TryStrToDate(LValue, LDate);
+
+    if not R then
+      R := TryISO8601ToDate(LValue, LDate, FJSONISO8601ReturnUTC);
+  end;
 
   if FIsNot then
     R := not R;

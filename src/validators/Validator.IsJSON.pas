@@ -17,7 +17,7 @@ type
   TValidatorIsJson = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -31,22 +31,21 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsJson.Checked: IDataValidatorResult;
+function TValidatorIsJson.Check: IDataValidatorResult;
 var
-  R: Boolean;
   LValue: string;
+  R: Boolean;
   LJV: TJsonValue;
 begin
-  R := False;
-
   LValue := Trim(GetValueAsString);
+  R := False;
 
   if not LValue.IsEmpty then
   begin
     LJV := nil;
 
     try
-      LValue := LValue.Replace(#$D, '').Replace(#$A, '').Replace(#9, '');
+      LValue := LValue.Replace(#$D, '').Replace(#$A, '').Replace(#9, '').Replace('\r\n','');
       LJV := TJSONObject.ParseJSONValue(LValue, False, False);
     except
     end;

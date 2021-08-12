@@ -18,7 +18,7 @@ type
   private
     function GetPattern: string;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -32,7 +32,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsPhoneNumber.Checked: IDataValidatorResult;
+function TValidatorIsPhoneNumber.Check: IDataValidatorResult;
 var
   R: Boolean;
   LValue: string;

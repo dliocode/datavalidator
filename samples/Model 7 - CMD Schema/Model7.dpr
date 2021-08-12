@@ -55,7 +55,7 @@ begin
       .AddSchema(SchemaEmail('E-mail de confirmação'))
     .&End
 
-    .CheckedAll;
+    .CheckAll;
 end;
 
 var

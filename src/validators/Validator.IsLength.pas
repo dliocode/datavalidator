@@ -19,7 +19,7 @@ type
     FMin: Integer;
     FMax: Integer;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMin: Integer; const AMax: Integer; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -36,7 +36,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsLength.Checked: IDataValidatorResult;
+function TValidatorIsLength.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;

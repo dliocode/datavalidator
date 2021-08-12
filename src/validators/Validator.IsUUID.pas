@@ -21,7 +21,7 @@ type
     FVersion: TTypeUUID;
     function GetPattern: string;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AVersion: TTypeUUID; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -36,7 +36,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsUUID.Checked: IDataValidatorResult;
+function TValidatorIsUUID.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;

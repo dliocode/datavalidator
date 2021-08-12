@@ -11,13 +11,13 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils, System.RegularExpressions, System.NetEncoding;
+  System.SysUtils, System.StrUtils, System.NetEncoding;
 
 type
   TValidatorIsBase64 = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -31,9 +31,10 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsBase64.Checked: IDataValidatorResult;
+function TValidatorIsBase64.Check: IDataValidatorResult;
 var
   LValue: string;
+  LValueDecode: string;
   R: Boolean;
 begin
   LValue := GetValueAsString;
@@ -41,14 +42,13 @@ begin
 
   if not Trim(LValue).IsEmpty then
   begin
-    R := TRegEx.IsMatch(LValue, '^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$');
+    LValue := LValue.Replace('\r\n', '').Replace(sLineBreak, '');
 
-    if not R then
-      try
-        LValue := TNetEncoding.Base64.Decode(LValue);
-        R := True;
-      except
-      end;
+    try
+      LValueDecode := TNetEncoding.Base64.Decode(LValue);
+      R := not LValueDecode.Equals(LValue);
+    except
+    end;
   end;
 
   if FIsNot then

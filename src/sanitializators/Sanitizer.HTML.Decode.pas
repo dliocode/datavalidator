@@ -30,11 +30,18 @@ end;
 
 function TSanitizerHTMLDecode.Sanitize: TValue;
 var
-  LValue: TValue;
+  LValue: string;
+  LValueDecode: string;
 begin
-  LValue := THTMLEncoding.HTML.Decode(GetValueAsString);
+  LValue := GetValueAsString;
 
-  SetValueAdapter(LValue);
+  try
+    LValueDecode := THTMLEncoding.HTML.Decode(LValue);
+  except
+    LValueDecode := LValue;
+  end;
+
+  SetValueAdapter(LValueDecode);
 
   Result := FValue;
 end;

@@ -18,13 +18,17 @@ type
   private
     FList: TList<IDataValidatorValueBaseContext>;
 
-    function Check(const ACheckAll: Boolean): IDataValidatorResult;
+    function CheckValue(const ACheckAll: Boolean): IDataValidatorResult;
+    function TValueToString(const AValue: TValue): string;
   public
     function Validate(const AValue: string): IDataValidatorValueBaseContext; overload;
     function Validate(const AValue: TArray<string>): IDataValidatorValueBaseContext; overload;
 
-    function Checked: IDataValidatorResult;
-    function CheckedAll: IDataValidatorResult;
+    function Check(): IDataValidatorResult;
+    function CheckAll(): IDataValidatorResult;
+
+    function Checked(): IDataValidatorResult;
+    function CheckedAll(): IDataValidatorResult;
 
     constructor Create;
     destructor Destroy; override;
@@ -64,32 +68,25 @@ end;
 
 function TDataValidatorValue.Checked: IDataValidatorResult;
 begin
-  Result := Check(False);
+  Result := Check;
 end;
 
 function TDataValidatorValue.CheckedAll: IDataValidatorResult;
 begin
-  Result := Check(True);
+  Result := CheckAll;
 end;
 
-function TDataValidatorValue.Check(const ACheckAll: Boolean): IDataValidatorResult;
-  function ValueString(const AValue: TValue): string;
-  var
-    LJSONPair: TJSONPair;
-  begin
-    Result := '';
+function TDataValidatorValue.Check: IDataValidatorResult;
+begin
+  Result := CheckValue(False);
+end;
 
-    if AValue.IsType<TJSONPair> then
-    begin
-      LJSONPair := AValue.AsType<TJSONPair>;
+function TDataValidatorValue.CheckAll: IDataValidatorResult;
+begin
+  Result := CheckValue(True);
+end;
 
-      if Assigned(LJSONPair) then
-        Result := LJSONPair.JsonValue.Value;
-    end
-    else
-      Result := AValue.AsString;
-  end;
-
+function TDataValidatorValue.CheckValue(const ACheckAll: Boolean): IDataValidatorResult;
 var
   LOK: Boolean;
   LInfo: IDataValidatorInformations;
@@ -128,7 +125,7 @@ begin
 
         LValidatorItem.SetValue(LValueSanitizer);
 
-        LValidatorResult := LValidatorItem.Checked;
+        LValidatorResult := LValidatorItem.Check;
 
         if not LValidatorResult.OK then
         begin
@@ -146,7 +143,7 @@ begin
             Break
       end;
 
-      LValues := Concat(LValues, [ValueString(LValueSanitizer)]);
+      LValues := Concat(LValues, [TValueToString(LValueSanitizer)]);
 
       if not LOK then
         if not ACheckAll then
@@ -159,6 +156,23 @@ begin
   end;
 
   Result := TDataValidatorResult.Create(LOK, LInfo, LValues);
+end;
+
+function TDataValidatorValue.TValueToString(const AValue: TValue): string;
+var
+  LJSONPair: TJSONPair;
+begin
+  Result := '';
+
+  if AValue.IsType<TJSONPair> then
+  begin
+    LJSONPair := AValue.AsType<TJSONPair>;
+
+    if Assigned(LJSONPair) then
+      Result := LJSONPair.JsonValue.Value;
+  end
+  else
+    Result := AValue.AsString;
 end;
 
 end.

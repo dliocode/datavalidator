@@ -19,7 +19,7 @@ type
     FValueStartsWith: TArray<string>;
     FCaseSensitive: Boolean;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AValueStartsWith: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -35,7 +35,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorStartsWith.Checked: IDataValidatorResult;
+function TValidatorStartsWith.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
@@ -44,16 +44,17 @@ begin
   LValue := GetValueAsString;
   R := False;
 
-  for I := Low(FValueStartsWith) to High(FValueStartsWith) do
-  begin
-    if FCaseSensitive then
-      R := StartsStr(FValueStartsWith[I], LValue)
-    else
-      R := StartsStr(LowerCase(FValueStartsWith[I]), LowerCase(LValue));
+  if not Trim(LValue).IsEmpty then
+    for I := Low(FValueStartsWith) to High(FValueStartsWith) do
+    begin
+      if FCaseSensitive then
+        R := StartsStr(FValueStartsWith[I], LValue)
+      else
+        R := StartsStr(LowerCase(FValueStartsWith[I]), LowerCase(LValue));
 
-    if R then
-      Break;
-  end;
+      if R then
+        Break;
+    end;
 
   if FIsNot then
     R := not R;

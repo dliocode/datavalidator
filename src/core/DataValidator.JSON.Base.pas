@@ -14,16 +14,14 @@ uses
   System.JSON;
 
 type
-  TDataValidatorJSONBase = class(TDataValidatorJSONContext<IDataValidatorJSONBase>, IDataValidatorJSONBase, IDataValidatorJSONValueName)
+  TDataValidatorJSONBase = class(TDataValidatorJSONContext<IDataValidatorJSONBase>, IDataValidatorJSONBase)
   private
     [weak]
     FResult: IDataValidatorJSONResult;
-    FName: TArray<string>;
   public
     function &End(): IDataValidatorJSONResult;
-    function GetName: TArray<string>;
 
-    constructor Create(const AResult: IDataValidatorJSONResult; const AName: TArray<string>; const AValue: TJSONPair); reintroduce;
+    constructor Create(const AResult: IDataValidatorJSONResult; const AValue: TJSONPair); reintroduce;
     destructor Destroy; override;
   end;
 
@@ -31,11 +29,10 @@ implementation
 
 { TDataValidatorJSONBase }
 
-constructor TDataValidatorJSONBase.Create(const AResult: IDataValidatorJSONResult; const AName: TArray<string>; const AValue: TJSONPair);
+constructor TDataValidatorJSONBase.Create(const AResult: IDataValidatorJSONResult; const AValue: TJSONPair);
 begin
   inherited Create(Self, AValue);
   FResult := AResult;
-  FName := AName;
 end;
 
 destructor TDataValidatorJSONBase.Destroy;
@@ -46,11 +43,6 @@ end;
 function TDataValidatorJSONBase.&End(): IDataValidatorJSONResult;
 begin
   Result := FResult;
-end;
-
-function TDataValidatorJSONBase.GetName: TArray<string>;
-begin
-  Result := FName;
 end;
 
 end.

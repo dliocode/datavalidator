@@ -87,7 +87,7 @@ begin
           .&End
         .&End
 
-      .CheckedAll
+      .CheckAll
       .Informations.Message;
 
     MemoJSONResult.Text := LJO.ToString;

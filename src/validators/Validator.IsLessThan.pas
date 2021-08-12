@@ -18,7 +18,7 @@ type
   private
     FValueLessThan: Integer;
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     constructor Create(const AValueLessThan: Integer; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -33,7 +33,7 @@ begin
   FExecute := AExecute;
 end;
 
-function TValidatorIsLessThan.Checked: IDataValidatorResult;
+function TValidatorIsLessThan.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;

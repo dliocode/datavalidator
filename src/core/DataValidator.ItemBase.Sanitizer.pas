@@ -22,7 +22,7 @@ type
   TDataValidatorItemBaseSanitizer = class(TDataValidatorItemBase, IDataSanitizerItem)
   private
   public
-    function Checked: IDataValidatorResult;
+    function Check: IDataValidatorResult;
     function Sanitize: TValue; virtual; abstract;
   end;
 
@@ -30,7 +30,7 @@ implementation
 
 { TDataValidatorItemBaseSanitizer }
 
-function TDataValidatorItemBaseSanitizer.Checked: IDataValidatorResult;
+function TDataValidatorItemBaseSanitizer.Check: IDataValidatorResult;
 begin
   // not implementation
 end;

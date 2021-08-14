@@ -288,6 +288,8 @@ TDataValidator.Values
 |IsHexColor			        |                                 |					          |
 |IsInteger			        |                                 |					          |
 |IsIP				            |                                 |					          |
+|IsIPv4			            |                                 |					          |
+|IsIPv6			            |                                 |					          |
 |IsISO8601              |                                 |					          |
 |IsJSON				          |                                 |					          |
 |IsJWT				          |                                 |					          |

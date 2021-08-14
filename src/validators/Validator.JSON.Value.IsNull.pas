@@ -30,45 +30,49 @@
   ********************************************************************************
 }
 
-unit Validator.IsOptional;
+unit Validator.JSON.Value.IsNull;
 
 interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils;
+  System.JSON, System.SysUtils;
 
 type
-  TValidatorIsOptional = class(TDataValidatorItemBase, IDataValidatorItem)
+  TDataValidatorJSONValueIsNull = class(TDataValidatorItemBase, IDataValidatorItem)
   private
-    FOptionalExecute: TDataValidatorCustomExecute;
   public
     function Check: IDataValidatorResult;
-    constructor Create(const AOptionalExecute: TDataValidatorCustomExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
-{ TValidatorIsOptional }
+{ TDataValidatorJSONValueIsNull }
 
-constructor TValidatorIsOptional.Create(const AOptionalExecute: TDataValidatorCustomExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TDataValidatorJSONValueIsNull.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
-  FOptionalExecute := AOptionalExecute;
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsOptional.Check: IDataValidatorResult;
+function TDataValidatorJSONValueIsNull.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
+  LJSONPair: TJSONPair;
 begin
   LValue := GetValueAsString;
+  R := False;
 
-  if Assigned(FOptionalExecute) then
-    R := FOptionalExecute(LValue)
-  else
-    R := LValue.IsEmpty;
+  if not Trim(LValue).IsEmpty then
+    if FValue.IsType<TJSONPair> then
+    begin
+      LJSONPair := FValue.AsType<TJSONPair>;
+
+      if Assigned(LJSONPair) then
+        R := LJSONPair.JsonValue is TJSONNull;
+    end;
 
   if FIsNot then
     R := not R;

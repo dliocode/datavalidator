@@ -257,11 +257,11 @@ TDataValidator.Values
 |Contains       	      |(Key) IsRequired	                |NormalizeEmail     |
 |EndsWith        	      |(Value) CustomJSONValue          |OnlyNumbers   		  |
 |IsAlpha        	      |(Value) IsArray                  |RemoveAccents      |
-|IsAlphaNumeric 	      |(Value) IsObject                 |Replace            |
-|IsAscii         	      |(Value) MinItems                 |ToBase64Decode     |
-|IsBase32        	      |(Value) MaxItems                 |ToBase64Encode     |
-|IsBase58        	      |(Value) + Validação para values  |ToDate             |
-|IsBase64       	      |                                 |ToDateTime         |
+|IsAlphaNumeric 	      |(Value) IsNull                   |Replace            |
+|IsAscii         	      |(Value) IsObject                 |ToBase64Decode     |
+|IsBase32        	      |(Value) MinItems                 |ToBase64Encode     |
+|IsBase58        	      |(Value) MaxItems                 |ToDate             |
+|IsBase64       	      |(Value) + Validação para values  |ToDateTime         |
 |IsBetween      	      |                                 |ToHTMLDecode	      |
 |IsBoolean       		    |                                 |ToHTMLEncode	      |
 |IsBTCAddress   		    |                                 |ToInteger			    |
@@ -300,6 +300,7 @@ TDataValidator.Values
 |IsMagnetURI 	          |                                 |					          |
 |IsMD5				          |                                 |					          |
 |IsMimeType  	          |                                 |					          |
+|IsMongoId  	          |                                 |					          |
 |IsNegative			        |                                 |					          |
 |IsNumeric			        |                                 |					          |
 |IsOptional		          |                                 |					          |

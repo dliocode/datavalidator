@@ -1,8 +1,33 @@
 {
-  *************************************
-  Created by Danilo Lucas
-  Github - https://github.com/dliocode
-  *************************************
+  ********************************************************************************
+
+  Github - https://github.com/dliocode/datavalidator
+
+  ********************************************************************************
+
+  MIT License
+
+  Copyright (c) 2021 Danilo Lucas
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+  ********************************************************************************
 }
 
 unit DataValidator.JSON.Context;
@@ -35,6 +60,7 @@ type
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueExecute): IDataValidatorJSONContextValue<T>; overload;
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessageExecute): IDataValidatorJSONContextValue<T>; overload;
     function IsArray(): IDataValidatorJSONContextValue<T>;
+    function IsNull(): IDataValidatorJSONContextValue<T>;
     function IsObject(): IDataValidatorJSONContextValue<T>;
     function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
     function MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
@@ -52,6 +78,7 @@ uses
   Validator.JSON.Key.IsRequired,
   Validator.JSON.Value.Custom,
   Validator.JSON.Value.IsArray,
+  Validator.JSON.Value.IsNull,
   Validator.JSON.Value.IsObject,
   Validator.JSON.Value.MinItems,
   Validator.JSON.Value.MaxItems;
@@ -126,6 +153,12 @@ function TDataValidatorJSONContext<T>.IsArray: IDataValidatorJSONContextValue<T>
 begin
   Result := Self;
   Add(TDataValidatorJSONValueIsArray.Create('Value not is JSON Array!'));
+end;
+
+function TDataValidatorJSONContext<T>.IsNull: IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONValueIsNull.Create('Value not is null!'));
 end;
 
 function TDataValidatorJSONContext<T>.IsObject: IDataValidatorJSONContextValue<T>;

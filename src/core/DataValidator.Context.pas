@@ -1,8 +1,33 @@
 {
-  *************************************
-  Created by Danilo Lucas
-  Github - https://github.com/dliocode
-  *************************************
+  ********************************************************************************
+
+  Github - https://github.com/dliocode/datavalidator
+
+  ********************************************************************************
+
+  MIT License
+
+  Copyright (c) 2021 Danilo Lucas
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+  ********************************************************************************
 }
 
 unit DataValidator.Context;
@@ -76,6 +101,8 @@ type
     function IsHexColor(): T;
     function IsInteger(): T;
     function IsIP(): T;
+    function IsIPv4(): T;
+    function IsIPv6(): T;
     function IsISO8601(): T;
     function IsJSON(): T;
     function IsJWT(): T;
@@ -88,6 +115,7 @@ type
     function IsMagnetURI(): T;
     function IsMD5(): T;
     function IsMimeType(): T;
+    function IsMongoId(): T;
     function IsNegative(): T;
     function IsNumeric(): T;
     function IsOctal(): T;
@@ -229,6 +257,7 @@ uses
   Validator.IsMagnetURI,
   Validator.IsMD5,
   Validator.IsMimeType,
+  Validator.IsMongoId,
   Validator.IsNegative,
   Validator.IsNumeric,
   Validator.IsOctal,
@@ -549,7 +578,17 @@ end;
 
 function TDataValidatorContext<T>.IsIP: T;
 begin
-  Result := Add(TValidatorIsIP.Create('Value is not IP (Internet Protocol)!'));
+  Result := Add(TValidatorIsIP.Create(TTypeIpVersion.tvAll, 'Value is not IP (Internet Protocol)!'));
+end;
+
+function TDataValidatorContext<T>.IsIPv4: T;
+begin
+  Result := Add(TValidatorIsIP.Create(TTypeIpVersion.tvIPv4, 'Value is not IPv4 (Internet Protocol)!'));
+end;
+
+function TDataValidatorContext<T>.IsIPv6: T;
+begin
+  Result := Add(TValidatorIsIP.Create(TTypeIpVersion.tvIPv6, 'Value is not IPv6 (Internet Protocol)!'));
 end;
 
 function TDataValidatorContext<T>.IsISO8601: T;
@@ -610,6 +649,11 @@ end;
 function TDataValidatorContext<T>.IsMimeType: T;
 begin
   Result := Add(TValidatorIsMimeType.Create('Value is not MimeType!'));
+end;
+
+function TDataValidatorContext<T>.IsMongoId: T;
+begin
+  Result := Add(TValidatorIsMongoId.Create('Value is not MongoId!'));
 end;
 
 function TDataValidatorContext<T>.IsNegative: T;

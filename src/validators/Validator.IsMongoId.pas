@@ -30,45 +30,42 @@
   ********************************************************************************
 }
 
-unit Validator.IsOptional;
+unit Validator.IsMongoId;
 
 interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils;
+  System.SysUtils, System.RegularExpressions;
 
 type
-  TValidatorIsOptional = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsMongoId = class(TDataValidatorItemBase, IDataValidatorItem)
   private
-    FOptionalExecute: TDataValidatorCustomExecute;
   public
     function Check: IDataValidatorResult;
-    constructor Create(const AOptionalExecute: TDataValidatorCustomExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
-{ TValidatorIsOptional }
+{ TValidatorIsMongoId }
 
-constructor TValidatorIsOptional.Create(const AOptionalExecute: TDataValidatorCustomExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsMongoId.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
-  FOptionalExecute := AOptionalExecute;
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TValidatorIsOptional.Check: IDataValidatorResult;
+function TValidatorIsMongoId.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
 begin
   LValue := GetValueAsString;
+  R := False;
 
-  if Assigned(FOptionalExecute) then
-    R := FOptionalExecute(LValue)
-  else
-    R := LValue.IsEmpty;
+  if not Trim(LValue).IsEmpty then
+    R := TRegEx.IsMatch(LValue, '^(0[xh])?[0-9a-fA-F]{24}$');
 
   if FIsNot then
     R := not R;

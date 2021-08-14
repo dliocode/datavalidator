@@ -30,44 +30,44 @@ begin
   LValid :=
 
     TDataValidator.JSON(LBody)
-//    .Validate('nome')
-//      .Key
-//        .IsRequired.WithMessage('Key "nome" não informado!')
-//      .&End
-//
-//      .Value
-//        .Trim
-//        .&Not.IsEmpty.WithMessage('O campo nome não foi preenchido!')
-//        .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('O campo nome não pode possuir caracters especiais!')
-//        .IsLength(3, 100).WithMessage('O campo nome deve ter no mínimo 3 caracters e no mázimo 100')
-//      .&End
-//    .&End
-//
-//    .Validate('email')
-//      .Key
-//        .IsRequired.WithMessage('Key "email" não informado!')
-//      .&End
-//
-//      .Value
-//        .Trim
-//        .&Not.IsEmpty.WithMessage('Informe o e-mail!')
-//        .IsLength(6, 100).WithMessage('Informe um e-mail maior que 5 caracteres!')
-//        .NormalizeEmail(True, False).IsEmail.WithMessage('E-mail inválido!')
-//        .CustomValue(
-//        function(const AValue: string): Boolean
-//        begin
-//          // Recebe o valor no AValue para analisar e fazer o que for necessário
-//          //
-//          // Ex:
-//          // Consulta no banco verifica se esse email já existe;
-//          //
-//          // Result -> True = significa tudo certo! - False = significa que tem algum problema
-//
-//          Result := AValue = 'developer.dlio@gmail.com';
-//
-//        end).WithMessage('E-mail já cadastrado!')
-//      .&End
-//    .&End
+    .Validate('nome')
+      .Key
+        .IsRequired.WithMessage('Key "nome" não informado!')
+      .&End
+
+      .Value
+        .Trim
+        .&Not.IsEmpty.WithMessage('O campo nome não foi preenchido!')
+        .IsAlpha(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('O campo nome não pode possuir caracters especiais!')
+        .IsLength(3, 100).WithMessage('O campo nome deve ter no mínimo 3 caracters e no mázimo 100')
+      .&End
+    .&End
+
+    .Validate('email')
+      .Key
+        .IsRequired.WithMessage('Key "email" não informado!')
+      .&End
+
+      .Value
+        .Trim
+        .&Not.IsEmpty.WithMessage('Informe o e-mail!')
+        .IsLength(6, 100).WithMessage('Informe um e-mail maior que 5 caracteres!')
+        .NormalizeEmail(True, False).IsEmail.WithMessage('E-mail inválido!')
+        .CustomValue(
+        function(const AValue: string): Boolean
+        begin
+          // Recebe o valor no AValue para analisar e fazer o que for necessário
+          //
+          // Ex:
+          // Consulta no banco verifica se esse email já existe;
+          //
+          // Result -> True = significa tudo certo! - False = significa que tem algum problema
+
+          Result := AValue = 'developer.dlio@gmail.com';
+
+        end).WithMessage('E-mail já cadastrado!')
+      .&End
+    .&End
 
     .Validate('data_nascimento')
       .Key
@@ -83,30 +83,30 @@ begin
       .&End
     .&End
 
-//    .Validate('telefone')
-//      .Key
-//        .IsRequired.WithMessage('Key "telefone" não informado!')
-//      .&End
-//
-//      .Value
-//        .Trim
-//        .&Not.IsEmpty.WithMessage('Informe o telefone!')
-//        .IsPhoneNumber(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Número de telefone inválido!')
-//      .&End
-//    .&End
-//
-//    .Validate('cpf')
-//      .Key
-//        .IsRequired.WithMessage('Key "cpf" não informado!')
-//      .&End
-//
-//      .Value
-//        .Trim
-//        .&Not.IsEmpty.WithMessage('Informe o CPF!')
-//        .IsLength(14, 14).WithMessage('Informe corretamente todos os dígitos do CPF!')
-//        .OnlyNumbers.IsCPF.WithMessage('CPF inválido!')
-//      .&End
-//    .&End
+    .Validate('telefone')
+      .Key
+        .IsRequired.WithMessage('Key "telefone" não informado!')
+      .&End
+
+      .Value
+        .Trim
+        .&Not.IsEmpty.WithMessage('Informe o telefone!')
+        .IsPhoneNumber(TDataValidatorLocaleLanguage.tl_pt_BR).WithMessage('Número de telefone inválido!')
+      .&End
+    .&End
+
+    .Validate('cpf')
+      .Key
+        .IsRequired.WithMessage('Key "cpf" não informado!')
+      .&End
+
+      .Value
+        .Trim
+        .&Not.IsEmpty.WithMessage('Informe o CPF!')
+        .IsLength(14, 14).WithMessage('Informe corretamente todos os dígitos do CPF!')
+        .OnlyNumbers.IsCPF.WithMessage('CPF inválido!')
+      .&End
+    .&End
 
     .Check;
 
@@ -149,6 +149,6 @@ begin
 
   THorse.Post('/register', DataValidatorMiddleware, ControllerRegister);
 
-  THorse.Listen(9001);
+  THorse.Listen(9000);
 
 end.

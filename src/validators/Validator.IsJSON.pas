@@ -70,7 +70,7 @@ begin
 
     try
       LValue := LValue.Replace('\r\n', '').Replace(sLineBreak, '');
-      LJV := TJSONObject.ParseJSONValue(LValue, False, False);
+      LJV := TJSONObject.ParseJSONValue(LValue);
     except
     end;
 

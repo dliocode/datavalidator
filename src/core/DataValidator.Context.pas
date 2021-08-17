@@ -88,8 +88,8 @@ type
     function IsDateTime(const AJSONISO8601ReturnUTC: Boolean = True): T;
     function IsEmail(): T;
     function IsEmpty(): T;
-    function IsEquals(const AValueEquals: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function IsEquals(const AValueEquals: string; const ACaseSensitive: Boolean = False): T; overload;
+    function IsEquals(const AValueEquals: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function IsEthereumAddress(): T;
     function IsGreaterThan(const AValueGreaterThan: Integer): T;
     function IsGTIN(): T;
@@ -347,7 +347,7 @@ end;
 
 function TDataValidatorContext<T>.Contains(const AValueContains: string; const ACaseSensitive: Boolean): T;
 begin
-  Result := Contains([AValueContains], ACaseSensitive);
+  Result := Add(TValidatorContains.Create([AValueContains], ACaseSensitive, Format('Value not contains %s!', [AValueContains])));
 end;
 
 function TDataValidatorContext<T>.Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean): T;
@@ -364,7 +364,7 @@ end;
 
 function TDataValidatorContext<T>.EndsWith(const AValueEndsWith: string; const ACaseSensitive: Boolean = False): T;
 begin
-  Result := EndsWith([AValueEndsWith], ACaseSensitive);
+  Result := Add(TValidatorEndsWith.Create([AValueEndsWith], ACaseSensitive, Format('Value does not end with %s!', [AValueEndsWith])));
 end;
 
 function TDataValidatorContext<T>.EndsWith(const AValueEndsWith: TArray<string>; const ACaseSensitive: Boolean = False): T;
@@ -509,6 +509,11 @@ begin
   Result := Add(TValidatorIsEmpty.Create('Value is not empty!'));
 end;
 
+function TDataValidatorContext<T>.IsEquals(const AValueEquals: string; const ACaseSensitive: Boolean): T;
+begin
+  Result := Add(TValidatorIsEquals.Create([AValueEquals], ACaseSensitive, Format('Value is not equals %s!', [AValueEquals])));
+end;
+
 function TDataValidatorContext<T>.IsEquals(const AValueEquals: TArray<string>; const ACaseSensitive: Boolean): T;
 var
   LValue: string;
@@ -519,11 +524,6 @@ begin
     LMessage := LMessage + LValue + ' ';
 
   Result := Add(TValidatorIsEquals.Create(AValueEquals, ACaseSensitive, Format('Value is not equals %s!', [LMessage])));
-end;
-
-function TDataValidatorContext<T>.IsEquals(const AValueEquals: string; const ACaseSensitive: Boolean): T;
-begin
-  Result := IsEquals([AValueEquals], ACaseSensitive);
 end;
 
 function TDataValidatorContext<T>.IsEthereumAddress: T;
@@ -788,7 +788,7 @@ end;
 
 function TDataValidatorContext<T>.StartsWith(const AValueStartsWith: string; const ACaseSensitive: Boolean = False): T;
 begin
-  Result := StartsWith([AValueStartsWith], ACaseSensitive);
+  Result := Add(TValidatorStartsWith.Create([AValueStartsWith], ACaseSensitive, Format('Value does not start with %s!', [AValueStartsWith])));
 end;
 
 function TDataValidatorContext<T>.StartsWith(const AValueStartsWith: TArray<string>; const ACaseSensitive: Boolean = False): T;

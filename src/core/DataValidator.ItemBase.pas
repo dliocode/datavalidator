@@ -146,7 +146,7 @@ begin
         if LJSONGetValue is TJSONNumber then
         begin
           if TryStrToInt64(LJSONGetValue.Value, LValueInt) then
-            FValue.AsType<TJSONPair>.JsonValue := TJSONNumber.Create(AValue.AsInt64)
+            FValue.AsType<TJSONPair>.JsonValue := TJSONNumber.Create(AValue.AsVariant)
           else
             FValue.AsType<TJSONPair>.JsonValue := TJSONNumber.Create(AValue.AsType<Double>)
         end

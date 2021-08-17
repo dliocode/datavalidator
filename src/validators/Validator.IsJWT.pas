@@ -36,7 +36,7 @@ interface
 
 uses
   DataValidator.ItemBase, Validator.IsBase64,
-  System.SysUtils, System.StrUtils, System.NetEncoding, System.JSON;
+  System.SysUtils, System.StrUtils, System.Types, System.NetEncoding, System.JSON;
 
 type
   TValidatorIsJWT = class(TDataValidatorItemBase, IDataValidatorItem) // JWT (JSON Web Token)
@@ -62,7 +62,7 @@ function TValidatorIsJWT.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
-  LSplit: TArray<string>;
+  LSplit: TStringDynArray;
   LResult: IDataValidatorResult;
   I: Integer;
   LValueDecode: string;

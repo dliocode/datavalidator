@@ -65,13 +65,12 @@ begin
   LValue := GetValueAsString;
   R := True;
 
-  if not Trim(LValue).IsEmpty then
-    if FValue.IsType<TJSONPair> then
-    begin
-      LJSONPair := FValue.AsType<TJSONPair>;
+  if FValue.IsType<TJSONPair> then
+  begin
+    LJSONPair := FValue.AsType<TJSONPair>;
 
-      R := Assigned(LJSONPair);
-    end;
+    R := Assigned(LJSONPair);
+  end;
 
   if FIsNot then
     R := not R;

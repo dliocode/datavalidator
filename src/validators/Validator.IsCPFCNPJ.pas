@@ -35,14 +35,12 @@ unit Validator.IsCPFCNPJ;
 interface
 
 uses
-  DataValidator.ItemBase, Validator.IsCPF, Validator.IsCNPJ,
+  DataValidator.ItemBase,
   System.SysUtils;
 
 type
   TValidatorIsCPFCNPJ = class(TDataValidatorItemBase, IDataValidatorItem)
   private
-    FValidatorCPF: IDataValidatorItem;
-    FValidatorCNPJ: IDataValidatorItem;
   public
     function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
@@ -50,39 +48,43 @@ type
 
 implementation
 
+uses
+  Validator.IsCPF, Validator.IsCNPJ;
+
 { TValidatorIsCPFCNPJ }
 
 constructor TValidatorIsCPFCNPJ.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
-
-  FValidatorCPF := TValidatorIsCPF.Create(AMessage, AExecute);
-  FValidatorCNPJ := TValidatorIsCNPJ.Create(AMessage, AExecute);
 end;
 
 function TValidatorIsCPFCNPJ.Check: IDataValidatorResult;
 var
-  R: Boolean;
-  LResult: IDataValidatorResult;
   LValue: string;
+  R: Boolean;
+  LValidatorCPF: IDataValidatorItem;
+  LValidatorCNPJ: IDataValidatorItem;
 begin
-  FValidatorCPF.SetIsNot(FIsNot);
-  FValidatorCPF.SetValue(FValue);
+  LValue := GetValueAsString;
+  R := False;
 
-  LResult := FValidatorCPF.Check;
-  R := LResult.OK;
-  LValue := LResult.Values[0];
-
-  if not R then
+  if not Trim(LValue).IsEmpty then
   begin
-    FValidatorCNPJ.SetIsNot(FIsNot);
-    FValidatorCNPJ.SetValue(FValue);
+    LValidatorCPF := TValidatorIsCPF.Create('');
+    LValidatorCPF.SetValue(LValue);
+    R := LValidatorCPF.Check.OK;
 
-    LResult := FValidatorCNPJ.Check;
-    R := LResult.OK;
-    LValue := LResult.Values[0];
+    if not R then
+    begin
+      LValidatorCNPJ := TValidatorIsCNPJ.Create('');
+      LValidatorCNPJ.SetValue(LValue);
+      R := LValidatorCNPJ.Check.OK;
+    end;
   end;
+
+  if FIsNot then
+    R := not R;
 
   Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
 end;

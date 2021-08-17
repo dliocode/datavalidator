@@ -69,7 +69,7 @@ begin
     LJV := nil;
 
     try
-      LValue := LValue.Replace(#$D, '').Replace(#$A, '').Replace(#9, '').Replace('\r\n', '');
+      LValue := LValue.Replace('\r\n', '').Replace(sLineBreak, '');
       LJV := TJSONObject.ParseJSONValue(LValue, False, False);
     except
     end;

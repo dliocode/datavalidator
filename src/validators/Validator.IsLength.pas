@@ -50,6 +50,9 @@ type
 
 implementation
 
+uses
+  Validator.IsBetween;
+
 { TValidatorIsLength }
 
 constructor TValidatorIsLength.Create(const AMin: Integer; const AMax: Integer; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
@@ -65,16 +68,17 @@ function TValidatorIsLength.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
+  LValidatorBetween: IDataValidatorItem;
 begin
   LValue := GetValueAsString;
   R := False;
 
   if not Trim(LValue).IsEmpty then
   begin
-    R := Length(LValue) >= FMin;
+    LValidatorBetween := TValidatorIsBetween.Create(FMin, FMax, '');
+    LValidatorBetween.SetValue(Length(LValue));
 
-    if R then
-      R := Length(LValue) <= FMax;
+    R := LValidatorBetween.Check.OK;
   end;
 
   if FIsNot then

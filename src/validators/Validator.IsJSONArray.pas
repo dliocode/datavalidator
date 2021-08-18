@@ -29,17 +29,16 @@
 
   ********************************************************************************
 }
-
-unit Validator.JSON.Value.IsObject;
+unit Validator.IsJSONArray; // JSON (JavaScript Object Notation)
 
 interface
 
 uses
   DataValidator.ItemBase,
-  System.JSON, System.SysUtils;
+  System.SysUtils, System.JSON;
 
 type
-  TDataValidatorJSONValueIsObject = class(TDataValidatorItemBase, IDataValidatorItem)
+  TValidatorIsJson = class(TDataValidatorItemBase, IDataValidatorItem)
   private
   public
     function Check: IDataValidatorResult;
@@ -48,31 +47,38 @@ type
 
 implementation
 
-{ TDataValidatorJSONValueIsObject }
+{ TValidatorIsJson }
 
-constructor TDataValidatorJSONValueIsObject.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsJson.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMessage := AMessage;
   FExecute := AExecute;
 end;
 
-function TDataValidatorJSONValueIsObject.Check: IDataValidatorResult;
+function TValidatorIsJson.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
-  LJSONPair: TJSONPair;
+  LJV: TJsonValue;
 begin
-  LValue := GetValueAsString;
+  LValue := Trim(GetValueAsString);
   R := False;
 
-  if not Trim(LValue).IsEmpty then
-    if FValue.IsType<TJSONPair> then
-    begin
-      LJSONPair := FValue.AsType<TJSONPair>;
+  if not LValue.IsEmpty then
+  begin
+    LValue := StringReplace(LValue, '\r\n', '', [rfReplaceAll]);
+    LValue := StringReplace(LValue, sLineBreak, '', [rfReplaceAll]);
 
-      if Assigned(LJSONPair) then
-        R := LJSONPair.JsonValue is TJSONObject;
+    LJV := nil;
+
+    try
+      LJV := TJSONObject.ParseJSONValue(LValue);
+    except
     end;
+
+    if Assigned(LJV) then
+      R := LJV is TJSONArray;
+  end;
 
   if FIsNot then
     R := not R;

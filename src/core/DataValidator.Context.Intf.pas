@@ -128,6 +128,8 @@ type
     function IsIPv6(): T;
     function IsISO8601(): T;
     function IsJSON(): T;
+    function IsJSONArray(): T;
+    function IsJSONObject(): T;
     function IsJWT(): T;
     function IsLatLong(const ACheckDMS: Boolean = False): T;
     function IsLength(const AMin: Integer; const AMax: Integer): T;

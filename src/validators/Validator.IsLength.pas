@@ -76,7 +76,7 @@ begin
   if not Trim(LValue).IsEmpty then
   begin
     LValidatorBetween := TValidatorIsBetween.Create(FMin, FMax, '');
-    LValidatorBetween.SetValue(Length(LValue));
+    LValidatorBetween.SetValue(IntToStr(Length(LValue)));
 
     R := LValidatorBetween.Check.OK;
   end;

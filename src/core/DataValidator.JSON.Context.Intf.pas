@@ -67,9 +67,7 @@ type
     function &End(): T;
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueExecute): IDataValidatorJSONContextValue<T>; overload;
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessageExecute): IDataValidatorJSONContextValue<T>; overload;
-    function IsArray(): IDataValidatorJSONContextValue<T>;
     function IsNull(): IDataValidatorJSONContextValue<T>;
-    function IsObject(): IDataValidatorJSONContextValue<T>;
     function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
     function MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
   end;

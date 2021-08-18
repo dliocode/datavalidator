@@ -105,6 +105,8 @@ type
     function IsIPv6(): T;
     function IsISO8601(): T;
     function IsJSON(): T;
+    function IsJSONArray(): T;
+    function IsJSONObject(): T;
     function IsJWT(): T;
     function IsLatLong(const ACheckDMS: Boolean = False): T;
     function IsLength(const AMin: Integer; const AMax: Integer): T;
@@ -598,7 +600,17 @@ end;
 
 function TDataValidatorContext<T>.IsJSON: T;
 begin
-  Result := Add(TValidatorIsJSON.Create('Value is not JSON (JavaScript Object Notation)!'));
+  Result := Add(TValidatorIsJSON.Create(TTypeJSON.tjAll, 'Value is not JSON (JavaScript Object Notation)!'));
+end;
+
+function TDataValidatorContext<T>.IsJSONArray: T;
+begin
+  Result := Add(TValidatorIsJSON.Create(TTypeJSON.tjArray, 'Value is not JSONArray (JavaScript Object Notation)!'));
+end;
+
+function TDataValidatorContext<T>.IsJSONObject: T;
+begin
+  Result := Add(TValidatorIsJSON.Create(TTypeJSON.tjObject, 'Value is not JSONObject (JavaScript Object Notation)!'));
 end;
 
 function TDataValidatorContext<T>.IsJWT: T;

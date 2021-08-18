@@ -38,19 +38,23 @@ uses
   System.SysUtils, System.JSON;
 
 type
+  TTypeJSON = (tjAll, tjArray, tjObject);
+
   TValidatorIsJson = class(TDataValidatorItemBase, IDataValidatorItem)
   private
+    FTypeJSON: TTypeJSON;
   public
     function Check: IDataValidatorResult;
-    constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const ATypeJSON: TTypeJSON; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
 { TValidatorIsJson }
 
-constructor TValidatorIsJson.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsJson.Create(const ATypeJSON: TTypeJSON; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  FTypeJSON := ATypeJSON;
   FMessage := AMessage;
   FExecute := AExecute;
 end;
@@ -66,20 +70,26 @@ begin
 
   if not LValue.IsEmpty then
   begin
+    LValue := StringReplace(LValue, '\r\n', '', [rfReplaceAll]);
+    LValue := StringReplace(LValue, sLineBreak, '', [rfReplaceAll]);
+
     LJV := nil;
 
     try
-      LValue := LValue.Replace('\r\n', '').Replace(sLineBreak, '');
       LJV := TJSONObject.ParseJSONValue(LValue);
     except
     end;
 
     if Assigned(LJV) then
     begin
-      R := LJV is TJSONObject;
-
-      if not R then
-        R := LJV is TJSONArray;
+      case FTypeJSON of
+        tjAll:
+          R := (LJV is TJSONArray) or (LJV is TJSONObject);
+        tjArray:
+          R := LJV is TJSONArray;
+        tjObject:
+          R := LJV is TJSONObject;
+      end;
     end;
   end;
 

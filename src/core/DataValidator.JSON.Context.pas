@@ -59,9 +59,7 @@ type
     // Value
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueExecute): IDataValidatorJSONContextValue<T>; overload;
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessageExecute): IDataValidatorJSONContextValue<T>; overload;
-    function IsArray(): IDataValidatorJSONContextValue<T>;
     function IsNull(): IDataValidatorJSONContextValue<T>;
-    function IsObject(): IDataValidatorJSONContextValue<T>;
     function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
     function MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
 
@@ -77,9 +75,7 @@ uses
   Validator.JSON.Key.IsOptional,
   Validator.JSON.Key.IsRequired,
   Validator.JSON.Value.Custom,
-  Validator.JSON.Value.IsArray,
   Validator.JSON.Value.IsNull,
-  Validator.JSON.Value.IsObject,
   Validator.JSON.Value.MinItems,
   Validator.JSON.Value.MaxItems;
 
@@ -149,22 +145,10 @@ begin
   Add(TValidatorJSONValueCustom.Create(nil, AExecute, 'Value is false!'));
 end;
 
-function TDataValidatorJSONContext<T>.IsArray: IDataValidatorJSONContextValue<T>;
-begin
-  Result := Self;
-  Add(TDataValidatorJSONValueIsArray.Create('Value not is JSON Array!'));
-end;
-
 function TDataValidatorJSONContext<T>.IsNull: IDataValidatorJSONContextValue<T>;
 begin
   Result := Self;
   Add(TDataValidatorJSONValueIsNull.Create('Value not is null!'));
-end;
-
-function TDataValidatorJSONContext<T>.IsObject: IDataValidatorJSONContextValue<T>;
-begin
-  Result := Self;
-  Add(TDataValidatorJSONValueIsObject.Create('Value not is JSON Object!'));
 end;
 
 function TDataValidatorJSONContext<T>.MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;

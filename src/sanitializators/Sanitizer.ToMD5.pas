@@ -56,9 +56,10 @@ end;
 
 function TSanitizerToMD5.Sanitize: TValue;
 var
-  LValue: TValue;
+  LValue: string;
 begin
-  LValue := THashMD5.GetHashString(GetValueAsString);
+  LValue := GetValueAsString;
+  LValue := THashMD5.GetHashString(LValue);
 
   SetValueAdapter(LValue);
 

@@ -62,7 +62,9 @@ function TSanitizerReplace.Sanitize: TValue;
 var
   LValue: string;
 begin
-  LValue := GetValueAsString.Replace(FOldValue, FNewValue);
+  LValue := GetValueAsString;
+
+  LValue := StringReplace(LValue, FOldValue, FNewValue, [rfReplaceAll]);
 
   SetValueAdapter(LValue);
 

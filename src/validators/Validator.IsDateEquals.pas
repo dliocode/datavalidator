@@ -71,7 +71,7 @@ begin
 
   if not Trim(LValue).IsEmpty then
   begin
-    LValue := LValue.Replace('\', '');
+    LValue := StringReplace(LValue, '\', '', [rfReplaceAll]);
 
     R := TryStrToDate(LValue, LDate);
 

@@ -57,11 +57,13 @@ end;
 
 function TSanitizerCustom.Sanitize: TValue;
 var
-  LValue: TValue;
+  LValue: string;
 begin
+  LValue := GetValueAsString;
+
   if Assigned(FExecute) then
   begin
-    LValue := FExecute(GetValueAsString);
+    LValue := FExecute(LValue);
     SetValueAdapter(LValue);
   end;
 

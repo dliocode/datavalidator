@@ -59,19 +59,23 @@ end;
 function TSanitizerToDateTime.Sanitize: TValue;
 var
   LValue: string;
+  LValueSanitize: string;
   R: Boolean;
   LDateTime: TDateTime;
 begin
   LValue := Trim(GetValueAsString);
-  LValue := LValue.Replace('\', '');
+  LValueSanitize := StringReplace(LValue, '\', '', [rfReplaceAll]);
 
-  R := TryStrToDateTime(LValue, LDateTime);
+  R := TryStrToDateTime(LValueSanitize, LDateTime);
 
   if not R then
-    R := TryISO8601ToDate(LValue, LDateTime, FJSONISO8601ReturnUTC);
+    R := TryISO8601ToDate(LValueSanitize, LDateTime, FJSONISO8601ReturnUTC);
 
   if R then
-    SetValueAdapter(TValue.From<TDateTime>(LDateTime));
+    if LValue <> LValueSanitize then
+      SetValueAdapter(LValueSanitize)
+    else
+      SetValueAdapter(TValue.From<TDate>(LDateTime));
 
   Result := FValue;
 end;

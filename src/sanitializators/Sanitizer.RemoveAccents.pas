@@ -59,7 +59,9 @@ type
 var
   LValue: string;
 begin
-  LValue := string(ASCIIString(GetValueAsString));
+  LValue := GetValueAsString;
+
+  LValue := string(ASCIIString(LValue));
 
   SetValueAdapter(LValue);
 

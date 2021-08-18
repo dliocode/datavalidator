@@ -56,9 +56,11 @@ end;
 
 function TSanitizerOnlyNumbers.Sanitize: TValue;
 var
-  LValue: TValue;
+  LValue: string;
 begin
-  LValue := TRegEx.Replace(GetValueAsString, '\D', '');
+  LValue := GetValueAsString;
+
+  LValue := TRegEx.Replace(LValue, '\D', '');
 
   SetValueAdapter(LValue);
 

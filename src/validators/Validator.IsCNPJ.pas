@@ -82,8 +82,12 @@ end;
 function TValidatorIsCNPJ.Validate(const ACNPJ: string): Boolean;
 var
   LCNPJ: string;
-  LDig13, LDig14: ShortString;
-  S, I, R, LPeso: Integer;
+  LSum: Integer;
+  LPeso: Integer;
+  I: Integer;
+  LResultSum: Integer;
+  LDig13: ShortString;
+  LDig14: ShortString;
 begin
   Result := False;
 
@@ -101,41 +105,41 @@ begin
     Exit;
 
   try
-    S := 0;
+    LSum := 0;
     LPeso := 2;
 
     for I := 12 downto 1 do
     begin
-      S := S + (StrToInt(LCNPJ[I]) * LPeso);
+      LSum := LSum + (StrToInt(LCNPJ[I]) * LPeso);
       LPeso := LPeso + 1;
 
       if (LPeso = 10) then
         LPeso := 2;
     end;
 
-    R := S mod 11;
-    if ((R = 0) or (R = 1)) then
+    LResultSum := LSum mod 11;
+    if ((LResultSum = 0) or (LResultSum = 1)) then
       LDig13 := '0'
     else
-      str((11 - R): 1, LDig13);
+      str((11 - LResultSum): 1, LDig13);
 
-    S := 0;
+    LSum := 0;
     LPeso := 2;
 
     for I := 13 downto 1 do
     begin
-      S := S + (StrToInt(LCNPJ[I]) * LPeso);
+      LSum := LSum + (StrToInt(LCNPJ[I]) * LPeso);
       LPeso := LPeso + 1;
 
       if (LPeso = 10) then
         LPeso := 2;
     end;
 
-    R := S mod 11;
-    if ((R = 0) or (R = 1)) then
+    LResultSum := LSum mod 11;
+    if ((LResultSum = 0) or (LResultSum = 1)) then
       LDig14 := '0'
     else
-      str((11 - R): 1, LDig14);
+      str((11 - LResultSum): 1, LDig14);
 
     Result := (LDig13 = ShortString(LCNPJ[13])) and (LDig14 = ShortString(LCNPJ[14]));
   except

@@ -35,7 +35,7 @@ unit Validator.IsBetween;
 interface
 
 uses
-  DataValidator.ItemBase,
+  DataValidator.ItemBase, DataValidator.ItemBase.Sanitizer,
   System.Math, System.SysUtils;
 
 type
@@ -51,6 +51,10 @@ type
 
 implementation
 
+uses
+  Sanitizer.ToNumeric,
+  Validator.IsNumeric;
+
 { TValidatorIsBetween }
 
 constructor TValidatorIsBetween.Create(const AValueA: TValue; const AValueB: TValue; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
@@ -63,22 +67,32 @@ end;
 
 function TValidatorIsBetween.Check: IDataValidatorResult;
 var
-  LValue: Variant;
+  LValue: string;
+  R: Boolean;
+  LSanitizerNumeric: IDataSanitizerItem;
+  LValidatorNumeric: IDataValidatorItem;
   LValueA: Variant;
   LValueB: Variant;
-  R: Boolean;
 begin
   LValue := GetValueAsString;
   R := False;
 
   if not Trim(LValue).IsEmpty then
   begin
-    LValueA := FValueA.AsVariant;
-    LValueB := FValueB.AsVariant;
+    LSanitizerNumeric := TSanitizerToNumeric.Create;
+    LSanitizerNumeric.SetValue(LValue);
+    LValue := LSanitizerNumeric.Sanitize.AsString;
 
-    try
-      R := InRange(LValue, LValueA, LValueB);
-    except
+    LValidatorNumeric := TValidatorIsNumeric.Create('');
+    LValidatorNumeric.SetValue(LValue);
+    R := LValidatorNumeric.Check.OK;
+
+    if R then
+    begin
+      LValueA := FValueA.AsVariant;
+      LValueB := FValueB.AsVariant;
+
+      R := InRange(StrToFloat(LValue), LValueA, LValueB);
     end;
   end;
 

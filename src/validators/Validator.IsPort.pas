@@ -48,6 +48,9 @@ type
 
 implementation
 
+uses
+  Validator.IsInteger, Validator.IsBetween;
+
 { TValidatorIsPort }
 
 constructor TValidatorIsPort.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
@@ -58,16 +61,26 @@ end;
 
 function TValidatorIsPort.Check: IDataValidatorResult;
 var
-  LValue: Variant;
+  LValue: string;
   R: Boolean;
+  LValidatorInteger: IDataValidatorItem;
+  LValidatorBetween: IDataValidatorItem;
 begin
   LValue := GetValueAsString;
   R := False;
 
-  try
-    if not Trim(LValue).IsEmpty then
-      R := InRange(LValue, 0, 65535);
-  except
+  if not Trim(LValue).IsEmpty then
+  begin
+    LValidatorInteger := TValidatorIsInteger.Create('');
+    LValidatorInteger.SetValue(LValue);
+    R := LValidatorInteger.Check.OK;
+
+    if R then
+    begin
+      LValidatorBetween := TValidatorIsBetween.Create(0, 65535, '');
+      LValidatorBetween.SetValue(LValue);
+      R := LValidatorBetween.Check.OK;
+    end;
   end;
 
   if FIsNot then

@@ -82,13 +82,17 @@ begin
 
     if Assigned(LJV) then
     begin
-      case FTypeJSON of
-        tjAll:
-          R := (LJV is TJSONArray) or (LJV is TJSONObject);
-        tjArray:
-          R := LJV is TJSONArray;
-        tjObject:
-          R := LJV is TJSONObject;
+      try
+        case FTypeJSON of
+          tjAll:
+            R := (LJV is TJSONArray) or (LJV is TJSONObject);
+          tjArray:
+            R := LJV is TJSONArray;
+          tjObject:
+            R := LJV is TJSONObject;
+        end;
+      finally
+        LJV.Free;
       end;
     end;
   end;

@@ -41,7 +41,6 @@ uses
 type
   TValidatorIsJWT = class(TDataValidatorItemBase, IDataValidatorItem) // JWT (JSON Web Token)
   private
-    FValidatorBase64: IDataValidatorItem;
   public
     function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
@@ -55,7 +54,6 @@ constructor TValidatorIsJWT.Create(const AMessage: string; const AExecute: TData
 begin
   FMessage := AMessage;
   FExecute := AExecute;
-  FValidatorBase64 := TValidatorIsBase64.Create('Value is not base64!');
 end;
 
 function TValidatorIsJWT.Check: IDataValidatorResult;
@@ -64,6 +62,7 @@ var
   R: Boolean;
   LSplit: TStringDynArray;
   LResult: IDataValidatorResult;
+  LValidatorBase64: IDataValidatorItem;
   I: Integer;
   LValueDecode: string;
   LJSONValue: TJSONValue;
@@ -79,14 +78,16 @@ begin
 
     if Length(LSplit) = 3 then
     begin
+      LValidatorBase64 := TValidatorIsBase64.Create('');
+
       for I := 0 to Pred(Length(LSplit)) do
       begin
         if I > 1 then
           Continue;
 
         // Valid Base64
-        FValidatorBase64.SetValue(LSplit[I]);
-        LResult := FValidatorBase64.Check;
+        LValidatorBase64.SetValue(LSplit[I]);
+        LResult := LValidatorBase64.Check;
         R := LResult.OK;
 
         if not R then

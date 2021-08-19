@@ -88,8 +88,12 @@ end;
 function TValidatorIsCPF.Validate(const ACPF: string): Boolean;
 var
   LCPF: string;
-  LDig10, LDig11: ShortString;
-  S, I, R, LPeso: Integer;
+  LSum: Integer;
+  LPeso: Integer;
+  I: Integer;
+  LResultSum: Integer;
+  LDig10: ShortString;
+  LDig11: ShortString;
 begin
   Result := False;
 
@@ -107,33 +111,33 @@ begin
     Exit;
 
   try
-    S := 0;
+    LSum := 0;
     LPeso := 10;
     for I := 1 to 9 do
     begin
-      S := S + (StrToInt(LCPF[I]) * LPeso);
+      LSum := LSum + (StrToInt(LCPF[I]) * LPeso);
       LPeso := LPeso - 1;
     end;
 
-    R := 11 - (S mod 11);
-    if ((R = 10) or (R = 11)) then
+    LResultSum := 11 - (LSum mod 11);
+    if ((LResultSum = 10) or (LResultSum = 11)) then
       LDig10 := '0'
     else
-      str(R: 1, LDig10);
+      str(LResultSum: 1, LDig10);
 
-    S := 0;
+    LSum := 0;
     LPeso := 11;
     for I := 1 to 10 do
     begin
-      S := S + (StrToInt(LCPF[I]) * LPeso);
+      LSum := LSum + (StrToInt(LCPF[I]) * LPeso);
       LPeso := LPeso - 1;
     end;
 
-    R := 11 - (S mod 11);
-    if ((R = 10) or (R = 11)) then
+    LResultSum := 11 - (LSum mod 11);
+    if ((LResultSum = 10) or (LResultSum = 11)) then
       LDig11 := '0'
     else
-      str(R: 1, LDig11);
+      str(LResultSum: 1, LDig11);
 
     Result := (LDig10 = ShortString(LCPF[10])) and (LDig11 = ShortString(LCPF[11]));
   except

@@ -77,7 +77,6 @@ begin
   begin
     LValidatorBetween := TValidatorIsBetween.Create(FMin, FMax, '');
     LValidatorBetween.SetValue(IntToStr(Length(LValue)));
-
     R := LValidatorBetween.Check.OK;
   end;
 

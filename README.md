@@ -256,12 +256,12 @@ TDataValidator.Values
 |CustomValue            |(Key) IsOptional                 |CustomSanitizer	  |
 |Contains       	      |(Key) IsRequired	                |NormalizeEmail     |
 |EndsWith        	      |(Value) CustomJSONValue          |OnlyNumbers   		  |
-|IsAlpha        	      |(Value) IsArray                  |RemoveAccents      |
-|IsAlphaNumeric 	      |(Value) IsNull                   |Replace            |
-|IsAscii         	      |(Value) IsObject                 |ToBase64Decode     |
-|IsBase32        	      |(Value) MinItems                 |ToBase64Encode     |
-|IsBase58        	      |(Value) MaxItems                 |ToDate             |
-|IsBase64       	      |(Value) + Validação para values  |ToDateTime         |
+|IsAlpha        	      |(Value) IsNull                   |RemoveAccents      |
+|IsAlphaNumeric 	      |(Value) MinItems                 |Replace            |
+|IsAscii         	      |(Value) MaxItems                 |ToBase64Decode     |
+|IsBase32        	      |(Value) + Validação para values  |ToBase64Encode     |
+|IsBase58        	      |                                 |ToDate             |
+|IsBase64       	      |                                 |ToDateTime         |
 |IsBetween      	      |                                 |ToHTMLDecode	      |
 |IsBoolean       		    |                                 |ToHTMLEncode	      |
 |IsBTCAddress   		    |                                 |ToInteger			    |
@@ -292,6 +292,8 @@ TDataValidator.Values
 |IsIPv6			            |                                 |					          |
 |IsISO8601              |                                 |					          |
 |IsJSON				          |                                 |					          |
+|IsJSONArray	          |                                 |					          |
+|IsJSONObject	          |                                 |					          |
 |IsJWT				          |                                 |					          |
 |IsLatLong		          |                                 |					          |
 |IsLength			          |                                 |					          |

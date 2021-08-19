@@ -52,9 +52,6 @@ type
     function Check(): IDataValidatorResult;
     function CheckAll(): IDataValidatorResult;
 
-    function Checked(): IDataValidatorResult;
-    function CheckedAll(): IDataValidatorResult;
-
     constructor Create;
     destructor Destroy; override;
   end;
@@ -89,16 +86,6 @@ function TDataValidatorValue.Validate(const AValue: TArray<string>): IDataValida
 begin
   FList.Add(TDataValidatorValueBase.Create(Self, AValue));
   Result := FList.Last;
-end;
-
-function TDataValidatorValue.Checked: IDataValidatorResult;
-begin
-  Result := Check;
-end;
-
-function TDataValidatorValue.CheckedAll: IDataValidatorResult;
-begin
-  Result := CheckAll;
 end;
 
 function TDataValidatorValue.Check: IDataValidatorResult;

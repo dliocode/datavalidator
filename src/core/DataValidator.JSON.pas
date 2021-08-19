@@ -61,9 +61,6 @@ type
     function CheckItem(const AName: string): IDataValidatorResult;
     function CheckItemAll(const AName: string): IDataValidatorResult;
 
-    function Checked(): IDataValidatorResult;
-    function CheckedAll(): IDataValidatorResult;
-
     constructor Create(const AJSON: TJSONObject); overload;
     constructor Create(const AJSON: TJSONArray); overload;
     destructor Destroy; override;
@@ -156,16 +153,6 @@ begin
   else
     if FJSON is TJSONArray then
       Result := CheckItemValueArray(AName, True);
-end;
-
-function TDataValidatorJSON.Checked: IDataValidatorResult;
-begin
-  Result := Check;
-end;
-
-function TDataValidatorJSON.CheckedAll: IDataValidatorResult;
-begin
-  Result := CheckAll;
 end;
 
 function TDataValidatorJSON.CheckValueObject(const ACheckAll: Boolean): IDataValidatorResult;

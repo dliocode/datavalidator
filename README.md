@@ -221,9 +221,7 @@ begin
     .AddSchema(SchemaEmail('E-mail de confirmação'))
   .&End
 
-  .CheckAll;
-
-  Readln;  
+  .CheckAll;  
 end.
 ```
 

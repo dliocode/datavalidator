@@ -56,8 +56,8 @@ constructor TValidatorIsEquals.Create(const AValueEquals: TArray<string>; const 
 begin
   FValueEquals := AValueEquals;
   FCaseSensitive := ACaseSensitive;
-  FMessage := AMessage;
-  FExecute := AExecute;
+  SetMessage(AMessage);
+  SetExecute(AExecute);
 end;
 
 function TValidatorIsEquals.Check: IDataValidatorResult;
@@ -84,7 +84,7 @@ begin
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, GetMessage, FExecute));
 end;
 
 end.

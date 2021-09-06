@@ -52,8 +52,8 @@ implementation
 
 constructor TValidatorIsHexadecimal.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
-  FMessage := AMessage;
-  FExecute := AExecute;
+  SetMessage(AMessage);
+  SetExecute(AExecute);
 end;
 
 function TValidatorIsHexadecimal.Check: IDataValidatorResult;
@@ -70,7 +70,7 @@ begin
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, GetMessage, FExecute));
 end;
 
 end.

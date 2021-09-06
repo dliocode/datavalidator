@@ -35,7 +35,9 @@ unit DataValidator.ItemBase;
 interface
 
 uses
-  DataValidator.Types, DataValidator.ItemBase.Intf, DataValidator.Result.Intf, DataValidator.Result, DataValidator.Information,
+  DataValidator.Types,
+  DataValidator.ItemBase.Intf, DataValidator.Result.Intf, DataValidator.Information.Intf,
+  DataValidator.Result, DataValidator.Information,
   System.SysUtils, System.RTTI, System.JSON, System.StrUtils, System.TypInfo;
 
 type
@@ -49,19 +51,21 @@ type
   TDataValidatorCustomJSONValueExecute = DataValidator.Types.TDataValidatorCustomJSONValueExecute;
   TDataValidatorCustomJSONValueMessageExecute = DataValidator.Types.TDataValidatorCustomJSONValueMessageExecute;
 
-  TDataValidatorInformationExecute = DataValidator.ItemBase.Intf.TDataValidatorInformationExecute;
+  TDataValidatorInformationExecute = DataValidator.Information.Intf.TDataValidatorInformationExecute;
   IDataValidatorItem = DataValidator.ItemBase.Intf.IDataValidatorItem;
   IDataValidatorResult = DataValidator.Result.Intf.IDataValidatorResult;
   TDataValidatorResult = DataValidator.Result.TDataValidatorResult;
   TDataValidatorInformation = DataValidator.Information.TDataValidatorInformation;
 
   TDataValidatorItemBase = class(TInterfacedObject, IDataValidatorItemBase)
+  private
+    FMessage: string;
   protected
     FLocaleLanguage: TDataValidatorLocaleLanguage;
     FIsNot: Boolean;
     FValue: TValue;
-    FMessage: string;
     FExecute: TDataValidatorInformationExecute;
+    function GetMessage: string;
     function GetValueAsString: string;
     procedure SetValueAdapter(const AValue: TValue);
   public
@@ -107,6 +111,14 @@ end;
 procedure TDataValidatorItemBase.SetExecute(const AExecute: TDataValidatorInformationExecute);
 begin
   FExecute := AExecute;
+end;
+
+function TDataValidatorItemBase.GetMessage: string;
+var
+  LValue: string;
+begin
+  LValue := GetValueAsString;
+  Result := FMessage.Replace('${value}', LValue, [rfReplaceAll]);
 end;
 
 function TDataValidatorItemBase.GetValueAsString: string;

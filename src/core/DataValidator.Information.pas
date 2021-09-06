@@ -50,7 +50,7 @@ type
     function Execute: TDataValidatorInformationExecute;
     procedure OnExecute;
 
-    constructor Create(const AValue: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const AValue: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute);
     destructor Destroy; override;
 
   end;
@@ -132,7 +132,7 @@ end;
 
 { TDataValidatorInformation }
 
-constructor TDataValidatorInformation.Create(const AValue: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TDataValidatorInformation.Create(const AValue: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute);
 begin
   FValue := AValue;
   FMessage := AMessage;

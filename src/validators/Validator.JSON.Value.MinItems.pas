@@ -54,8 +54,8 @@ implementation
 constructor TDataValidatorJSONValueMinItems.Create(const AMinItems: Integer; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FMinItems := AMinItems;
-  FMessage := AMessage;
-  FExecute := AExecute;
+  SetMessage(AMessage);
+  SetExecute(AExecute);
 end;
 
 function TDataValidatorJSONValueMinItems.Check: IDataValidatorResult;
@@ -85,7 +85,7 @@ begin
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, GetMessage, FExecute));
 end;
 
 end.

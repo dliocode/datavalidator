@@ -61,8 +61,8 @@ begin
   FCustomJSONValueExecute := ACustomJSONObjectExecute;
   FCustomJSONValueMessageExecute := ACustomJSONObjectMessageExecute;
 
-  FMessage := AMessage;
-  FExecute := AExecute;
+  SetMessage(AMessage);
+  SetExecute(AExecute);
 end;
 
 function TValidatorJSONValueCustom.Check: IDataValidatorResult;
@@ -70,6 +70,7 @@ var
   LValue: string;
   R: Boolean;
   LJSONPair: TJSONPair;
+  LMessage: string;
 begin
   LValue := GetValueAsString;
   R := False;
@@ -85,7 +86,11 @@ begin
             R := FCustomJSONValueExecute(LJSONPair.JsonValue)
           else
             if Assigned(FCustomJSONValueMessageExecute) then
-              R := FCustomJSONValueMessageExecute(LJSONPair.JsonValue, FMessage);
+            begin
+              LMessage := GetMessage;
+              R := FCustomJSONValueMessageExecute(LJSONPair.JsonValue, LMessage);
+              SetMessage(LMessage);
+            end;
 
         LValue := GetValueAsString;
       end;
@@ -95,7 +100,7 @@ begin
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, GetMessage, FExecute));
 end;
 
 end.

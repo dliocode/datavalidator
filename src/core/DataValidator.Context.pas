@@ -36,7 +36,7 @@ interface
 
 uses
   DataValidator.Types,
-  DataValidator.Context.Intf, DataValidator.ItemBase.Intf,
+  DataValidator.Context.Intf, DataValidator.ItemBase.Intf, DataValidator.Information.Intf,
   System.RTTI, System.JSON, System.Generics.Collections, System.SysUtils, System.Variants;
 
 type

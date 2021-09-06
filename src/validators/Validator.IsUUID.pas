@@ -57,8 +57,8 @@ implementation
 constructor TValidatorIsUUID.Create(const AVersion: TTypeUUID; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FVersion := AVersion;
-  FMessage := AMessage;
-  FExecute := AExecute;
+  SetMessage(AMessage);
+  SetExecute(AExecute);
 end;
 
 function TValidatorIsUUID.Check: IDataValidatorResult;
@@ -75,7 +75,7 @@ begin
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, GetMessage, FExecute));
 end;
 
 function TValidatorIsUUID.GetPattern: string;

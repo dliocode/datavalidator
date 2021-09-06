@@ -35,7 +35,7 @@ unit DataValidator.JSON.Context;
 interface
 
 uses
-  DataValidator.JSON.Context.Intf, DataValidator.ItemBase.Intf,
+  DataValidator.JSON.Context.Intf, DataValidator.ItemBase.Intf, DataValidator.Information.Intf,
   DataValidator.Types, DataValidator.Context,
   System.JSON, System.Generics.Collections, System.SysUtils;
 

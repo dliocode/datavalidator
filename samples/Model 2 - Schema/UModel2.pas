@@ -79,7 +79,7 @@ begin
 
   .Validate(LabeledEditApelido.Text)
     .AddSchema(SchemaNome('Apelido'))
-    .IsUppercase.WithMessage('Deve ser tudo Maiuscula o Apelido!') // Add outra validação
+    .IsUppercase.WithMessage('O apelido (${value}) deve ser digitado tudo em maiúscula!') // Add outra validação
   .&End
 
   .Validate(LabeledEditRazaoSocial.Text)

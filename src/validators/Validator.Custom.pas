@@ -56,14 +56,15 @@ constructor TValidatorCustom.Create(const ACustomExecute: TDataValidatorCustomEx
 begin
   FCustomExecute := ACustomExecute;
   FCustomMessageExecute := ACustomMessageExecute;
-  FMessage := AMessage;
-  FExecute := AExecute;
+  SetMessage(AMessage);
+  SetExecute(AExecute);
 end;
 
 function TValidatorCustom.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
+  LMessage: string;
 begin
   LValue := GetValueAsString;
   R := False;
@@ -73,14 +74,18 @@ begin
       R := FCustomExecute(LValue)
     else
       if Assigned(FCustomMessageExecute) then
-        R := FCustomMessageExecute(LValue, FMessage);
+      begin
+        LMessage := GetMessage;
+        R := FCustomMessageExecute(LValue, LMessage);
+        SetMessage(LMessage);
+      end;
   except
   end;
 
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, GetMessage, FExecute));
 end;
 
 end.

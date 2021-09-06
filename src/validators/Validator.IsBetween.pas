@@ -61,8 +61,8 @@ constructor TValidatorIsBetween.Create(const AValueA: TValue; const AValueB: TVa
 begin
   FValueA := AValueA;
   FValueB := AValueB;
-  FMessage := AMessage;
-  FExecute := AExecute;
+  SetMessage(AMessage);
+  SetExecute(AExecute);
 end;
 
 function TValidatorIsBetween.Check: IDataValidatorResult;
@@ -99,7 +99,7 @@ begin
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, GetMessage, FExecute));
 end;
 
 end.

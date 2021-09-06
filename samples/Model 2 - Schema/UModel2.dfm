@@ -29,7 +29,7 @@ object Form1: TForm1
     Width = 177
     Height = 41
     Caption = 'Validar todos os campos'
-    TabOrder = 1
+    TabOrder = 3
     OnClick = btnValidarTodosClick
   end
   object Memo1: TMemo
@@ -40,7 +40,7 @@ object Form1: TForm1
     Align = alBottom
     Anchors = [akLeft, akTop, akRight, akBottom]
     ReadOnly = True
-    TabOrder = 2
+    TabOrder = 5
   end
   object btnValidar: TButton
     Left = 206
@@ -48,7 +48,7 @@ object Form1: TForm1
     Width = 177
     Height = 41
     Caption = 'Validar '
-    TabOrder = 3
+    TabOrder = 4
     OnClick = btnValidarClick
   end
   object LabeledEditApelido: TLabeledEdit
@@ -59,7 +59,7 @@ object Form1: TForm1
     EditLabel.Width = 35
     EditLabel.Height = 13
     EditLabel.Caption = 'Apelido'
-    TabOrder = 4
+    TabOrder = 1
   end
   object LabeledEditRazaoSocial: TLabeledEdit
     Left = 262
@@ -69,6 +69,6 @@ object Form1: TForm1
     EditLabel.Width = 60
     EditLabel.Height = 13
     EditLabel.Caption = 'Razao Social'
-    TabOrder = 5
+    TabOrder = 2
   end
 end

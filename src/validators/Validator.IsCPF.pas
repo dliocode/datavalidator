@@ -43,7 +43,6 @@ type
   private
     function Validate(const ACPF: string): Boolean;
   public
-    function GetMessage: string;
     function Check: IDataValidatorResult;
     constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
@@ -54,13 +53,8 @@ implementation
 
 constructor TValidatorIsCPF.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
-  FMessage := AMessage;
-  FExecute := AExecute;
-end;
-
-function TValidatorIsCPF.GetMessage: string;
-begin
-  Result := FMessage;
+  SetMessage(AMessage);
+  SetExecute(AExecute);
 end;
 
 function TValidatorIsCPF.Check: IDataValidatorResult;
@@ -82,7 +76,7 @@ begin
   if FIsNot then
     R := not R;
 
-  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, FMessage, FExecute));
+  Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, GetMessage, FExecute));
 end;
 
 function TValidatorIsCPF.Validate(const ACPF: string): Boolean;

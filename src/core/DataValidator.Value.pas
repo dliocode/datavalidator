@@ -135,6 +135,7 @@ begin
           Continue;
         end;
 
+        LValidatorItem.SetName('');
         LValidatorItem.SetValue(LValueSanitizer);
 
         LValidatorResult := LValidatorItem.Check;

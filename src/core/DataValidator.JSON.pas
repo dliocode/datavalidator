@@ -189,6 +189,7 @@ begin
         Continue;
       end;
 
+      LValidatorItem.SetName(LName);
       LValidatorItem.SetValue(LValueSanitizer);
 
       LValidatorResult := LValidatorItem.Check;

@@ -45,6 +45,7 @@ type
     procedure SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
     procedure SetIsNot(const AIsNot: Boolean);
 
+    procedure SetName(const AName: string);
     procedure SetValue(const AValue: TValue);
     procedure SetMessage(const AMessage: string);
     procedure SetExecute(const AExecute: TDataValidatorInformationExecute); overload;

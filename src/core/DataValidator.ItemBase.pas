@@ -65,6 +65,7 @@ type
   protected
     FLocaleLanguage: TDataValidatorLocaleLanguage;
     FIsNot: Boolean;
+    FName: string;
     FValue: TValue;
     FExecute: TDataValidatorInformationExecute;
     function GetMessage: string;
@@ -75,6 +76,7 @@ type
     procedure SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
 
     procedure SetIsNot(const AIsNot: Boolean);
+    procedure SetName(const AName: string);
     procedure SetValue(const AValue: TValue);
     procedure SetMessage(const AMessage: string);
     procedure SetExecute(const AExecute: TDataValidatorInformationExecute);
@@ -92,6 +94,11 @@ end;
 procedure TDataValidatorItemBase.SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
 begin
   FLocaleLanguage := ALocaleLanguage;
+end;
+
+procedure TDataValidatorItemBase.SetName(const AName: string);
+begin
+  FName := AName;
 end;
 
 procedure TDataValidatorItemBase.SetValue(const AValue: TValue);
@@ -117,10 +124,22 @@ end;
 
 function TDataValidatorItemBase.GetMessage: string;
 var
+  LKey: string;
   LValue: string;
+  LMessage: string;
 begin
+  LKey := FName;
   LValue := GetValueAsString;
-  Result := FMessage.Replace('${value}', LValue, [rfReplaceAll]);
+
+  LMessage := FMessage.Replace('${key}', LKey, [rfReplaceAll]);
+  LMessage := LMessage.Replace('${keyupper}', UpperCase(LKey), [rfReplaceAll]);
+  LMessage := LMessage.Replace('${keylower}', LowerCase(LKey), [rfReplaceAll]);
+
+  LMessage := LMessage.Replace('${value}', LValue, [rfReplaceAll]);
+  LMessage := LMessage.Replace('${valueupper}', UpperCase(LValue), [rfReplaceAll]);
+  LMessage := LMessage.Replace('${valuelower}', LowerCase(LValue), [rfReplaceAll]);
+
+  Result := LMessage;
 end;
 
 function TDataValidatorItemBase.GetValueAsString: string;

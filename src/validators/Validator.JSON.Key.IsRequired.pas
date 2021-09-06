@@ -62,14 +62,17 @@ function TDataValidatorJSONKeyIsRequired.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
+  LIsRequired: Boolean;
   LJSONPair: TJSONPair;
 begin
   LValue := GetValueAsString;
   R := True;
+  LIsRequired := True;
 
   if Assigned(FFuncExecute) then
-    R := FFuncExecute
-  else
+    LIsRequired := FFuncExecute;
+
+  if LIsRequired then
     if FValue.IsType<TJSONPair> then
     begin
       LJSONPair := FValue.AsType<TJSONPair>;

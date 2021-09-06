@@ -62,14 +62,17 @@ function TDataValidatorJSONKeyIsOptional.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
+  LIsOptional: Boolean;
   LJSONPair: TJSONPair;
 begin
   LValue := GetValueAsString;
   R := True;
+  LIsOptional := True;
 
   if Assigned(FFuncExecute) then
-    R := FFuncExecute
-  else
+    LIsOptional := FFuncExecute;
+
+  if LIsOptional then
     if FValue.IsType<TJSONPair> then
     begin
       LJSONPair := FValue.AsType<TJSONPair>;

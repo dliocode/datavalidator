@@ -54,8 +54,10 @@ type
   IDataValidatorJSONContextKey<T> = interface(IDataValidatorJSONContextKeyContext<T>)
     ['{54906AC4-363A-4031-927C-2D007C6279AC}']
     function &End(): T;
-    function IsOptional(): IDataValidatorJSONContextKey<T>;
-    function IsRequired(): IDataValidatorJSONContextKey<T>;
+    function IsOptional(): IDataValidatorJSONContextKey<T>; overload;
+    function IsOptional(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>; overload;
+    function IsRequired(): IDataValidatorJSONContextKey<T>; overload;
+    function IsRequired(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>; overload;
   end;
 
   IDataValidatorJSONContextValueContext<T> = interface(IDataValidatorContext < IDataValidatorJSONContextValue < T >> )

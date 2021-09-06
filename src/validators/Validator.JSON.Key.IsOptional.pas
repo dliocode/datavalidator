@@ -41,17 +41,19 @@ uses
 type
   TDataValidatorJSONKeyIsOptional = class(TDataValidatorItemBase, IDataValidatorItem)
   private
+    FFuncExecute: TDataValidatorFuncExecute;
   public
     function Check: IDataValidatorResult;
-    constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const AFuncExecute: TDataValidatorFuncExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
 { TDataValidatorJSONKeyIsOptional }
 
-constructor TDataValidatorJSONKeyIsOptional.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TDataValidatorJSONKeyIsOptional.Create(const AFuncExecute: TDataValidatorFuncExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  FFuncExecute := AFuncExecute;
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;
@@ -65,7 +67,9 @@ begin
   LValue := GetValueAsString;
   R := True;
 
-  if not Trim(LValue).IsEmpty then
+  if Assigned(FFuncExecute) then
+    R := FFuncExecute
+  else
     if FValue.IsType<TJSONPair> then
     begin
       LJSONPair := FValue.AsType<TJSONPair>;

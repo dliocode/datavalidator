@@ -46,6 +46,8 @@ type
 
   TDataValidatorLocaleLanguage = DataValidator.Types.TDataValidatorLocaleLanguage;
 
+  TDataValidatorFuncExecute = DataValidator.Types.TDataValidatorFuncExecute;
+
   TDataValidatorCustomExecute = DataValidator.Types.TDataValidatorCustomExecute;
   TDataValidatorCustomMessageExecute = DataValidator.Types.TDataValidatorCustomMessageExecute;
   TDataValidatorCustomJSONValueExecute = DataValidator.Types.TDataValidatorCustomJSONValueExecute;

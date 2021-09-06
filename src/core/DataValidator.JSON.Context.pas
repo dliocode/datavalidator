@@ -49,8 +49,10 @@ type
     function Value(): IDataValidatorJSONContextValue<T>;
 
     // Key
-    function IsOptional(): IDataValidatorJSONContextKey<T>;
-    function IsRequired(): IDataValidatorJSONContextKey<T>;
+    function IsOptional(): IDataValidatorJSONContextKey<T>; overload;
+    function IsOptional(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>; overload;
+    function IsRequired(): IDataValidatorJSONContextKey<T>; overload;
+    function IsRequired(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>; overload;
 
     function WithMessage(const AMessage: string): IDataValidatorJSONContextKey<T>; overload;
     function WithMessage(const AMessage: string; const AParams: array of const): IDataValidatorJSONContextKey<T>; overload;
@@ -106,13 +108,25 @@ end;
 function TDataValidatorJSONContext<T>.IsOptional: IDataValidatorJSONContextKey<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONKeyIsOptional.Create('Key is optional!'));
+  Add(TDataValidatorJSONKeyIsOptional.Create(nil, 'Key is optional!'));
+end;
+
+function TDataValidatorJSONContext<T>.IsOptional(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONKeyIsOptional.Create(AExecute, 'Key is optional!'));
 end;
 
 function TDataValidatorJSONContext<T>.IsRequired: IDataValidatorJSONContextKey<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONKeyIsRequired.Create('Key is required!'));
+  Add(TDataValidatorJSONKeyIsRequired.Create(nil, 'Key is required!'));
+end;
+
+function TDataValidatorJSONContext<T>.IsRequired(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONKeyIsRequired.Create(AExecute, 'Key is required!'));
 end;
 
 function TDataValidatorJSONContext<T>.WithMessage(const AMessage: string): IDataValidatorJSONContextKey<T>;

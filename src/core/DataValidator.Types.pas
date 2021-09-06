@@ -41,6 +41,8 @@ uses
 type
   TDataValidatorLocaleLanguage = (tl_en_US, tl_de_DE, tl_fr_FR, tl_it_IT, tl_es_ES, tl_ru_RU, tl_pt_BR);
 
+  TDataValidatorFuncExecute = reference to function: Boolean;
+
   TDataValidatorCustomExecute = reference to function(const AValue: string): Boolean;
   TDataValidatorCustomMessageExecute = reference to function(const AValue: string; var AMessage: string): Boolean;
 

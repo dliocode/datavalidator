@@ -70,8 +70,6 @@ begin
 
   if not Trim(LValue).IsEmpty then
   begin
-    LValue := StringReplace(LValue, '\', '', [rfReplaceAll]);
-
     R := TryStrToTime(LValue, LTime);
 
     if not R then

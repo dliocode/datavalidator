@@ -145,6 +145,7 @@ end;
 function TDataValidatorItemBase.GetValueAsString: string;
 var
   LJSONPair: TJSONPair;
+  LValue: string;
 begin
   Result := '';
 
@@ -153,7 +154,10 @@ begin
     LJSONPair := FValue.AsType<TJSONPair>;
 
     if Assigned(LJSONPair) then
-      Result := LJSONPair.JsonValue.ToString.Trim(['"']);
+    begin
+      LValue := LJSONPair.JsonValue.ToString.Trim(['"']);
+      Result := StringReplace(LValue, '\/', '/', [rfReplaceAll]);
+    end;
   end
   else
     Result := FValue.AsString;

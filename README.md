@@ -246,7 +246,7 @@ TDataValidator.Values
 | ------------ | ------------ |
 | Not | Quando usado esse validador, ele nega o resultado do validador. <br> Ex: **Validate('email').&Not.IsEmpty** <br> Se entende que o valor não deve ser vazio.|
 | Execute | Define o que deve ser executado se aquele **_validate_** não passar na validação. A execução dessa procedure é forma manual. <br> Ex: <br> CheckAll.Informations.GetItem(0).OnExecute;|
-| WithMessage | Define a mensagem do error. <br> Para adicionar na mensagem o valor validado, basta adicionar a tag **\${value}**. <br> Ex: **IsEmail.WithMessage('E-mail \${value} está inválido!')**. ```output: E-mail null@@null está inválido ```  |
+| WithMessage | Define a mensagem do error. <br> Para adicionar na mensagem o valor validado, basta adicionar a tag **\${value}**. <br> Ex: **IsEmail.WithMessage('E-mail \${value} está inválido!')**. ```output: E-mail null@@null está inválido! ```  |
 
 ## Validators / Sanitizers
 

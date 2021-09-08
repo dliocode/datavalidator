@@ -64,7 +64,7 @@ var
   LDateTime: TDateTime;
 begin
   LValue := Trim(GetValueAsString);
-  LValueSanitize := StringReplace(LValue, '\', '', [rfReplaceAll]);
+  LValueSanitize := LValue;
 
   R := TryStrToDateTime(LValueSanitize, LDateTime);
 

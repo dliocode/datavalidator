@@ -67,8 +67,6 @@ begin
 
   if not Trim(LValue).IsEmpty then
   begin
-    LValue := StringReplace(LValue, '\', '', [rfReplaceAll]);
-
     R := TRegEx.IsMatch(LValue, '^(\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}|\d{14})$');
 
     if R then

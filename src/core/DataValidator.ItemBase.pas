@@ -167,7 +167,6 @@ procedure TDataValidatorItemBase.SetValueAdapter(const AValue: TValue);
 var
   LJSONPair: TJSONPair;
   LJSONGetValue: TJSONValue;
-  LValueInt: Int64;
 begin
   if FValue.IsType<TJSONPair> then
   begin
@@ -181,18 +180,11 @@ begin
         FValue.AsType<TJSONPair>.JsonValue := TJSONBool.Create(AValue.AsBoolean)
       else
         if LJSONGetValue is TJSONNumber then
-        begin
-          if TryStrToInt64(LJSONGetValue.Value, LValueInt) then
-            FValue.AsType<TJSONPair>.JsonValue := TJSONNumber.Create(AValue.AsVariant)
-          else
-            FValue.AsType<TJSONPair>.JsonValue := TJSONNumber.Create(AValue.AsType<Double>)
-        end
+          FValue.AsType<TJSONPair>.JsonValue := TJSONNumber.Create(AValue.AsVariant)
         else
           if LJSONGetValue is TJSONString then
-          begin
             if not MatchText(string(AValue.TypeInfo.Name), ['TDateTime', 'TDate', 'TTime', 'TTimeStamp']) then
               FValue.AsType<TJSONPair>.JsonValue := TJSONString.Create(AValue.AsString);
-          end;
 
       Exit;
     end;

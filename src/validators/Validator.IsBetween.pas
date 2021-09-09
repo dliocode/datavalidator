@@ -36,7 +36,7 @@ interface
 
 uses
   DataValidator.ItemBase, DataValidator.ItemBase.Sanitizer,
-  System.Math, System.SysUtils;
+  System.Math, System.SysUtils, System.RTTI;
 
 type
   TValidatorIsBetween = class(TDataValidatorItemBase, IDataValidatorItem)

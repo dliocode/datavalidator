@@ -61,12 +61,22 @@ var
   LValue: string;
   R: Boolean;
   LFloat: Double;
+  LFormatSettings: TFormatSettings;
 begin
   LValue := GetValueAsString;
   R := False;
 
   if not Trim(LValue).IsEmpty then
-    R := TryStrToFloat(LValue, LFloat);
+  begin
+    LFormatSettings.DecimalSeparator := ',';
+    R := TryStrToFloat(LValue, LFloat, LFormatSettings);
+
+    if not R then
+    begin
+      LFormatSettings.DecimalSeparator := '.';
+      R := TryStrToFloat(LValue, LFloat, LFormatSettings);
+    end;
+  end;
 
   if FIsNot then
     R := not R;

@@ -65,7 +65,7 @@ var
   LIsOptional: Boolean;
 begin
   LValue := GetValueAsString;
-  R := True;
+  R := False;
   LIsOptional := True;
 
   if Assigned(FOptionalExecute) then

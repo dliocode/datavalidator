@@ -66,7 +66,7 @@ var
   LJSONPair: TJSONPair;
 begin
   LValue := GetValueAsString;
-  R := True;
+  R := False;
   LIsOptional := True;
 
   if Assigned(FFuncExecute) then

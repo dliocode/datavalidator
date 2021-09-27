@@ -71,7 +71,7 @@ implementation
 uses
   DataValidator.Information.Intf, DataValidator.ItemBase.Intf, DataValidator.Context.Intf,
   DataValidator.JSON.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase,
-  Validator.JSON.Key.IsOptional, Validator.IsOptional;
+  Validator.JSON.Key.IsRequired, Validator.JSON.Key.IsOptional, Validator.IsOptional;
 
 { TDataValidatorJSON }
 
@@ -201,6 +201,9 @@ begin
 
         LOK := False;
         LInfo.Add(LValidatorResult.Informations as IDataValidatorInformations);
+
+        if (LValidatorItem is TDataValidatorJSONKeyIsRequired) then
+          Break;
 
         if not ACheckAll then
           Break;

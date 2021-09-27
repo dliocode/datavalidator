@@ -108,25 +108,25 @@ end;
 function TDataValidatorJSONContext<T>.IsOptional: IDataValidatorJSONContextKey<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONKeyIsOptional.Create(nil, 'Key is optional!'));
+  Add(TDataValidatorJSONKeyIsOptional.Create(nil, 'Key ${key} is optional!'));
 end;
 
 function TDataValidatorJSONContext<T>.IsOptional(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONKeyIsOptional.Create(AExecute, 'Key is optional!'));
+  Add(TDataValidatorJSONKeyIsOptional.Create(AExecute, 'Key ${key} is optional!'));
 end;
 
 function TDataValidatorJSONContext<T>.IsRequired: IDataValidatorJSONContextKey<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONKeyIsRequired.Create(nil, 'Key is required!'));
+  Add(TDataValidatorJSONKeyIsRequired.Create(nil, 'Key ${key} is required!'));
 end;
 
 function TDataValidatorJSONContext<T>.IsRequired(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONKeyIsRequired.Create(AExecute, 'Key is required!'));
+  Add(TDataValidatorJSONKeyIsRequired.Create(AExecute, 'Key ${key} is required!'));
 end;
 
 function TDataValidatorJSONContext<T>.WithMessage(const AMessage: string): IDataValidatorJSONContextKey<T>;

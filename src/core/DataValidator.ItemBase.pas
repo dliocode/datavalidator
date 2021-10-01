@@ -154,17 +154,11 @@ begin
     LJSONPair := FValue.AsType<TJSONPair>;
 
     if Assigned(LJSONPair) then
-    begin
-      if LJSONPair.JsonValue is TJSONNull then
-      begin
-        Result := LValue;
-      end
-      else
+      if not (LJSONPair.JsonValue is TJSONNull) then
       begin
         LValue := LJSONPair.JsonValue.ToString.Trim(['"']);
         Result := StringReplace(LValue, '\/', '/', [rfReplaceAll]);
       end;
-    end;
   end
   else
     Result := FValue.AsString;

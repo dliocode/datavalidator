@@ -155,8 +155,15 @@ begin
 
     if Assigned(LJSONPair) then
     begin
-      LValue := LJSONPair.JsonValue.ToString.Trim(['"']);
-      Result := StringReplace(LValue, '\/', '/', [rfReplaceAll]);
+      if LJSONPair.JsonValue is TJSONNull then
+      begin
+        Result := LValue;
+      end
+      else
+      begin
+        LValue := LJSONPair.JsonValue.ToString.Trim(['"']);
+        Result := StringReplace(LValue, '\/', '/', [rfReplaceAll]);
+      end;
     end;
   end
   else

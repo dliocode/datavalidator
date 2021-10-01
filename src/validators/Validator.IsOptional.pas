@@ -62,16 +62,12 @@ function TValidatorIsOptional.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
-  LIsOptional: Boolean;
 begin
   LValue := GetValueAsString;
-  R := False;
-  LIsOptional := True;
 
   if Assigned(FOptionalExecute) then
-    LIsOptional := FOptionalExecute(LValue);
-
-  if LIsOptional then
+    R := FOptionalExecute(LValue)
+  else
     R := LValue.IsEmpty;
 
   if FIsNot then

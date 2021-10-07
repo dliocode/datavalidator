@@ -263,6 +263,7 @@ begin
           Continue;
         end;
 
+        LValidatorItem.SetName(LName);
         LValidatorItem.SetValue(LValueSanitizer);
 
         LValidatorResult := LValidatorItem.Check;
@@ -275,12 +276,15 @@ begin
           LOK := False;
           LInfo.Add(LValidatorResult.Informations as IDataValidatorInformations);
 
+          if (LValidatorItem is TDataValidatorJSONKeyIsRequired) then
+            Break;
+
           if not ACheckAll then
             Break;
         end
         else
           if (LValidatorItem is TDataValidatorJSONKeyIsOptional) or (LValidatorItem is TValidatorIsOptional) then
-            Break
+            Break;
       end;
 
       LValues := Concat(LValues, [TValueToString(LValueSanitizer)]);

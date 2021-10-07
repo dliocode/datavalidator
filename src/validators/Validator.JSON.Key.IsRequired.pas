@@ -76,7 +76,6 @@ begin
     if FValue.IsType<TJSONPair> then
     begin
       LJSONPair := FValue.AsType<TJSONPair>;
-
       R := Assigned(LJSONPair);
     end;
 

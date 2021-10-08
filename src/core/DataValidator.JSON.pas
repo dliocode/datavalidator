@@ -96,7 +96,7 @@ end;
 destructor TDataValidatorJSON.Destroy;
 begin
   FList.Clear;
-  FList.DisposeOf;
+  FList.Free;
 
   inherited;
 end;
@@ -342,6 +342,9 @@ begin
       LOK := False;
       LInfo.Add(LValidatorResult.Informations as IDataValidatorInformations);
 
+      if (LValidatorItem is TDataValidatorJSONKeyIsRequired) then
+        Break;
+
       if not ACheckAll then
         Break;
     end
@@ -405,6 +408,9 @@ begin
 
         LOK := False;
         LInfo.Add(LValidatorResult.Informations as IDataValidatorInformations);
+
+        if (LValidatorItem is TDataValidatorJSONKeyIsRequired) then
+          Break;
 
         if not ACheckAll then
           Break;

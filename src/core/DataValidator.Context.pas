@@ -623,7 +623,7 @@ begin
   Result := Add(TValidatorIsLatLong.Create(ACheckDMS, 'Value is not JWT (JSON Web Token)!'));
 end;
 
-function TDataValidatorContext<T>.IsLength(const AMin, AMax: Integer): T;
+function TDataValidatorContext<T>.IsLength(const AMin: Integer; const AMax: Integer): T;
 begin
   Result := Add(TValidatorIsLength.Create(AMin, AMax, Format('Value required length min(%d) and max(%d)!', [AMin, AMax])));
 end;

@@ -69,18 +69,15 @@ begin
   LValue := GetValueAsString;
   R := False;
 
-  try
-    if Assigned(FCustomExecute) then
-      R := FCustomExecute(LValue)
-    else
-      if Assigned(FCustomMessageExecute) then
-      begin
-        LMessage := GetMessage;
-        R := FCustomMessageExecute(LValue, LMessage);
-        SetMessage(LMessage);
-      end;
-  except
-  end;
+  if Assigned(FCustomExecute) then
+    R := FCustomExecute(LValue)
+  else
+    if Assigned(FCustomMessageExecute) then
+    begin
+      LMessage := GetMessage;
+      R := FCustomMessageExecute(LValue, LMessage);
+      SetMessage(LMessage);
+    end;
 
   if FIsNot then
     R := not R;

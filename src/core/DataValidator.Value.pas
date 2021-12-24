@@ -72,7 +72,7 @@ end;
 destructor TDataValidatorValue.Destroy;
 begin
   FList.Clear;
-  FList.DisposeOf;
+  FList.Free;
 
   inherited;
 end;

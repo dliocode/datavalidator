@@ -118,7 +118,7 @@ begin
                 R := (LJSONValue as TJSONObject).TryGetValue<string>('alg', LJSONObjectValue);
           finally
             if Assigned(LJSONValue) then
-              LJSONValue.DisposeOf;
+              LJSONValue.Free;
           end;
 
           if not R then

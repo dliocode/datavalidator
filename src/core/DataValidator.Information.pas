@@ -83,7 +83,7 @@ end;
 destructor TDataValidatorInformations.Destroy;
 begin
   FList.Clear;
-  FList.DisposeOf;
+  FList.Free;
 
   inherited;
 end;
@@ -126,7 +126,7 @@ begin
 
     Result := Trim(LSL.Text);
   finally
-    LSL.DisposeOf
+    LSL.Free
   end;
 end;
 

@@ -36,7 +36,7 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.Math, System.SysUtils;
+  System.SysUtils;
 
 type
   TValidatorIsPort = class(TDataValidatorItemBase, IDataValidatorItem)

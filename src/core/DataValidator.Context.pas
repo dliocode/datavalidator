@@ -306,7 +306,6 @@ end;
 
 destructor TDataValidatorContext<T>.Destroy;
 begin
-  FList.Clear;
   FList.Free;
 
   inherited;

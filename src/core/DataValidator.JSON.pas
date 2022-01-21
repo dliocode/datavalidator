@@ -95,7 +95,6 @@ end;
 
 destructor TDataValidatorJSON.Destroy;
 begin
-  FList.Clear;
   FList.Free;
 
   inherited;

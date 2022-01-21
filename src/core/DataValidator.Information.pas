@@ -82,7 +82,6 @@ end;
 
 destructor TDataValidatorInformations.Destroy;
 begin
-  FList.Clear;
   FList.Free;
 
   inherited;

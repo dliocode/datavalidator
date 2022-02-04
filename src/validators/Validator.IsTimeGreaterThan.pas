@@ -56,6 +56,7 @@ constructor TValidatorIsTimeGreaterThan.Create(const ACompareTime: TTime; const 
 begin
   FCompareTime := ACompareTime;
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

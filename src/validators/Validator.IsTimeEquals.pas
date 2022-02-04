@@ -55,6 +55,7 @@ constructor TValidatorIsTimeEquals.Create(const ACompareTime: TTime; const AJSON
 begin
   FCompareTime := ACompareTime;
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

@@ -55,6 +55,7 @@ constructor TValidatorIsDateGreaterThan.Create(const ACompareDate: TDate; const 
 begin
   FCompareDate := ACompareDate;
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

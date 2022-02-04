@@ -52,10 +52,11 @@ implementation
 
 { TValidatorContains }
 
-constructor TValidatorContains.Create(const AValueContains: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute);
+constructor TValidatorContains.Create(const AValueContains: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FValueContains := AValueContains;
   FCaseSensitive := ACaseSensitive;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

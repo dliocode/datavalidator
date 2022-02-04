@@ -58,6 +58,7 @@ begin
   FStartDate := AStartDate;
   FEndDate := AEndDate;
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

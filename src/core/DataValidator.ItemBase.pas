@@ -45,15 +45,18 @@ type
   TValue = System.RTTI.TValue;
 
   TDataValidatorLocaleLanguage = DataValidator.Types.TDataValidatorLocaleLanguage;
+  TDataValidatorCustomResult = DataValidator.Types.TDataValidatorCustomResult;
 
-  TDataValidatorFuncExecute = DataValidator.Types.TDataValidatorFuncExecute;
+  TDataValidatorMessage = DataValidator.Types.TDataValidatorMessage;
+  TDataValidatorCustomValue = DataValidator.Types.TDataValidatorCustomValue;
+  TDataValidatorCustomValueMessage = DataValidator.Types.TDataValidatorCustomValueMessage;
+  TDataValidatorCustomMessage = DataValidator.Types.TDataValidatorCustomMessage;
 
-  TDataValidatorCustomExecute = DataValidator.Types.TDataValidatorCustomExecute;
-  TDataValidatorCustomMessageExecute = DataValidator.Types.TDataValidatorCustomMessageExecute;
-  TDataValidatorCustomJSONValueExecute = DataValidator.Types.TDataValidatorCustomJSONValueExecute;
-  TDataValidatorCustomJSONValueMessageExecute = DataValidator.Types.TDataValidatorCustomJSONValueMessageExecute;
+  TDataValidatorCustomJSONValue = DataValidator.Types.TDataValidatorCustomJSONValue;
+  TDataValidatorCustomJSONValueMessage = DataValidator.Types.TDataValidatorCustomJSONValueMessage;
+  TDataValidatorCustomJSONMessage = DataValidator.Types.TDataValidatorCustomJSONMessage;
 
-  TDataValidatorInformationExecute = DataValidator.Information.Intf.TDataValidatorInformationExecute;
+  TDataValidatorInformationExecute = DataValidator.Types.TDataValidatorInformationExecute;
   IDataValidatorItem = DataValidator.ItemBase.Intf.IDataValidatorItem;
   IDataValidatorResult = DataValidator.Result.Intf.IDataValidatorResult;
   TDataValidatorResult = DataValidator.Result.TDataValidatorResult;
@@ -61,24 +64,27 @@ type
 
   TDataValidatorItemBase = class(TInterfacedObject, IDataValidatorItemBase)
   private
-    FMessage: string;
+    FMessage: TDataValidatorMessage;
+
+    function GetAdjustedMessage(const AMessage: string): string;
   protected
     FLocaleLanguage: TDataValidatorLocaleLanguage;
     FIsNot: Boolean;
     FName: string;
     FValue: TValue;
     FExecute: TDataValidatorInformationExecute;
-    function GetMessage: string;
+
+    function GetMessage: TDataValidatorMessage;
     function GetValueAsString: string;
     procedure SetValueAdapter(const AValue: TValue);
   public
     function GetDataValidatorLocaleLanguage: TDataValidatorLocaleLanguage;
     procedure SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
-
     procedure SetIsNot(const AIsNot: Boolean);
     procedure SetName(const AName: string);
     procedure SetValue(const AValue: TValue);
-    procedure SetMessage(const AMessage: string);
+    procedure SetMessage(const AMessage: string); overload;
+    procedure SetMessage(const AMessage: TDataValidatorMessage); overload;
     procedure SetExecute(const AExecute: TDataValidatorInformationExecute);
   end;
 
@@ -114,7 +120,12 @@ end;
 procedure TDataValidatorItemBase.SetMessage(const AMessage: string);
 begin
   if not AMessage.IsEmpty then
-    FMessage := AMessage;
+    FMessage.Message := AMessage;
+end;
+
+procedure TDataValidatorItemBase.SetMessage(const AMessage: TDataValidatorMessage);
+begin
+  FMessage := AMessage;
 end;
 
 procedure TDataValidatorItemBase.SetExecute(const AExecute: TDataValidatorInformationExecute);
@@ -122,24 +133,15 @@ begin
   FExecute := AExecute;
 end;
 
-function TDataValidatorItemBase.GetMessage: string;
-var
-  LKey: string;
-  LValue: string;
-  LMessage: string;
+function TDataValidatorItemBase.GetMessage: TDataValidatorMessage;
 begin
-  LKey := FName;
-  LValue := GetValueAsString;
+  Result := Default (TDataValidatorMessage);
 
-  LMessage := FMessage.Replace('${key}', LKey, [rfReplaceAll]);
-  LMessage := LMessage.Replace('${keyupper}', UpperCase(LKey), [rfReplaceAll]);
-  LMessage := LMessage.Replace('${keylower}', LowerCase(LKey), [rfReplaceAll]);
-
-  LMessage := LMessage.Replace('${value}', LValue, [rfReplaceAll]);
-  LMessage := LMessage.Replace('${valueupper}', UpperCase(LValue), [rfReplaceAll]);
-  LMessage := LMessage.Replace('${valuelower}', LowerCase(LValue), [rfReplaceAll]);
-
-  Result := LMessage;
+  Result := FMessage;
+  Result.Title := GetAdjustedMessage(Result.Title);
+  Result.Message := GetAdjustedMessage(Result.Message);
+  Result.Detail := GetAdjustedMessage(Result.Detail);
+  Result.Status := GetAdjustedMessage(Result.Status);
 end;
 
 function TDataValidatorItemBase.GetValueAsString: string;
@@ -154,7 +156,7 @@ begin
     LJSONPair := FValue.AsType<TJSONPair>;
 
     if Assigned(LJSONPair) then
-      if not (LJSONPair.JsonValue is TJSONNull) then
+      if not(LJSONPair.JsonValue is TJSONNull) then
       begin
         LValue := LJSONPair.JsonValue.ToString.Trim(['"']);
         Result := StringReplace(LValue, '\/', '/', [rfReplaceAll]);
@@ -183,6 +185,26 @@ begin
   end;
 
   FValue := AValue;
+end;
+
+function TDataValidatorItemBase.GetAdjustedMessage(const AMessage: string): string;
+var
+  LKey: string;
+  LValue: string;
+  LMessage: string;
+begin
+  LKey := FName;
+  LValue := GetValueAsString;
+
+  LMessage := AMessage;
+  LMessage := LMessage.Replace('${key}', LKey, [rfReplaceAll]);
+  LMessage := LMessage.Replace('${keyupper}', UpperCase(LKey), [rfReplaceAll]);
+  LMessage := LMessage.Replace('${keylower}', LowerCase(LKey), [rfReplaceAll]);
+  LMessage := LMessage.Replace('${value}', LValue, [rfReplaceAll]);
+  LMessage := LMessage.Replace('${valueupper}', UpperCase(LValue), [rfReplaceAll]);
+  LMessage := LMessage.Replace('${valuelower}', LowerCase(LValue), [rfReplaceAll]);
+
+  Result := LMessage;
 end;
 
 end.

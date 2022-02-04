@@ -35,21 +35,31 @@ unit DataValidator.Types;
 interface
 
 uses
-
   System.JSON;
 
 type
+  TDataValidatorMessage = record
+    Title: string;
+    Message: string;
+    Detail: string;
+    Status: string;
+  end;
+
   TDataValidatorLocaleLanguage = (tl_en_US, tl_de_DE, tl_fr_FR, tl_it_IT, tl_es_ES, tl_ru_RU, tl_pt_BR);
 
-  TDataValidatorFuncExecute = reference to function: Boolean;
+  TDataValidatorCustomResult = reference to function: Boolean;
+  TDataValidatorCustomSanitizer = reference to function(const AValue: string): string;
 
-  TDataValidatorCustomExecute = reference to function(const AValue: string): Boolean;
-  TDataValidatorCustomMessageExecute = reference to function(const AValue: string; var AMessage: string): Boolean;
+  TDataValidatorCustomValue = reference to function(const AValue: string): Boolean;
+  TDataValidatorCustomValueMessage = reference to function(const AValue: string; var AMessage: string): Boolean;
+  TDataValidatorCustomMessage = reference to function(const AValue: string; var AMessage: TDataValidatorMessage): Boolean;
 
-  TDataValidatorCustomJSONValueExecute = reference to function(const AValue: TJSONValue): Boolean;
-  TDataValidatorCustomJSONValueMessageExecute = reference to function(const AValue: TJSONValue; var AMessage: string): Boolean;
+  TDataValidatorCustomJSONValue = reference to function(const AValue: TJSONValue): Boolean;
+  TDataValidatorCustomJSONValueMessage = reference to function(const AValue: TJSONValue; var AMessage: string): Boolean;
+  TDataValidatorCustomJSONMessage = reference to function(const AValue: TJSONValue; var AMessage: TDataValidatorMessage): Boolean;
 
-  TDataValidatorCustomSanitizerExecute = reference to function(const AValue: string): string;
+  TDataValidatorInformationExecute = reference to procedure;
+  TDataValidatorWithMessage = reference to procedure(var AMessage: TDataValidatorMessage);
 
 implementation
 

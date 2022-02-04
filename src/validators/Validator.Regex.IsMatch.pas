@@ -54,6 +54,7 @@ implementation
 constructor TValidatorRegexIsMatch.Create(const ARegex: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FRegex := ARegex;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

@@ -57,6 +57,7 @@ implementation
 constructor TValidatorIsUUID.Create(const AVersion: TTypeUUID; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FVersion := AVersion;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

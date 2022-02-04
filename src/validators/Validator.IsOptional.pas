@@ -41,19 +41,20 @@ uses
 type
   TValidatorIsOptional = class(TDataValidatorItemBase, IDataValidatorItem)
   private
-    FOptionalExecute: TDataValidatorCustomExecute;
+    FOptionalExecute: TDataValidatorCustomValue;
   public
     function Check: IDataValidatorResult;
-    constructor Create(const AOptionalExecute: TDataValidatorCustomExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const AOptionalExecute: TDataValidatorCustomValue; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
 { TValidatorIsOptional }
 
-constructor TValidatorIsOptional.Create(const AOptionalExecute: TDataValidatorCustomExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsOptional.Create(const AOptionalExecute: TDataValidatorCustomValue; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FOptionalExecute := AOptionalExecute;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

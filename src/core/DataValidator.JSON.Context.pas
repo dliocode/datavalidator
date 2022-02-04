@@ -50,17 +50,19 @@ type
 
     // Key
     function IsOptional(): IDataValidatorJSONContextKey<T>; overload;
-    function IsOptional(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>; overload;
+    function IsOptional(const AExecute: TDataValidatorCustomResult): IDataValidatorJSONContextKey<T>; overload;
     function IsRequired(): IDataValidatorJSONContextKey<T>; overload;
-    function IsRequired(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>; overload;
+    function IsRequired(const AExecute: TDataValidatorCustomResult): IDataValidatorJSONContextKey<T>; overload;
 
+    function WithMessage(const AMessage: TDataValidatorWithMessage): IDataValidatorJSONContextKey<T>; overload;
     function WithMessage(const AMessage: string): IDataValidatorJSONContextKey<T>; overload;
     function WithMessage(const AMessage: string; const AParams: array of const): IDataValidatorJSONContextKey<T>; overload;
     function Execute(const AExecute: TDataValidatorInformationExecute): IDataValidatorJSONContextKey<T>;
 
     // Value
-    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueExecute): IDataValidatorJSONContextValue<T>; overload;
-    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessageExecute): IDataValidatorJSONContextValue<T>; overload;
+    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValue): IDataValidatorJSONContextValue<T>; overload;
+    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessage): IDataValidatorJSONContextValue<T>; overload;
+    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONMessage): IDataValidatorJSONContextValue<T>; overload;
     function IsNull(): IDataValidatorJSONContextValue<T>;
     function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
     function MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
@@ -111,7 +113,7 @@ begin
   Add(TDataValidatorJSONKeyIsOptional.Create(nil, 'Key ${key} is optional!'));
 end;
 
-function TDataValidatorJSONContext<T>.IsOptional(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>;
+function TDataValidatorJSONContext<T>.IsOptional(const AExecute: TDataValidatorCustomResult): IDataValidatorJSONContextKey<T>;
 begin
   Result := Self;
   Add(TDataValidatorJSONKeyIsOptional.Create(AExecute, 'Key ${key} is optional!'));
@@ -123,10 +125,16 @@ begin
   Add(TDataValidatorJSONKeyIsRequired.Create(nil, 'Key ${key} is required!'));
 end;
 
-function TDataValidatorJSONContext<T>.IsRequired(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>;
+function TDataValidatorJSONContext<T>.IsRequired(const AExecute: TDataValidatorCustomResult): IDataValidatorJSONContextKey<T>;
 begin
   Result := Self;
   Add(TDataValidatorJSONKeyIsRequired.Create(AExecute, 'Key ${key} is required!'));
+end;
+
+function TDataValidatorJSONContext<T>.WithMessage(const AMessage: TDataValidatorWithMessage): IDataValidatorJSONContextKey<T>;
+begin
+  Result := Self;
+  TDataValidatorContext < IDataValidatorJSONContextValue < T >> (Self).WithMessage(AMessage);
 end;
 
 function TDataValidatorJSONContext<T>.WithMessage(const AMessage: string): IDataValidatorJSONContextKey<T>;
@@ -147,16 +155,22 @@ begin
   TDataValidatorContext < IDataValidatorJSONContextValue < T >> (Self).Execute(AExecute);
 end;
 
-function TDataValidatorJSONContext<T>.CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueExecute): IDataValidatorJSONContextValue<T>;
+function TDataValidatorJSONContext<T>.CustomJSONValue(const AExecute: TDataValidatorCustomJSONValue): IDataValidatorJSONContextValue<T>;
 begin
   Result := Self;
-  Add(TValidatorJSONValueCustom.Create(AExecute, nil, 'Value is false!'));
+  Add(TValidatorJSONValueCustom.Create(AExecute, nil, nil, 'Value is false!'));
 end;
 
-function TDataValidatorJSONContext<T>.CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessageExecute): IDataValidatorJSONContextValue<T>;
+function TDataValidatorJSONContext<T>.CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessage): IDataValidatorJSONContextValue<T>;
 begin
   Result := Self;
-  Add(TValidatorJSONValueCustom.Create(nil, AExecute, 'Value is false!'));
+  Add(TValidatorJSONValueCustom.Create(nil, AExecute, nil, 'Value is false!'));
+end;
+
+function TDataValidatorJSONContext<T>.CustomJSONValue(const AExecute: TDataValidatorCustomJSONMessage): IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TValidatorJSONValueCustom.Create(nil, nil, AExecute, 'Value is false!'));
 end;
 
 function TDataValidatorJSONContext<T>.IsNull: IDataValidatorJSONContextValue<T>;

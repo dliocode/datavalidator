@@ -45,6 +45,7 @@ type
 
   IDataValidatorContextMessage<T> = interface
     ['{54CF9567-25E9-4B1A-A62B-7F270E5351E2}']
+    function WithMessage(const AMessage: TDataValidatorWithMessage): T; overload;
     function WithMessage(const AMessage: string): T; overload;
     function WithMessage(const AMessage: string; const AParams: array of const): T; overload;
     function Execute(const AExecute: TDataValidatorInformationExecute): T;
@@ -53,7 +54,7 @@ type
   IDataValidatorContextSanitizer<T> = interface(IDataValidatorContextMessage<T>)
     ['{80BCAFBF-2BBB-46FA-9C39-E7CC7D188350}']
     function CustomSanitizer(const ASanitizerItem: IDataSanitizerItem): T; overload;
-    function CustomSanitizer(const AExecute: TDataValidatorCustomSanitizerExecute): T; overload;
+    function CustomSanitizer(const AExecute: TDataValidatorCustomSanitizer): T; overload;
     function NormalizeEmail(const AAllLowercase: Boolean = True; const AGmailRemoveDots: Boolean = True): T;
     function OnlyNumbers(): T;
     function RemoveAccents(): T;
@@ -80,8 +81,9 @@ type
   IDataValidatorContextValidator<T> = interface(IDataValidatorContextSanitizer<T>)
     ['{F61EA315-86CA-4807-B1A1-F9030FADB844}']
     function CustomValue(const ADataItem: IDataValidatorItem): T; overload;
-    function CustomValue(const AExecute: TDataValidatorCustomExecute): T; overload;
-    function CustomValue(const AExecute: TDataValidatorCustomMessageExecute): T; overload;
+    function CustomValue(const AExecute: TDataValidatorCustomValue): T; overload;
+    function CustomValue(const AExecute: TDataValidatorCustomValueMessage): T; overload;
+    function CustomValue(const AExecute: TDataValidatorCustomMessage): T; overload;
     function Contains(const AValueContains: string; const ACaseSensitive: Boolean = False): T; overload;
     function Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function EndsWith(const AValueEndsWith: string; const ACaseSensitive: Boolean = False): T; overload;
@@ -145,7 +147,7 @@ type
     function IsNumeric(): T;
     function IsOctal(): T;
     function IsOptional(): T; overload;
-    function IsOptional(const AExecute: TDataValidatorCustomExecute): T; overload;
+    function IsOptional(const AExecute: TDataValidatorCustomValue): T; overload;
     function IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPort(): T;

@@ -41,6 +41,7 @@ uses
 
 type
   TDataValidatorLocaleLanguage = DataValidator.Types.TDataValidatorLocaleLanguage;
+  TDataValidatorMessage = DataValidator.Types.TDataValidatorMessage;
 
   IDataValidatorSchema = DataValidator.Intf.IDataValidatorSchema;
   IDataValidatorValue = DataValidator.Intf.IDataValidatorValue;

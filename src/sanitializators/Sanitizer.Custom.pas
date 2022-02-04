@@ -40,17 +40,17 @@ uses
 type
   TSanitizerCustom = class(TDataValidatorItemBaseSanitizer)
   private
-    FExecute: TDataValidatorCustomSanitizerExecute;
+    FExecute: TDataValidatorCustomSanitizer;
   public
     function Sanitize: TValue; override;
-    constructor Create(const AExecute: TDataValidatorCustomSanitizerExecute);
+    constructor Create(const AExecute: TDataValidatorCustomSanitizer);
   end;
 
 implementation
 
 { TSanitizerCustom }
 
-constructor TSanitizerCustom.Create(const AExecute: TDataValidatorCustomSanitizerExecute);
+constructor TSanitizerCustom.Create(const AExecute: TDataValidatorCustomSanitizer);
 begin
   FExecute := AExecute;
 end;

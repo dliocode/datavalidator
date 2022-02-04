@@ -35,15 +35,14 @@ unit DataValidator.Information.Intf;
 interface
 
 uses
+  DataValidator.Types,
   System.SysUtils;
 
 type
-  TDataValidatorInformationExecute = TProc;
-
   IDataValidatorInformation = interface
     ['{972F5617-FDED-4D8E-8F89-5F372C1D62AB}']
     function Value: string;
-    function Message: string;
+    function Messages: TDataValidatorMessage;
     function Execute: TDataValidatorInformationExecute;
     procedure OnExecute;
   end;

@@ -41,12 +41,15 @@ uses
 type
   TValidatorJSONValueCustom = class(TDataValidatorItemBase, IDataValidatorItem)
   private
-    FCustomJSONValueExecute: TDataValidatorCustomJSONValueExecute;
-    FCustomJSONValueMessageExecute: TDataValidatorCustomJSONValueMessageExecute;
+    FCustomJSONValueExecute: TDataValidatorCustomJSONValue;
+    FCustomJSONValueMessageExecute: TDataValidatorCustomJSONValueMessage;
+    FCustomJSONValueMessage: TDataValidatorCustomJSONMessage;
   public
     function Check: IDataValidatorResult;
     constructor Create(
-      const ACustomJSONObjectExecute: TDataValidatorCustomJSONValueExecute; const ACustomJSONObjectMessageExecute: TDataValidatorCustomJSONValueMessageExecute;
+      const ACustomJSONObjectExecute: TDataValidatorCustomJSONValue;
+      const ACustomJSONObjectMessageExecute: TDataValidatorCustomJSONValueMessage;
+      const ACustomJSONObjectMessage: TDataValidatorCustomJSONMessage;
       const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -55,11 +58,14 @@ implementation
 { TValidatorJSONValueCustom }
 
 constructor TValidatorJSONValueCustom.Create(
-  const ACustomJSONObjectExecute: TDataValidatorCustomJSONValueExecute; const ACustomJSONObjectMessageExecute: TDataValidatorCustomJSONValueMessageExecute;
-  const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+      const ACustomJSONObjectExecute: TDataValidatorCustomJSONValue;
+      const ACustomJSONObjectMessageExecute: TDataValidatorCustomJSONValueMessage;
+      const ACustomJSONObjectMessage: TDataValidatorCustomJSONMessage;
+      const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FCustomJSONValueExecute := ACustomJSONObjectExecute;
   FCustomJSONValueMessageExecute := ACustomJSONObjectMessageExecute;
+  FCustomJSONValueMessage := ACustomJSONObjectMessage;
 
   SetMessage(AMessage);
   SetExecute(AExecute);
@@ -70,7 +76,7 @@ var
   LValue: string;
   R: Boolean;
   LJSONPair: TJSONPair;
-  LMessage: string;
+  LMessage: TDataValidatorMessage;
 begin
   LValue := GetValueAsString;
   R := False;
@@ -85,12 +91,17 @@ begin
           if Assigned(FCustomJSONValueExecute) then
             R := FCustomJSONValueExecute(LJSONPair.JsonValue)
           else
+          begin
+            LMessage := GetMessage;
+
             if Assigned(FCustomJSONValueMessageExecute) then
-            begin
-              LMessage := GetMessage;
-              R := FCustomJSONValueMessageExecute(LJSONPair.JsonValue, LMessage);
-              SetMessage(LMessage);
-            end;
+              R := FCustomJSONValueMessageExecute(LJSONPair.JsonValue, LMessage.Message)
+            else
+              if Assigned(FCustomJSONValueMessage) then
+                R := FCustomJSONValueMessage(LJSONPair.JsonValue, LMessage);
+
+            SetMessage(LMessage);
+          end;
 
         LValue := GetValueAsString;
       end;

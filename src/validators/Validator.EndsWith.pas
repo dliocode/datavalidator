@@ -52,10 +52,11 @@ implementation
 
 { TValidatorEndsWith }
 
-constructor TValidatorEndsWith.Create(const AValueEndsWith: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute);
+constructor TValidatorEndsWith.Create(const AValueEndsWith: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FValueEndsWith := AValueEndsWith;
   FCaseSensitive := ACaseSensitive;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

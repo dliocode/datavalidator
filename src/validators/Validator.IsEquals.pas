@@ -56,6 +56,7 @@ constructor TValidatorIsEquals.Create(const AValueEquals: TArray<string>; const 
 begin
   FValueEquals := AValueEquals;
   FCaseSensitive := ACaseSensitive;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

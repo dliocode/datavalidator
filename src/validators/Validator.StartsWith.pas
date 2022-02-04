@@ -52,10 +52,11 @@ implementation
 
 { TValidatorStartsWith }
 
-constructor TValidatorStartsWith.Create(const AValueStartsWith: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute);
+constructor TValidatorStartsWith.Create(const AValueStartsWith: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FValueStartsWith := AValueStartsWith;
   FCaseSensitive := ACaseSensitive;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

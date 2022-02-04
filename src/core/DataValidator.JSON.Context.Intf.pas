@@ -55,9 +55,9 @@ type
     ['{54906AC4-363A-4031-927C-2D007C6279AC}']
     function &End(): T;
     function IsOptional(): IDataValidatorJSONContextKey<T>; overload;
-    function IsOptional(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>; overload;
+    function IsOptional(const AExecute: TDataValidatorCustomResult): IDataValidatorJSONContextKey<T>; overload;
     function IsRequired(): IDataValidatorJSONContextKey<T>; overload;
-    function IsRequired(const AExecute: TDataValidatorFuncExecute): IDataValidatorJSONContextKey<T>; overload;
+    function IsRequired(const AExecute: TDataValidatorCustomResult): IDataValidatorJSONContextKey<T>; overload;
   end;
 
   IDataValidatorJSONContextValueContext<T> = interface(IDataValidatorContext < IDataValidatorJSONContextValue < T >> )
@@ -67,8 +67,9 @@ type
   IDataValidatorJSONContextValue<T> = interface(IDataValidatorJSONContextValueContext<T>)
     ['{320BD31E-810F-4EB6-A8C4-C17CA2C186DB}']
     function &End(): T;
-    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueExecute): IDataValidatorJSONContextValue<T>; overload;
-    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessageExecute): IDataValidatorJSONContextValue<T>; overload;
+    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValue): IDataValidatorJSONContextValue<T>; overload;
+    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessage): IDataValidatorJSONContextValue<T>; overload;
+    function CustomJSONValue(const AExecute: TDataValidatorCustomJSONMessage): IDataValidatorJSONContextValue<T>; overload;
     function IsNull(): IDataValidatorJSONContextValue<T>;
     function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
     function MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;

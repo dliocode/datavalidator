@@ -54,6 +54,7 @@ implementation
 constructor TValidatorIsLatLong.Create(const ACheckDMS: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FCheckDMS := ACheckDMS;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

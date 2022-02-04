@@ -61,6 +61,7 @@ constructor TValidatorIsBetween.Create(const AValueA: TValue; const AValueB: TVa
 begin
   FValueA := AValueA;
   FValueB := AValueB;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

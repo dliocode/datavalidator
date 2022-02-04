@@ -35,22 +35,22 @@ unit DataValidator.Information;
 interface
 
 uses
-  DataValidator.Information.Intf,
+  DataValidator.Information.Intf, DataValidator.Types,
   System.Classes, System.Generics.Collections, System.SysUtils;
 
 type
   TDataValidatorInformation = class(TInterfacedObject, IDataValidatorInformation)
   private
     FValue: Variant;
-    FMessage: string;
+    FMessages: TDataValidatorMessage;
     FExecute: TDataValidatorInformationExecute;
   public
     function Value: string;
-    function Message: string;
+    function Messages: TDataValidatorMessage;
     function Execute: TDataValidatorInformationExecute;
     procedure OnExecute;
 
-    constructor Create(const AValue: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute);
+    constructor Create(const AValue: string; const AMessages: TDataValidatorMessage; const AExecute: TDataValidatorInformationExecute);
     destructor Destroy; override;
 
   end;
@@ -121,20 +121,20 @@ begin
   LSL := TStringList.Create;
   try
     for I := 0 to Pred(Count) do
-      LSL.Add(GetItem(I).Message);
+      LSL.Add(GetItem(I).Messages.Message);
 
     Result := Trim(LSL.Text);
   finally
-    LSL.Free
+    LSL.Free;
   end;
 end;
 
 { TDataValidatorInformation }
 
-constructor TDataValidatorInformation.Create(const AValue: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute);
+constructor TDataValidatorInformation.Create(const AValue: string; const AMessages: TDataValidatorMessage; const AExecute: TDataValidatorInformationExecute);
 begin
   FValue := AValue;
-  FMessage := AMessage;
+  FMessages := AMessages;
   FExecute := AExecute;
 end;
 
@@ -148,9 +148,9 @@ begin
   Result := FValue;
 end;
 
-function TDataValidatorInformation.Message: string;
+function TDataValidatorInformation.Messages: TDataValidatorMessage;
 begin
-  Result := FMessage;
+  Result := FMessages;
 end;
 
 function TDataValidatorInformation.Execute: TDataValidatorInformationExecute;

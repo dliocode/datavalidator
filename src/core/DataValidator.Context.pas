@@ -45,7 +45,7 @@ type
     [weak]
     FOwner: T;
     FList: TList<IDataValidatorItem>;
-    FMessage: string;
+    FMessage: TDataValidatorMessage;
     FExecute: TDataValidatorInformationExecute;
     FIsNot: Boolean;
   protected
@@ -54,11 +54,11 @@ type
   public
     // Schema
     function AddSchema(const ASchema: IDataValidatorSchemaContext): T;
-
     // Values
     function CustomValue(const AValidatorItem: IDataValidatorItem): T; overload;
-    function CustomValue(const AExecute: TDataValidatorCustomExecute): T; overload;
-    function CustomValue(const AExecute: TDataValidatorCustomMessageExecute): T; overload;
+    function CustomValue(const AExecute: TDataValidatorCustomValue): T; overload;
+    function CustomValue(const AExecute: TDataValidatorCustomValueMessage): T; overload;
+    function CustomValue(const AExecute: TDataValidatorCustomMessage): T; overload;
     function Contains(const AValueContains: string; const ACaseSensitive: Boolean = False): T; overload;
     function Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function EndsWith(const AValueEndsWith: string; const ACaseSensitive: Boolean = False): T; overload;
@@ -122,7 +122,7 @@ type
     function IsNumeric(): T;
     function IsOctal(): T;
     function IsOptional(): T; overload;
-    function IsOptional(const AExecute: TDataValidatorCustomExecute): T; overload;
+    function IsOptional(const AExecute: TDataValidatorCustomValue): T; overload;
     function IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
     function IsPort(): T;
@@ -147,12 +147,11 @@ type
     function RegexIsMatch(const ARegex: string): T;
     function StartsWith(const AValueStartsWith: string; const ACaseSensitive: Boolean = False): T; overload;
     function StartsWith(const AValueStartsWith: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
-
     function &Not(): T;
 
     // Sanitizer
     function CustomSanitizer(const ASanitizerItem: IDataSanitizerItem): T; overload;
-    function CustomSanitizer(const AExecute: TDataValidatorCustomSanitizerExecute): T; overload;
+    function CustomSanitizer(const AExecute: TDataValidatorCustomSanitizer): T; overload;
     function NormalizeEmail(const AAllLowercase: Boolean = True; const AGmailRemoveDots: Boolean = True): T;
     function OnlyNumbers(): T;
     function RemoveAccents(): T;
@@ -176,6 +175,7 @@ type
     function TrimRight(): T;
 
     // Message
+    function WithMessage(const AMessage: TDataValidatorWithMessage): T; overload;
     function WithMessage(const AMessage: string): T; overload;
     function WithMessage(const AMessage: string; const AParams: array of const): T; overload;
     function Execute(const AExecute: TDataValidatorInformationExecute): T;
@@ -298,8 +298,9 @@ end;
 procedure TDataValidatorContext<T>.AfterConstruction;
 begin
   inherited;
+
   FList := TList<IDataValidatorItem>.Create;
-  FMessage := '';
+  FMessage := Default(TDataValidatorMessage);
   FExecute := nil;
   FIsNot := False;
 end;
@@ -336,14 +337,19 @@ begin
   Result := Add(AValidatorItem);
 end;
 
-function TDataValidatorContext<T>.CustomValue(const AExecute: TDataValidatorCustomExecute): T;
+function TDataValidatorContext<T>.CustomValue(const AExecute: TDataValidatorCustomValue): T;
 begin
-  Result := Add(TValidatorCustom.Create(AExecute, nil, 'Value false!'));
+  Result := Add(TValidatorCustom.Create(AExecute, nil, nil, 'Value false!'));
 end;
 
-function TDataValidatorContext<T>.CustomValue(const AExecute: TDataValidatorCustomMessageExecute): T;
+function TDataValidatorContext<T>.CustomValue(const AExecute: TDataValidatorCustomValueMessage): T;
 begin
-  Result := Add(TValidatorCustom.Create(nil, AExecute, 'Value false!'));
+  Result := Add(TValidatorCustom.Create(nil, AExecute, nil, 'Value false!'));
+end;
+
+function TDataValidatorContext<T>.CustomValue(const AExecute: TDataValidatorCustomMessage): T;
+begin
+  Result := Add(TValidatorCustom.Create(nil, nil, AExecute, 'Value false!'));
 end;
 
 function TDataValidatorContext<T>.Contains(const AValueContains: string; const ACaseSensitive: Boolean): T;
@@ -357,6 +363,7 @@ var
   LMessage: string;
 begin
   LMessage := '';
+
   for LValue in AValueContains do
     LMessage := LMessage + LValue + ' ';
 
@@ -374,6 +381,7 @@ var
   LMessage: string;
 begin
   LMessage := '';
+
   for LValue in AValueEndsWith do
     LMessage := LMessage + LValue + ' ';
 
@@ -521,6 +529,7 @@ var
   LMessage: string;
 begin
   LMessage := '';
+
   for LValue in AValueEquals do
     LMessage := LMessage + LValue + ' ';
 
@@ -687,7 +696,7 @@ begin
   Result := Add(TValidatorIsOptional.Create(nil, 'Value is optional!'));
 end;
 
-function TDataValidatorContext<T>.IsOptional(const AExecute: TDataValidatorCustomExecute): T;
+function TDataValidatorContext<T>.IsOptional(const AExecute: TDataValidatorCustomValue): T;
 begin
   Result := Add(TValidatorIsOptional.Create(AExecute, 'Value is optional!'));
 end;
@@ -808,6 +817,7 @@ var
   LMessage: string;
 begin
   LMessage := '';
+
   for LValue in AValueStartsWith do
     LMessage := LMessage + LValue + ' ';
 
@@ -821,13 +831,12 @@ begin
 end;
 
 // Sanitizer
-
 function TDataValidatorContext<T>.CustomSanitizer(const ASanitizerItem: IDataSanitizerItem): T;
 begin
   Result := Add(ASanitizerItem);
 end;
 
-function TDataValidatorContext<T>.CustomSanitizer(const AExecute: TDataValidatorCustomSanitizerExecute): T;
+function TDataValidatorContext<T>.CustomSanitizer(const AExecute: TDataValidatorCustomSanitizer): T;
 begin
   Result := Add(TSanitizerCustom.Create(AExecute) as IDataSanitizerItem);
 end;
@@ -937,14 +946,30 @@ begin
   Result := Add(TSanitizerTrimRight.Create as IDataSanitizerItem);
 end;
 
-function TDataValidatorContext<T>.WithMessage(const AMessage: string): T;
+function TDataValidatorContext<T>.WithMessage(const AMessage: TDataValidatorWithMessage): T;
+var
+  LDataValidatorMessage: TDataValidatorMessage;
 begin
   Result := FOwner;
 
+  LDataValidatorMessage := Default(TDataValidatorMessage);
+
+  if Assigned(AMessage) then
+    AMessage(LDataValidatorMessage);
+
   if FList.Count > 0 then
-    FList.Last.SetMessage(AMessage)
+    FList.Last.SetMessage(LDataValidatorMessage)
   else
-    FMessage := AMessage;
+    FMessage := LDataValidatorMessage;
+end;
+
+function TDataValidatorContext<T>.WithMessage(const AMessage: string): T;
+begin
+  Result := WithMessage(
+    procedure(var Message: TDataValidatorMessage)
+    begin
+      Message.Message := AMessage;
+    end);
 end;
 
 function TDataValidatorContext<T>.WithMessage(const AMessage: string; const AParams: array of const): T;

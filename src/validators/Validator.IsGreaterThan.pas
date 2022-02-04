@@ -54,6 +54,7 @@ implementation
 constructor TValidatorIsGreaterThan.Create(const AValueLessThan: Integer; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FValueLessThan := AValueLessThan;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

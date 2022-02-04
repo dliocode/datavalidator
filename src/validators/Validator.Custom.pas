@@ -41,21 +41,32 @@ uses
 type
   TValidatorCustom = class(TDataValidatorItemBase, IDataValidatorItem)
   private
-    FCustomExecute: TDataValidatorCustomExecute;
-    FCustomMessageExecute: TDataValidatorCustomMessageExecute;
+    FCustomExecute: TDataValidatorCustomValue;
+    FCustomMessageExecute: TDataValidatorCustomValueMessage;
+    FCustomMessage: TDataValidatorCustomMessage;
   public
     function Check: IDataValidatorResult;
-    constructor Create(const ACustomExecute: TDataValidatorCustomExecute; const ACustomMessageExecute: TDataValidatorCustomMessageExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(
+      const ACustomExecute: TDataValidatorCustomValue;
+      const ACustomMessageExecute: TDataValidatorCustomValueMessage;
+      const ACustomMessage: TDataValidatorCustomMessage;
+      const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
 { TValidatorCustom }
 
-constructor TValidatorCustom.Create(const ACustomExecute: TDataValidatorCustomExecute; const ACustomMessageExecute: TDataValidatorCustomMessageExecute; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorCustom.Create(
+      const ACustomExecute: TDataValidatorCustomValue;
+      const ACustomMessageExecute: TDataValidatorCustomValueMessage;
+      const ACustomMessage: TDataValidatorCustomMessage;
+      const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   FCustomExecute := ACustomExecute;
   FCustomMessageExecute := ACustomMessageExecute;
+  FCustomMessage := ACustomMessage;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;
@@ -64,7 +75,7 @@ function TValidatorCustom.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
-  LMessage: string;
+  LMessage: TDataValidatorMessage;
 begin
   LValue := GetValueAsString;
   R := False;
@@ -72,12 +83,17 @@ begin
   if Assigned(FCustomExecute) then
     R := FCustomExecute(LValue)
   else
+  begin
+    LMessage := GetMessage;
+
     if Assigned(FCustomMessageExecute) then
-    begin
-      LMessage := GetMessage;
-      R := FCustomMessageExecute(LValue, LMessage);
-      SetMessage(LMessage);
-    end;
+      R := FCustomMessageExecute(LValue, LMessage.Message)
+    else
+      if Assigned(FCustomMessage) then
+        R := FCustomMessage(LValue, LMessage);
+
+    SetMessage(LMessage);
+  end;
 
   if FIsNot then
     R := not R;

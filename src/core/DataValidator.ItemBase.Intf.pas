@@ -47,7 +47,8 @@ type
 
     procedure SetName(const AName: string);
     procedure SetValue(const AValue: TValue);
-    procedure SetMessage(const AMessage: string);
+    procedure SetMessage(const AMessage: string); overload;
+    procedure SetMessage(const AMessage: TDataValidatorMessage); overload;
     procedure SetExecute(const AExecute: TDataValidatorInformationExecute); overload;
   end;
 

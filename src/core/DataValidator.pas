@@ -54,7 +54,6 @@ type
   IDataValidatorSchemaContext = DataValidator.Context.Intf.IDataValidatorSchemaContext;
 
   TDataValidator = class
-  private
   public
     class function Schema: IDataValidatorSchema;
     class function Values: IDataValidatorValue;

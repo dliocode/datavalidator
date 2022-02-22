@@ -35,7 +35,7 @@ unit DataValidator.JSON.Context;
 interface
 
 uses
-  DataValidator.JSON.Context.Intf, DataValidator.ItemBase.Intf, DataValidator.Information.Intf,
+  DataValidator.JSON.Context.Intf, DataValidator.ItemBase.Intf,
   DataValidator.Types, DataValidator.Context,
   System.JSON, System.Generics.Collections, System.SysUtils;
 
@@ -67,7 +67,7 @@ type
     function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
     function MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
 
-    function &End(): T;
+    function &End: T;
 
     constructor Create(const AOwner: T; const AValue: TJSONPair);
     destructor Destroy; override;
@@ -94,7 +94,7 @@ end;
 
 destructor TDataValidatorJSONContext<T>.Destroy;
 begin
-  inherited;
+  inherited Destroy;
 end;
 
 function TDataValidatorJSONContext<T>.Key: IDataValidatorJSONContextKey<T>;

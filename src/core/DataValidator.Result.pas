@@ -82,8 +82,7 @@ end;
 
 destructor TDataValidatorResult.Destroy;
 begin
-  FDataInformations := nil;
-  inherited;
+
 end;
 
 function TDataValidatorResult.OK: Boolean;

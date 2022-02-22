@@ -76,15 +76,12 @@ implementation
 
 constructor TDataValidatorInformations.Create;
 begin
-  inherited;
   FList := TList<IDataValidatorInformation>.Create;
 end;
 
 destructor TDataValidatorInformations.Destroy;
 begin
   FList.Free;
-
-  inherited;
 end;
 
 function TDataValidatorInformations.Add(const ADataInformation: IDataValidatorInformation): IDataValidatorInformations;
@@ -140,7 +137,7 @@ end;
 
 destructor TDataValidatorInformation.Destroy;
 begin
-  inherited;
+
 end;
 
 function TDataValidatorInformation.Value: string;

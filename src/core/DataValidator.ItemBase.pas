@@ -36,7 +36,7 @@ interface
 
 uses
   DataValidator.Types,
-  DataValidator.ItemBase.Intf, DataValidator.Result.Intf, DataValidator.Information.Intf,
+  DataValidator.ItemBase.Intf, DataValidator.Result.Intf,
   DataValidator.Result, DataValidator.Information,
   System.SysUtils, System.RTTI, System.JSON, System.StrUtils, System.TypInfo;
 
@@ -125,7 +125,17 @@ end;
 
 procedure TDataValidatorItemBase.SetMessage(const AMessage: TDataValidatorMessage);
 begin
-  FMessage := AMessage;
+  if not AMessage.Title.Trim.IsEmpty then
+    FMessage.Title := AMessage.Title;
+
+  if not AMessage.Message.Trim.IsEmpty then
+    FMessage.Message := AMessage.Message;
+
+  if not AMessage.Detail.Trim.IsEmpty then
+    FMessage.Detail := AMessage.Detail;
+
+  if not AMessage.Status.Trim.IsEmpty then
+    FMessage.Status := AMessage.Status;
 end;
 
 procedure TDataValidatorItemBase.SetExecute(const AExecute: TDataValidatorInformationExecute);

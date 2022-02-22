@@ -52,6 +52,7 @@ implementation
 
 constructor TSanitizerBase64Decode.Create;
 begin
+
 end;
 
 function TSanitizerBase64Decode.Sanitize: TValue;

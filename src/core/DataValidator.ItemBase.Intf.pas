@@ -35,7 +35,7 @@ unit DataValidator.ItemBase.Intf;
 interface
 
 uses
-  DataValidator.Types, DataValidator.Result.Intf, DataValidator.Information.Intf,
+  DataValidator.Types, DataValidator.Result.Intf,
   System.RTTI;
 
 type

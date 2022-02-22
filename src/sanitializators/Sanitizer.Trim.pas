@@ -52,6 +52,7 @@ implementation
 
 constructor TSanitizerTrim.Create;
 begin
+
 end;
 
 function TSanitizerTrim.Sanitize: TValue;

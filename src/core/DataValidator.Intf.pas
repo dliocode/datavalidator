@@ -65,7 +65,7 @@ type
 
   IDataValidatorValueBase = interface(IDataValidatorValueBaseContext)
     ['{6FAD251E-6E4E-4359-B81D-EC08A0684489}']
-    function &End(): IDataValidatorValueResult;
+    function &End: IDataValidatorValueResult;
   end;
 
   IDataValidatorValueResult = interface(IDataValidatorValue)
@@ -86,13 +86,13 @@ type
 
   IDataValidatorJSON = interface
     ['{8409957E-995E-40F6-99F4-6867EEEA2E78}']
-    function Validate(const AName: string): IDataValidatorJSONBaseContext; overload;
     function Validate(const AName: TArray<string>): IDataValidatorJSONBaseContext; overload;
+    function Validate(const AName: string): IDataValidatorJSONBaseContext; overload;
   end;
 
   IDataValidatorJSONBase = interface(IDataValidatorJSONBaseContext)
     ['{0AE8315D-D7BF-48CF-8917-DB1AE2A0881B}']
-    function &End(): IDataValidatorJSONResult;
+    function &End: IDataValidatorJSONResult;
   end;
 
   IDataValidatorJSONResult = interface(IDataValidatorJSON)

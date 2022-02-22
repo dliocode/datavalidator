@@ -36,7 +36,7 @@ interface
 
 uses
   DataValidator.Types,
-  DataValidator.Context.Intf, DataValidator.ItemBase.Intf, DataValidator.Information.Intf,
+  DataValidator.Context.Intf, DataValidator.ItemBase.Intf,
   System.RTTI, System.JSON, System.Generics.Collections, System.SysUtils, System.Variants;
 
 type
@@ -298,9 +298,8 @@ end;
 procedure TDataValidatorContext<T>.AfterConstruction;
 begin
   inherited;
-
   FList := TList<IDataValidatorItem>.Create;
-  FMessage := Default(TDataValidatorMessage);
+  FMessage := Default (TDataValidatorMessage);
   FExecute := nil;
   FIsNot := False;
 end;
@@ -308,8 +307,6 @@ end;
 destructor TDataValidatorContext<T>.Destroy;
 begin
   FList.Free;
-
-  inherited;
 end;
 
 // Schema
@@ -322,7 +319,7 @@ begin
   Result := FOwner;
 
   if not Assigned(ASchema) then
-    raise Exception.Create('Schema is nil!');
+    raise EDataValidatorException.Create('Schema is nil!');
 
   LListValidatorItem := (ASchema as IDataValidatorContextBase<IDataValidatorItem>).GetItem;
 
@@ -952,7 +949,7 @@ var
 begin
   Result := FOwner;
 
-  LDataValidatorMessage := Default(TDataValidatorMessage);
+  LDataValidatorMessage := Default (TDataValidatorMessage);
 
   if Assigned(AMessage) then
     AMessage(LDataValidatorMessage);

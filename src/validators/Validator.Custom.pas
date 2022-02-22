@@ -35,8 +35,7 @@ unit Validator.Custom;
 interface
 
 uses
-  DataValidator.ItemBase,
-  System.SysUtils;
+  DataValidator.ItemBase;
 
 type
   TValidatorCustom = class(TDataValidatorItemBase, IDataValidatorItem)

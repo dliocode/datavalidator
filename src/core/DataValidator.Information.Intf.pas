@@ -35,8 +35,7 @@ unit DataValidator.Information.Intf;
 interface
 
 uses
-  DataValidator.Types,
-  System.SysUtils;
+  DataValidator.Types;
 
 type
   IDataValidatorInformation = interface

@@ -43,7 +43,7 @@ type
     [weak]
     FDataValidatorSchema: IDataValidatorSchema;
   public
-    function &End(): IDataValidatorSchemaContext;
+    function &End: IDataValidatorSchemaContext;
 
     constructor Create(const ADataValidatorSchema: IDataValidatorSchema); reintroduce;
     destructor Destroy; override;

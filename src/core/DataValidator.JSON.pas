@@ -53,8 +53,8 @@ type
     function TValueToString(const AValue: TValue): string;
     function TryGetValue(const AName: string; var AValue: IDataValidatorJSONBaseContext): Boolean;
   public
-    function Validate(const AName: string): IDataValidatorJSONBaseContext; overload;
     function Validate(const AName: TArray<string>): IDataValidatorJSONBaseContext; overload;
+    function Validate(const AName: string): IDataValidatorJSONBaseContext; overload;
 
     function Check(): IDataValidatorResult;
     function CheckAll(): IDataValidatorResult;
@@ -69,6 +69,7 @@ type
 implementation
 
 uses
+  DataValidator.Types,
   DataValidator.Information.Intf, DataValidator.ItemBase.Intf, DataValidator.Context.Intf,
   DataValidator.JSON.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase,
   Validator.JSON.Key.IsRequired, Validator.JSON.Key.IsOptional, Validator.IsOptional;
@@ -78,7 +79,7 @@ uses
 constructor TDataValidatorJSON.Create(const AJSON: TJSONObject);
 begin
   if not Assigned(AJSON) then
-    raise Exception.Create('JSON is nil');
+    raise EDataValidatorException.Create('JSON is nil');
 
   FJSON := AJSON;
   FList := TList < TPair < string, IDataValidatorJSONBaseContext >>.Create();
@@ -87,7 +88,7 @@ end;
 constructor TDataValidatorJSON.Create(const AJSON: TJSONArray);
 begin
   if not Assigned(AJSON) then
-    raise Exception.Create('JSON is nil');
+    raise EDataValidatorException.Create('JSON is nil');
 
   FJSON := AJSON;
   FList := TList < TPair < string, IDataValidatorJSONBaseContext >>.Create();
@@ -96,13 +97,6 @@ end;
 destructor TDataValidatorJSON.Destroy;
 begin
   FList.Free;
-
-  inherited;
-end;
-
-function TDataValidatorJSON.Validate(const AName: string): IDataValidatorJSONBaseContext;
-begin
-  Result := Validate([AName]);
 end;
 
 function TDataValidatorJSON.Validate(const AName: TArray<string>): IDataValidatorJSONBaseContext;
@@ -112,10 +106,15 @@ var
 begin
   LBase := TDataValidatorJSONBase.Create(Self, nil);
 
-  for I := 0 to Pred(Length(AName)) do
+  for I := Low(AName) to High(AName) do
     FList.Add(TPair<string, IDataValidatorJSONBaseContext>.Create(AName[I], LBase));
 
   Result := LBase;
+end;
+
+function TDataValidatorJSON.Validate(const AName: string): IDataValidatorJSONBaseContext;
+begin
+  Result := Validate([AName]);
 end;
 
 function TDataValidatorJSON.Check: IDataValidatorResult;

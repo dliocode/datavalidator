@@ -56,11 +56,12 @@ uses
 
 constructor TDataValidatorSchema.Create;
 begin
+
 end;
 
 destructor TDataValidatorSchema.Destroy;
 begin
-  inherited;
+
 end;
 
 function TDataValidatorSchema.Validate: IDataValidatorSchemaBaseContext;

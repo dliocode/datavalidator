@@ -44,7 +44,7 @@ type
     [weak]
     FResult: IDataValidatorJSONResult;
   public
-    function &End(): IDataValidatorJSONResult;
+    function &End: IDataValidatorJSONResult;
 
     constructor Create(const AResult: IDataValidatorJSONResult; const AValue: TJSONPair); reintroduce;
     destructor Destroy; override;
@@ -65,7 +65,7 @@ begin
   inherited Destroy;
 end;
 
-function TDataValidatorJSONBase.&End(): IDataValidatorJSONResult;
+function TDataValidatorJSONBase.&End: IDataValidatorJSONResult;
 begin
   Result := FResult;
 end;

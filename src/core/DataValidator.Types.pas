@@ -35,7 +35,7 @@ unit DataValidator.Types;
 interface
 
 uses
-  System.JSON;
+  System.JSON, System.SysUtils;
 
 type
   TDataValidatorMessage = record
@@ -60,6 +60,9 @@ type
 
   TDataValidatorInformationExecute = reference to procedure;
   TDataValidatorWithMessage = reference to procedure(var AMessage: TDataValidatorMessage);
+
+  EDataValidatorException = class(Exception)
+  end;
 
 implementation
 

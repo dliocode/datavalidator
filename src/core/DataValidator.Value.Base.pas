@@ -44,8 +44,7 @@ type
     FResult: IDataValidatorValueResult;
     FValue: TArray<string>;
   public
-    function &End(): IDataValidatorValueResult;
-
+    function &End: IDataValidatorValueResult;
     function GetValues: TArray<string>;
 
     constructor Create(const AResult: IDataValidatorValueResult; const AValue: TArray<string>); reintroduce;
@@ -59,8 +58,8 @@ implementation
 constructor TDataValidatorValueBase.Create(const AResult: IDataValidatorValueResult; const AValue: TArray<string>);
 begin
   inherited Create(Self, '');
-  FValue := AValue;
   FResult := AResult;
+  FValue := AValue;
 end;
 
 destructor TDataValidatorValueBase.Destroy;
@@ -68,7 +67,7 @@ begin
   inherited Destroy;
 end;
 
-function TDataValidatorValueBase.&End(): IDataValidatorValueResult;
+function TDataValidatorValueBase.&End: IDataValidatorValueResult;
 begin
   Result := FResult;
 end;

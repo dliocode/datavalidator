@@ -72,8 +72,6 @@ end;
 destructor TDataValidatorValue.Destroy;
 begin
   FList.Free;
-
-  inherited;
 end;
 
 function TDataValidatorValue.Validate(const AValue: string): IDataValidatorValueBaseContext;

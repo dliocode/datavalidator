@@ -56,6 +56,8 @@ implementation
 
 constructor TValidatorIsIP.Create(const AVersion: TTypeIPVersion; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FVersion := AVersion;
 
   SetMessage(AMessage);

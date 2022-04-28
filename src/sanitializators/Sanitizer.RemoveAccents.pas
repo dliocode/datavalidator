@@ -42,16 +42,11 @@ type
   private
   public
     function Sanitize: TValue; override;
-    constructor Create;
   end;
 
 implementation
 
 { TSanitizerRemoveAccents }
-
-constructor TSanitizerRemoveAccents.Create;
-begin
-end;
 
 function TSanitizerRemoveAccents.Sanitize: TValue;
 type

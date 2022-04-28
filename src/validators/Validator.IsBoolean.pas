@@ -55,6 +55,8 @@ uses
 
 constructor TValidatorIsBoolean.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

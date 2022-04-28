@@ -43,16 +43,11 @@ type
   private
   public
     function Sanitize: TValue; override;
-    constructor Create;
   end;
 
 implementation
 
 { TSanitizerToUpperCase }
-
-constructor TSanitizerToUpperCase.Create;
-begin
-end;
 
 function TSanitizerToUpperCase.Sanitize: TValue;
 var

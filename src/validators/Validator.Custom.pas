@@ -62,6 +62,8 @@ constructor TValidatorCustom.Create(
       const ACustomMessage: TDataValidatorCustomMessage;
       const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FCustomExecute := ACustomExecute;
   FCustomMessageExecute := ACustomMessageExecute;
   FCustomMessage := ACustomMessage;

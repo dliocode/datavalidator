@@ -63,6 +63,8 @@ constructor TValidatorJSONValueCustom.Create(
       const ACustomJSONObjectMessage: TDataValidatorCustomJSONMessage;
       const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FCustomJSONValueExecute := ACustomJSONObjectExecute;
   FCustomJSONValueMessageExecute := ACustomJSONObjectMessageExecute;
   FCustomJSONValueMessage := ACustomJSONObjectMessage;

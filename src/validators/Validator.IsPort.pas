@@ -55,6 +55,8 @@ uses
 
 constructor TValidatorIsPort.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

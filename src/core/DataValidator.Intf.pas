@@ -70,8 +70,8 @@ type
 
   IDataValidatorValueResult = interface(IDataValidatorValue)
     ['{69331F14-D8A2-4E40-ADB4-D3195C59100E}']
-    function Check(): IDataValidatorResult;
-    function CheckAll(): IDataValidatorResult;
+    function Check: IDataValidatorResult;
+    function CheckAll: IDataValidatorResult;
   end;
 
   IDataValidatorValueValues = interface
@@ -97,8 +97,8 @@ type
 
   IDataValidatorJSONResult = interface(IDataValidatorJSON)
     ['{69331F14-D8A2-4E40-ADB4-D3195C59100E}']
-    function Check(): IDataValidatorResult;
-    function CheckAll(): IDataValidatorResult;
+    function Check: IDataValidatorResult;
+    function CheckAll: IDataValidatorResult;
     function CheckItem(const AName: string): IDataValidatorResult;
     function CheckItemAll(const AName: string): IDataValidatorResult;
   end;

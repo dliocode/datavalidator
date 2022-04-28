@@ -53,6 +53,8 @@ implementation
 
 constructor TValidatorIsDateGreaterThan.Create(const ACompareDate: TDate; const AJSONISO8601ReturnUTC: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FCompareDate := ACompareDate;
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;
 

@@ -54,6 +54,8 @@ implementation
 
 constructor TValidatorIsJson.Create(const ATypeJSON: TTypeJSON; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FTypeJSON := ATypeJSON;
 
   SetMessage(AMessage);

@@ -45,13 +45,13 @@ type
   [weak]
     FOwner: T;
   public
-    function Key(): IDataValidatorJSONContextKey<T>;
-    function Value(): IDataValidatorJSONContextValue<T>;
+    function Key: IDataValidatorJSONContextKey<T>;
+    function Value: IDataValidatorJSONContextValue<T>;
 
     // Key
-    function IsOptional(): IDataValidatorJSONContextKey<T>; overload;
+    function IsOptional: IDataValidatorJSONContextKey<T>; overload;
     function IsOptional(const AExecute: TDataValidatorCustomResult): IDataValidatorJSONContextKey<T>; overload;
-    function IsRequired(): IDataValidatorJSONContextKey<T>; overload;
+    function IsRequired: IDataValidatorJSONContextKey<T>; overload;
     function IsRequired(const AExecute: TDataValidatorCustomResult): IDataValidatorJSONContextKey<T>; overload;
 
     function WithMessage(const AMessage: TDataValidatorWithMessage): IDataValidatorJSONContextKey<T>; overload;
@@ -63,14 +63,13 @@ type
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValue): IDataValidatorJSONContextValue<T>; overload;
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessage): IDataValidatorJSONContextValue<T>; overload;
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONMessage): IDataValidatorJSONContextValue<T>; overload;
-    function IsNull(): IDataValidatorJSONContextValue<T>;
+    function IsNull: IDataValidatorJSONContextValue<T>;
     function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
     function MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
 
     function &End: T;
 
     constructor Create(const AOwner: T; const AValue: TJSONPair);
-    destructor Destroy; override;
   end;
 
 implementation
@@ -90,11 +89,6 @@ begin
   FOwner := AOwner;
 
   inherited Create(Self, AValue);
-end;
-
-destructor TDataValidatorJSONContext<T>.Destroy;
-begin
-  inherited Destroy;
 end;
 
 function TDataValidatorJSONContext<T>.Key: IDataValidatorJSONContextKey<T>;

@@ -56,8 +56,8 @@ type
     function Validate(const AName: TArray<string>): IDataValidatorJSONBaseContext; overload;
     function Validate(const AName: string): IDataValidatorJSONBaseContext; overload;
 
-    function Check(): IDataValidatorResult;
-    function CheckAll(): IDataValidatorResult;
+    function Check: IDataValidatorResult;
+    function CheckAll: IDataValidatorResult;
     function CheckItem(const AName: string): IDataValidatorResult;
     function CheckItemAll(const AName: string): IDataValidatorResult;
 

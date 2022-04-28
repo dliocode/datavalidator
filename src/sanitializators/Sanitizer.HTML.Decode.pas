@@ -43,15 +43,11 @@ type
   private
   public
     function Sanitize: TValue; override;
-    constructor Create;
   end;
 
 implementation
 
 { TSanitizerHTMLDecode }
-constructor TSanitizerHTMLDecode.Create;
-begin
-end;
 
 function TSanitizerHTMLDecode.Sanitize: TValue;
 var

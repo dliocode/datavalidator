@@ -53,6 +53,8 @@ implementation
 
 constructor TValidatorIsTime.Create(const AJSONISO8601ReturnUTC: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;
 
   SetMessage(AMessage);

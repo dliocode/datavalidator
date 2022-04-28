@@ -54,6 +54,8 @@ implementation
 
 constructor TValidatorStartsWith.Create(const AValueStartsWith: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FValueStartsWith := AValueStartsWith;
   FCaseSensitive := ACaseSensitive;
 

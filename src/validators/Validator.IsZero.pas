@@ -52,6 +52,8 @@ implementation
 
 constructor TValidatorIsZero.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;

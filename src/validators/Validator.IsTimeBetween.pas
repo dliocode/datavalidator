@@ -55,6 +55,8 @@ implementation
 
 constructor TValidatorIsTimeBetween.Create(const AStartTime: TTime; const AEndTime: TTime; const AJSONISO8601ReturnUTC: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FStartTime := AStartTime;
   FEndTime := AEndTime;
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;

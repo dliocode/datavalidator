@@ -59,6 +59,8 @@ uses
 
 constructor TValidatorIsBetween.Create(const AValueA: TValue; const AValueB: TValue; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FValueA := AValueA;
   FValueB := AValueB;
 

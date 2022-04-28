@@ -43,16 +43,11 @@ type
   private
   public
     function Sanitize: TValue; override;
-    constructor Create;
   end;
 
 implementation
 
 { TSanitizerOnlyNumbers }
-
-constructor TSanitizerOnlyNumbers.Create;
-begin
-end;
 
 function TSanitizerOnlyNumbers.Sanitize: TValue;
 var

@@ -43,17 +43,11 @@ type
   private
   public
     function Sanitize: TValue; override;
-    constructor Create;
   end;
 
 implementation
 
 { TSanitizerTrim }
-
-constructor TSanitizerTrim.Create;
-begin
-
-end;
 
 function TSanitizerTrim.Sanitize: TValue;
 var

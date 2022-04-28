@@ -55,6 +55,8 @@ implementation
 
 constructor TValidatorIsDateBetween.Create(const AStartDate: TDate; const AEndDate: TDate; const AJSONISO8601ReturnUTC: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FStartDate := AStartDate;
   FEndDate := AEndDate;
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;

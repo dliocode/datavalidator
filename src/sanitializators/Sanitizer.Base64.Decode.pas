@@ -43,17 +43,11 @@ type
   private
   public
     function Sanitize: TValue; override;
-    constructor Create;
   end;
 
 implementation
 
 { TSanitizerBase64Decode }
-
-constructor TSanitizerBase64Decode.Create;
-begin
-
-end;
 
 function TSanitizerBase64Decode.Sanitize: TValue;
 var

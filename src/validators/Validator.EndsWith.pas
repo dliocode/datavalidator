@@ -54,6 +54,8 @@ implementation
 
 constructor TValidatorEndsWith.Create(const AValueEndsWith: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FValueEndsWith := AValueEndsWith;
   FCaseSensitive := ACaseSensitive;
 

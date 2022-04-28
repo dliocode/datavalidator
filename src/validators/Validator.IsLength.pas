@@ -57,6 +57,8 @@ uses
 
 constructor TValidatorIsLength.Create(const AMin: Integer; const AMax: Integer; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FMin := AMin;
   FMax := AMax;
 

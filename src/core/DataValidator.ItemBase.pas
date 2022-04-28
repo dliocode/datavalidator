@@ -131,11 +131,14 @@ begin
   if not AMessage.Message.Trim.IsEmpty then
     FMessage.Message := AMessage.Message;
 
-  if not AMessage.Detail.Trim.IsEmpty then
-    FMessage.Detail := AMessage.Detail;
+  if not AMessage.Description.Trim.IsEmpty then
+    FMessage.Description := AMessage.Description;
 
   if not AMessage.Status.Trim.IsEmpty then
     FMessage.Status := AMessage.Status;
+
+  if not AMessage.Uri.Trim.IsEmpty then
+    FMessage.Uri := AMessage.Uri;
 end;
 
 procedure TDataValidatorItemBase.SetExecute(const AExecute: TDataValidatorInformationExecute);
@@ -150,8 +153,9 @@ begin
   Result := FMessage;
   Result.Title := GetAdjustedMessage(Result.Title);
   Result.Message := GetAdjustedMessage(Result.Message);
-  Result.Detail := GetAdjustedMessage(Result.Detail);
+  Result.Description := GetAdjustedMessage(Result.Description);
   Result.Status := GetAdjustedMessage(Result.Status);
+  Result.Uri := GetAdjustedMessage(Result.Uri);
 end;
 
 function TDataValidatorItemBase.GetValueAsString: string;

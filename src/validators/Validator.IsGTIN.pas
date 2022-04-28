@@ -57,6 +57,8 @@ implementation
 
 constructor TValidatorIsGTIN.Create(const AGTINType: TTypeGTIN; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FType := AGTINType;
 
   SetMessage(AMessage);

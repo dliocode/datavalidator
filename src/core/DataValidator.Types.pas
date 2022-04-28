@@ -41,8 +41,16 @@ type
   TDataValidatorMessage = record
     Title: string;
     Message: string;
-    Detail: string;
+    Description: string;
     Status: string;
+    Uri: string;
+
+    constructor Create(const ATitle: string; const AMessage: string; const ADescription: string; const AStatus: string; const AUri: string); overload;
+    constructor Create(const AMessage: string; const ADescription: string = ''); overload;
+    constructor Create(const AJSONObject: TJSONObject; const AOwner: Boolean = False); overload;
+
+    function ToJSONObject(const AIncludeAll: Boolean = True): TJSONObject; overload;
+    function ToJSONString(const AIncludeAll: Boolean = True): string; overload;
   end;
 
   TDataValidatorLocaleLanguage = (tl_en_US, tl_de_DE, tl_fr_FR, tl_it_IT, tl_es_ES, tl_ru_RU, tl_pt_BR);
@@ -65,5 +73,88 @@ type
   end;
 
 implementation
+
+{ TDataValidatorMessage }
+
+constructor TDataValidatorMessage.Create(const ATitle: string; const AMessage: string; const ADescription: string; const AStatus: string; const AUri: string);
+begin
+  Self.Title := ATitle;
+  Self.Title := AMessage;
+  Self.Title := ADescription;
+  Self.Title := AStatus;
+  Self.Title := AUri;
+end;
+
+constructor TDataValidatorMessage.Create(const AMessage: string; const ADescription: string = '');
+begin
+  Self.Message := AMessage;
+  Self.Description := ADescription;
+end;
+
+constructor TDataValidatorMessage.Create(const AJSONObject: TJSONObject; const AOwner: Boolean = False);
+var
+  LValue: TJSONValue;
+begin
+  try
+    LValue := AJSONObject.GetValue('title');
+    if Assigned(LValue) then
+      Self.Title := LValue.Value;
+
+    LValue := AJSONObject.GetValue('message');
+    if Assigned(LValue) then
+      Self.Message := LValue.Value;
+
+    LValue := AJSONObject.GetValue('description');
+    if Assigned(LValue) then
+      Self.Description := LValue.Value;
+
+    LValue := AJSONObject.GetValue('status');
+    if Assigned(LValue) then
+      Self.Status := LValue.Value;
+
+    LValue := AJSONObject.GetValue('uri');
+    if Assigned(LValue) then
+      Self.Uri := LValue.Value;
+  finally
+    if AOwner then
+      AJSONObject.Free;
+  end;
+end;
+
+function TDataValidatorMessage.ToJSONObject(const AIncludeAll: Boolean = True): TJSONObject;
+var
+  LJO: TJSONObject;
+begin
+  LJO := TJSONObject.Create;
+
+  if not Self.Title.IsEmpty or AIncludeAll then
+    LJO.AddPair('title', Self.Title);
+
+  if not Self.Message.IsEmpty or AIncludeAll then
+    LJO.AddPair('message', Self.Message);
+
+  if not Self.Description.IsEmpty or AIncludeAll then
+    LJO.AddPair('description', Self.Description);
+
+  if not Self.Status.IsEmpty or AIncludeAll then
+    LJO.AddPair('status', Self.Status);
+
+  if not Self.Uri.IsEmpty or AIncludeAll then
+    LJO.AddPair('uri', Self.Uri);
+
+  Result := LJO;
+end;
+
+function TDataValidatorMessage.ToJSONString(const AIncludeAll: Boolean = True): string;
+var
+  LJO: TJSONObject;
+begin
+  LJO := ToJSONObject(AIncludeAll);
+  try
+    Result := LJO.ToString;
+  finally
+    LJO.Free;
+  end;
+end;
 
 end.

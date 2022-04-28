@@ -53,6 +53,8 @@ implementation
 
 constructor TValidatorIsTimeEquals.Create(const ACompareTime: TTime; const AJSONISO8601ReturnUTC: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FCompareTime := ACompareTime;
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;
 

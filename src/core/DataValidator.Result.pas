@@ -51,7 +51,6 @@ type
 
     constructor Create(const AOK: Boolean; const ADataInformation: IDataValidatorInformation); overload;
     constructor Create(const AOK: Boolean; const ADataInformations: IDataValidatorInformations; const ADataValues: TArray<string>); overload;
-    destructor Destroy; override;
   end;
 
 implementation
@@ -78,11 +77,6 @@ begin
   FOK := AOK;
   FDataInformations := ADataInformations;
   FDataValues := ADataValues;
-end;
-
-destructor TDataValidatorResult.Destroy;
-begin
-
 end;
 
 function TDataValidatorResult.OK: Boolean;

@@ -54,6 +54,7 @@ implementation
 
 constructor TSanitizerReplace.Create(const AOldValue: string; const ANewValue: string);
 begin
+  inherited Create;
   FOldValue := AOldValue;
   FNewValue := ANewValue;
 end;

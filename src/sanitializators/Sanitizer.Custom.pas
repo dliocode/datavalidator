@@ -52,6 +52,7 @@ implementation
 
 constructor TSanitizerCustom.Create(const AExecute: TDataValidatorCustomSanitizer);
 begin
+  inherited Create;
   FExecute := AExecute;
 end;
 

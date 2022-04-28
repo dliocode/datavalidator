@@ -49,8 +49,8 @@ type
     function Validate(const AValue: string): IDataValidatorValueBaseContext; overload;
     function Validate(const AValue: TArray<string>): IDataValidatorValueBaseContext; overload;
 
-    function Check(): IDataValidatorResult;
-    function CheckAll(): IDataValidatorResult;
+    function Check: IDataValidatorResult;
+    function CheckAll: IDataValidatorResult;
 
     constructor Create;
     destructor Destroy; override;

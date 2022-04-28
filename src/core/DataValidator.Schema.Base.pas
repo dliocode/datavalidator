@@ -46,7 +46,6 @@ type
     function &End: IDataValidatorSchemaContext;
 
     constructor Create(const ADataValidatorSchema: IDataValidatorSchema); reintroduce;
-    destructor Destroy; override;
   end;
 
 implementation
@@ -57,11 +56,6 @@ constructor TDataValidatorSchemaBase.Create(const ADataValidatorSchema: IDataVal
 begin
   inherited Create(Self, '');
   FDataValidatorSchema := ADataValidatorSchema;
-end;
-
-destructor TDataValidatorSchemaBase.Destroy;
-begin
-  inherited Destroy;
 end;
 
 function TDataValidatorSchemaBase.&End: IDataValidatorSchemaContext;

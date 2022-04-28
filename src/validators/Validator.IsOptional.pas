@@ -53,6 +53,8 @@ implementation
 
 constructor TValidatorIsOptional.Create(const AOptionalExecute: TDataValidatorCustomValue; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FOptionalExecute := AOptionalExecute;
 
   SetMessage(AMessage);

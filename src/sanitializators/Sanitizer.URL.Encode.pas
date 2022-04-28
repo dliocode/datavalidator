@@ -43,16 +43,11 @@ type
   private
   public
     function Sanitize: TValue; override;
-    constructor Create;
   end;
 
 implementation
 
 { TSanitizerURLEncode }
-
-constructor TSanitizerURLEncode.Create;
-begin
-end;
 
 function TSanitizerURLEncode.Sanitize: TValue;
 var

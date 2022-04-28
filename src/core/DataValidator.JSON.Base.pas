@@ -47,7 +47,6 @@ type
     function &End: IDataValidatorJSONResult;
 
     constructor Create(const AResult: IDataValidatorJSONResult; const AValue: TJSONPair); reintroduce;
-    destructor Destroy; override;
   end;
 
 implementation
@@ -58,11 +57,6 @@ constructor TDataValidatorJSONBase.Create(const AResult: IDataValidatorJSONResul
 begin
   inherited Create(Self, AValue);
   FResult := AResult;
-end;
-
-destructor TDataValidatorJSONBase.Destroy;
-begin
-  inherited Destroy;
 end;
 
 function TDataValidatorJSONBase.&End: IDataValidatorJSONResult;

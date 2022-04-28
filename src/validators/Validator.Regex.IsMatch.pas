@@ -53,6 +53,8 @@ implementation
 
 constructor TValidatorRegexIsMatch.Create(const ARegex: string; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FRegex := ARegex;
 
   SetMessage(AMessage);

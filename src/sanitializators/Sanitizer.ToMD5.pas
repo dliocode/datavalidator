@@ -43,16 +43,11 @@ type
   private
   public
     function Sanitize: TValue; override;
-    constructor Create;
   end;
 
 implementation
 
 { TSanitizerMD5 }
-
-constructor TSanitizerToMD5.Create;
-begin
-end;
 
 function TSanitizerToMD5.Sanitize: TValue;
 var

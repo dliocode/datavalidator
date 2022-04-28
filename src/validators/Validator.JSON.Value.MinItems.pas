@@ -53,6 +53,8 @@ implementation
 
 constructor TDataValidatorJSONValueMinItems.Create(const AMinItems: Integer; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FMinItems := AMinItems;
 
   SetMessage(AMessage);

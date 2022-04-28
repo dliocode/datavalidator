@@ -51,8 +51,6 @@ type
     procedure OnExecute;
 
     constructor Create(const AValue: string; const AMessages: TDataValidatorMessage; const AExecute: TDataValidatorInformationExecute);
-    destructor Destroy; override;
-
   end;
 
   TDataValidatorInformations = class(TInterfacedObject, IDataValidatorInformations)
@@ -133,11 +131,6 @@ begin
   FValue := AValue;
   FMessages := AMessages;
   FExecute := AExecute;
-end;
-
-destructor TDataValidatorInformation.Destroy;
-begin
-
 end;
 
 function TDataValidatorInformation.Value: string;

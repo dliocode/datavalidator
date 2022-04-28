@@ -53,6 +53,8 @@ implementation
 
 constructor TDataValidatorJSONValueMaxItems.Create(const AMaxItems: Integer; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FMaxItems := AMaxItems;
 
   SetMessage(AMessage);

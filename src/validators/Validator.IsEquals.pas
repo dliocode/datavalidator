@@ -54,6 +54,8 @@ implementation
 
 constructor TValidatorIsEquals.Create(const AValueEquals: TArray<string>; const ACaseSensitive: Boolean; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FValueEquals := AValueEquals;
   FCaseSensitive := ACaseSensitive;
 

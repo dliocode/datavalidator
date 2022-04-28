@@ -53,6 +53,8 @@ implementation
 
 constructor TDataValidatorJSONKeyIsOptional.Create(const AFuncExecute: TDataValidatorCustomResult; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
+  inherited Create;
+
   FFuncExecute := AFuncExecute;
 
   SetMessage(AMessage);

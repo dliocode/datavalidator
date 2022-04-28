@@ -54,6 +54,7 @@ implementation
 
 constructor TSanitizerNormalizeEmail.Create(const AAllLowercase: Boolean = True; const AGmailRemoveDots: Boolean = True);
 begin
+  inherited Create;
   FAllLowercase := AAllLowercase;
   FGmailRemoveDots := AGmailRemoveDots;
 end;

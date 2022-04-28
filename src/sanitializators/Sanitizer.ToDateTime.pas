@@ -53,6 +53,7 @@ implementation
 
 constructor TSanitizerToDateTime.Create(const AJSONISO8601ReturnUTC: Boolean);
 begin
+  inherited Create;
   FJSONISO8601ReturnUTC := AJSONISO8601ReturnUTC;
 end;
 

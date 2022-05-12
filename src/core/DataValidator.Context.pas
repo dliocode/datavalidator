@@ -320,7 +320,7 @@ begin
   Result := FOwner;
 
   if not Assigned(ASchema) then
-    raise EDataValidatorException.Create('Schema is nil!');
+    raise EDataValidatorException.Create('Schema is nil');
 
   LListValidatorItem := (ASchema as IDataValidatorContextBase<IDataValidatorItem>).GetItem;
 

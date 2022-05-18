@@ -43,29 +43,37 @@ type
   private
     FOldValue: string;
     FNewValue: string;
+    FIgnoreCase: Boolean;
   public
     function Sanitize: TValue; override;
-    constructor Create(const AOldValue: string; const ANewValue: string);
+    constructor Create(const AOldValue: string; const ANewValue: string; const AIgnoreCase: Boolean = True);
   end;
 
 implementation
 
 { TSanitizerReplace }
 
-constructor TSanitizerReplace.Create(const AOldValue: string; const ANewValue: string);
+constructor TSanitizerReplace.Create(const AOldValue: string; const ANewValue: string; const AIgnoreCase: Boolean = True);
 begin
   inherited Create;
   FOldValue := AOldValue;
   FNewValue := ANewValue;
+  FIgnoreCase := AIgnoreCase;
 end;
 
 function TSanitizerReplace.Sanitize: TValue;
 var
   LValue: string;
+  LFlags: TReplaceFlags;
 begin
   LValue := GetValueAsString;
 
-  LValue := StringReplace(LValue, FOldValue, FNewValue, [rfReplaceAll]);
+  if FIgnoreCase then
+    LFlags := [rfReplaceAll, rfIgnoreCase]
+  else
+    LFlags := [rfReplaceAll];
+
+  LValue := StringReplace(LValue, FOldValue, FNewValue, LFlags);
 
   SetValueAdapter(LValue);
 

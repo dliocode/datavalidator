@@ -65,7 +65,6 @@ type
   TDataValidatorItemBase = class(TInterfacedObject, IDataValidatorItemBase)
   private
     FMessage: TDataValidatorMessage;
-
     function GetAdjustedMessage(const AMessage: string): string;
   protected
     FLocaleLanguage: TDataValidatorLocaleLanguage;
@@ -211,12 +210,12 @@ begin
   LValue := GetValueAsString;
 
   LMessage := AMessage;
-  LMessage := LMessage.Replace('${key}', LKey, [rfReplaceAll]);
-  LMessage := LMessage.Replace('${keyupper}', UpperCase(LKey), [rfReplaceAll]);
-  LMessage := LMessage.Replace('${keylower}', LowerCase(LKey), [rfReplaceAll]);
-  LMessage := LMessage.Replace('${value}', LValue, [rfReplaceAll]);
-  LMessage := LMessage.Replace('${valueupper}', UpperCase(LValue), [rfReplaceAll]);
-  LMessage := LMessage.Replace('${valuelower}', LowerCase(LValue), [rfReplaceAll]);
+  LMessage := LMessage.Replace('${key}', LKey, [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${keyupper}', UpperCase(LKey), [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${keylower}', LowerCase(LKey), [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${value}', LValue, [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${valueupper}', UpperCase(LValue), [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${valuelower}', LowerCase(LValue), [rfReplaceAll, rfIgnoreCase]);
 
   Result := LMessage;
 end;

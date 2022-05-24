@@ -357,11 +357,9 @@ end;
 
 function TDataValidatorContext<T>.Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean): T;
 var
-  LValue: string;
   LMessage: string;
 begin
   LMessage := String.Join(' ', AValueContains);
-
   Result := Add(TValidatorContains.Create(AValueContains, ACaseSensitive, Format('Value not contains %s!', [LMessage])));
 end;
 
@@ -372,11 +370,9 @@ end;
 
 function TDataValidatorContext<T>.EndsWith(const AValueEndsWith: TArray<string>; const ACaseSensitive: Boolean = False): T;
 var
-  LValue: string;
   LMessage: string;
 begin
   LMessage := String.Join(' ', AValueEndsWith);
-
   Result := Add(TValidatorEndsWith.Create(AValueEndsWith, ACaseSensitive, Format('Value does not end with %s!', [LMessage])));
 end;
 
@@ -517,11 +513,9 @@ end;
 
 function TDataValidatorContext<T>.IsEquals(const AValueEquals: TArray<string>; const ACaseSensitive: Boolean): T;
 var
-  LValue: string;
   LMessage: string;
 begin
   LMessage := String.Join(' ', AValueEquals);
-
   Result := Add(TValidatorIsEquals.Create(AValueEquals, ACaseSensitive, Format('Value is not equals %s!', [LMessage])));
 end;
 

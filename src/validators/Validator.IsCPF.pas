@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -109,6 +109,7 @@ begin
   try
     LSum := 0;
     LPeso := 10;
+
     for I := 1 to 9 do
     begin
       LSum := LSum + (StrToInt(LCPF[I]) * LPeso);
@@ -116,6 +117,7 @@ begin
     end;
 
     LResultSum := 11 - (LSum mod 11);
+
     if ((LResultSum = 10) or (LResultSum = 11)) then
       LDig10 := '0'
     else
@@ -123,6 +125,7 @@ begin
 
     LSum := 0;
     LPeso := 11;
+
     for I := 1 to 10 do
     begin
       LSum := LSum + (StrToInt(LCPF[I]) * LPeso);
@@ -130,6 +133,7 @@ begin
     end;
 
     LResultSum := 11 - (LSum mod 11);
+
     if ((LResultSum = 10) or (LResultSum = 11)) then
       LDig11 := '0'
     else

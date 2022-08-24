@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ unit Validator.JSON.Value.Custom;
 interface
 
 uses
-  DataValidator.ItemBase,
+  DataValidator.ItemBase, DataValidator.Intf,
   System.SysUtils, System.JSON;
 
 type
@@ -43,13 +43,14 @@ type
   private
     FCustomJSONValueExecute: TDataValidatorCustomJSONValue;
     FCustomJSONValueMessageExecute: TDataValidatorCustomJSONValueMessage;
-    FCustomJSONValueMessage: TDataValidatorCustomJSONMessage;
+    FCustomJSONMessageExecute: TDataValidatorCustomJSONMessage;
   public
     function Check: IDataValidatorResult;
     constructor Create(
-      const ACustomJSONObjectExecute: TDataValidatorCustomJSONValue;
-      const ACustomJSONObjectMessageExecute: TDataValidatorCustomJSONValueMessage;
-      const ACustomJSONObjectMessage: TDataValidatorCustomJSONMessage;
+      const ACustomJSONValueExecute: TDataValidatorCustomJSONValue;
+      const ACustomJSONValueMessageExecute: TDataValidatorCustomJSONValueMessage;
+      const ACustomJSONMessageMessageExecute: TDataValidatorCustomJSONMessage;
+
       const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
@@ -58,16 +59,17 @@ implementation
 { TValidatorJSONValueCustom }
 
 constructor TValidatorJSONValueCustom.Create(
-      const ACustomJSONObjectExecute: TDataValidatorCustomJSONValue;
-      const ACustomJSONObjectMessageExecute: TDataValidatorCustomJSONValueMessage;
-      const ACustomJSONObjectMessage: TDataValidatorCustomJSONMessage;
-      const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+  const ACustomJSONValueExecute: TDataValidatorCustomJSONValue;
+  const ACustomJSONValueMessageExecute: TDataValidatorCustomJSONValueMessage;
+  const ACustomJSONMessageMessageExecute: TDataValidatorCustomJSONMessage;
+
+  const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   inherited Create;
 
-  FCustomJSONValueExecute := ACustomJSONObjectExecute;
-  FCustomJSONValueMessageExecute := ACustomJSONObjectMessageExecute;
-  FCustomJSONValueMessage := ACustomJSONObjectMessage;
+  FCustomJSONValueExecute := ACustomJSONValueExecute;
+  FCustomJSONValueMessageExecute := ACustomJSONValueMessageExecute;
+  FCustomJSONMessageExecute := ACustomJSONMessageMessageExecute;
 
   SetMessage(AMessage);
   SetExecute(AExecute);
@@ -90,6 +92,7 @@ begin
         LJSONPair := FValue.AsType<TJSONPair>;
 
         if Assigned(LJSONPair) then
+        begin
           if Assigned(FCustomJSONValueExecute) then
             R := FCustomJSONValueExecute(LJSONPair.JsonValue)
           else
@@ -99,13 +102,14 @@ begin
             if Assigned(FCustomJSONValueMessageExecute) then
               R := FCustomJSONValueMessageExecute(LJSONPair.JsonValue, LMessage.Message)
             else
-              if Assigned(FCustomJSONValueMessage) then
-                R := FCustomJSONValueMessage(LJSONPair.JsonValue, LMessage);
+              if Assigned(FCustomJSONMessageExecute) then
+                R := FCustomJSONMessageExecute(LJSONPair.JsonValue, LMessage);
 
             SetMessage(LMessage);
           end;
 
-        LValue := GetValueAsString;
+          LValue := GetValueAsString;
+        end;
       end;
   except
   end;

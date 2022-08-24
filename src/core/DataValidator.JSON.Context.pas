@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -35,8 +35,8 @@ unit DataValidator.JSON.Context;
 interface
 
 uses
-  DataValidator.JSON.Context.Intf, DataValidator.ItemBase.Intf,
-  DataValidator.Types, DataValidator.Context,
+  DataValidator.Types,
+  DataValidator.Intf, DataValidator.Context,
   System.JSON, System.Generics.Collections, System.SysUtils;
 
 type
@@ -63,9 +63,17 @@ type
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValue): IDataValidatorJSONContextValue<T>; overload;
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessage): IDataValidatorJSONContextValue<T>; overload;
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONMessage): IDataValidatorJSONContextValue<T>; overload;
-    function IsNull: IDataValidatorJSONContextValue<T>;
-    function MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
-    function MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
+    function CustomJSONSubValidator(const AExecute: TDataValidatorCustomJSONSubValidator): IDataValidatorJSONContextValue<T>; overload;
+    function CustomJSONSubValidator(const AExecute: TDataValidatorCustomJSONSubValidatorMessage): IDataValidatorJSONContextValue<T>; overload;
+    function CustomJSONSubValidator(const AExecute: TDataValidatorCustomJSONSubMessage): IDataValidatorJSONContextValue<T>; overload;
+
+    function IsJSONNull: IDataValidatorJSONContextValue<T>;
+    function IsJSONBoolean: IDataValidatorJSONContextValue<T>;
+    function IsJSONNumeric: IDataValidatorJSONContextValue<T>;
+    function IsJSONString: IDataValidatorJSONContextValue<T>;
+
+    function JSONMinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
+    function JSONMaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
 
     function &End: T;
 
@@ -77,10 +85,10 @@ implementation
 uses
   Validator.JSON.Key.IsOptional,
   Validator.JSON.Key.IsRequired,
+  Validator.JSON.SubValidator.Custom,
   Validator.JSON.Value.Custom,
-  Validator.JSON.Value.IsNull,
-  Validator.JSON.Value.MinItems,
-  Validator.JSON.Value.MaxItems;
+  Validator.JSON.Value.IsJSONValue,
+  Validator.JSON.Value.IsMinMaxItems;
 
 { TDataValidatorJSONContext<T> }
 
@@ -164,25 +172,61 @@ end;
 function TDataValidatorJSONContext<T>.CustomJSONValue(const AExecute: TDataValidatorCustomJSONMessage): IDataValidatorJSONContextValue<T>;
 begin
   Result := Self;
-  Add(TValidatorJSONValueCustom.Create(nil, nil, AExecute, 'Value is false!'));
+  Add(TValidatorJSONValueCustom.Create(nil, nil, AExecute,  'Value is false!'));
 end;
 
-function TDataValidatorJSONContext<T>.IsNull: IDataValidatorJSONContextValue<T>;
+function TDataValidatorJSONContext<T>.CustomJSONSubValidator(const AExecute: TDataValidatorCustomJSONSubValidator): IDataValidatorJSONContextValue<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONValueIsNull.Create('Value not is null!'));
+  Add(TValidatorJSONSubValidatorCustom.Create(AExecute, nil, nil, 'Value is false!'));
 end;
 
-function TDataValidatorJSONContext<T>.MinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
+function TDataValidatorJSONContext<T>.CustomJSONSubValidator(const AExecute: TDataValidatorCustomJSONSubValidatorMessage): IDataValidatorJSONContextValue<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONValueMinItems.Create(AMinItems, Format('Its size is less than %d!', [AMinItems])));
+  Add(TValidatorJSONSubValidatorCustom.Create(nil, AExecute, nil, 'Value is false!'));
 end;
 
-function TDataValidatorJSONContext<T>.MaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
+function TDataValidatorJSONContext<T>.CustomJSONSubValidator(const AExecute: TDataValidatorCustomJSONSubMessage): IDataValidatorJSONContextValue<T>;
 begin
   Result := Self;
-  Add(TDataValidatorJSONValueMaxItems.Create(AMaxItems, Format('Its size is greater than %d!', [AMaxItems])));
+  Add(TValidatorJSONSubValidatorCustom.Create(nil, nil, AExecute, 'Value is false!'));
+end;
+
+function TDataValidatorJSONContext<T>.IsJSONNull: IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONValueIsJSONValue.Create(TTypeJSONValue.tjNull, 'Value not is null!'));
+end;
+
+function TDataValidatorJSONContext<T>.IsJSONBoolean: IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONValueIsJSONValue.Create(TTypeJSONValue.tjBoolean, 'Value not is boolean!'));
+end;
+
+function TDataValidatorJSONContext<T>.IsJSONNumeric: IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONValueIsJSONValue.Create(TTypeJSONValue.tjNumeric, 'Value not is numeric!'));
+end;
+
+function TDataValidatorJSONContext<T>.IsJSONString: IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONValueIsJSONValue.Create(TTypeJSONValue.tjString, 'Value not is string!'));
+end;
+
+function TDataValidatorJSONContext<T>.JSONMinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONValueIsMinMaxItems.Create(TTypeJSONValueMinMax.tmMin, AMinItems, Format('Its size is less than %d!', [AMinItems])));
+end;
+
+function TDataValidatorJSONContext<T>.JSONMaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TDataValidatorJSONValueIsMinMaxItems.Create(TTypeJSONValueMinMax.tmMax, AMaxItems, Format('Its size is greater than %d!', [AMaxItems])));
 end;
 
 function TDataValidatorJSONContext<T>.&End: T;

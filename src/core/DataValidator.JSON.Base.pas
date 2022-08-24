@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -35,33 +35,43 @@ unit DataValidator.JSON.Base;
 interface
 
 uses
-  DataValidator.Intf, DataValidator.JSON.Context,
-  System.JSON;
+  DataValidator.Intf,
+  DataValidator.JSON.Context,
+  System.SysUtils, System.JSON;
 
 type
-  TDataValidatorJSONBase = class(TDataValidatorJSONContext<IDataValidatorJSONBase>, IDataValidatorJSONBase)
+  TDataValidatorJSONBase = class(TDataValidatorJSONContext<IDataValidatorJSONBase>, IDataValidatorJSONBase, IDataValidatorJSONValues)
   private
     [weak]
     FResult: IDataValidatorJSONResult;
+    FName: string;
   public
     function &End: IDataValidatorJSONResult;
+    function GetName: string;
 
-    constructor Create(const AResult: IDataValidatorJSONResult; const AValue: TJSONPair); reintroduce;
+    constructor Create(const AResult: IDataValidatorJSONResult; const AValue: TJSONPair; const AName: string = ''); reintroduce;
   end;
 
 implementation
 
 { TDataValidatorJSONBase }
 
-constructor TDataValidatorJSONBase.Create(const AResult: IDataValidatorJSONResult; const AValue: TJSONPair);
+constructor TDataValidatorJSONBase.Create(const AResult: IDataValidatorJSONResult; const AValue: TJSONPair; const AName: string = '');
 begin
   inherited Create(Self, AValue);
+
   FResult := AResult;
+  FName := AName;
 end;
 
 function TDataValidatorJSONBase.&End: IDataValidatorJSONResult;
 begin
   Result := FResult;
+end;
+
+function TDataValidatorJSONBase.GetName: string;
+begin
+  Result := FName;
 end;
 
 end.

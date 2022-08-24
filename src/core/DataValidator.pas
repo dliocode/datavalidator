@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -35,13 +35,15 @@ unit DataValidator;
 interface
 
 uses
-  DataValidator.Intf, DataValidator.Context.Intf, DataValidator.Result.Intf,
-  DataValidator.Types, DataValidator.Schema, DataValidator.Value, DataValidator.JSON,
+  DataValidator.Types,
+  DataValidator.Intf,
   System.JSON;
 
 type
   TDataValidatorLocaleLanguage = DataValidator.Types.TDataValidatorLocaleLanguage;
   TDataValidatorMessage = DataValidator.Types.TDataValidatorMessage;
+  TDataValidatorCheckAll = DataValidator.Types.TDataValidatorCheckAll;
+  TDataValidatorWithMessage = DataValidator.Types.TDataValidatorWithMessage;
 
   IDataValidatorSchema = DataValidator.Intf.IDataValidatorSchema;
   IDataValidatorValue = DataValidator.Intf.IDataValidatorValue;
@@ -50,29 +52,36 @@ type
   IDataValidatorValueResult = DataValidator.Intf.IDataValidatorValueResult;
   IDataValidatorJSONResult = DataValidator.Intf.IDataValidatorJSONResult;
 
-  IDataValidatorResult = DataValidator.Result.Intf.IDataValidatorResult;
-  IDataValidatorSchemaContext = DataValidator.Context.Intf.IDataValidatorSchemaContext;
+  IDataValidatorResult = DataValidator.Intf.IDataValidatorResult;
+  IDataValidatorSchemaContext = DataValidator.Intf.IDataValidatorSchemaContext;
 
-  TDataValidator = class
+  TJSONObject = System.JSON.TJSONObject;
+  TJSONArray = System.JSON.TJSONArray;
+  TJSONValue = System.JSON.TJSONValue;
+
+  TDataValidator = record
   public
-    class function Schema: IDataValidatorSchema;
-    class function Values: IDataValidatorValue;
-    class function JSON(const AJSON: TJSONObject): IDataValidatorJSON; overload;
-    class function JSON(const AJSON: TJSONArray): IDataValidatorJSON; overload;
+    class function Schema: IDataValidatorSchema; static;
+    class function Values: IDataValidatorValue; static;
+    class function JSON(const AJSON: TJSONObject): IDataValidatorJSON; overload; static;
+    class function JSON(const AJSON: TJSONArray): IDataValidatorJSON; overload; static;
   end;
 
 implementation
+
+uses
+ DataValidator.Schema, DataValidator.Value, DataValidator.JSON;
 
 { TDataValidator }
 
 class function TDataValidator.Schema: IDataValidatorSchema;
 begin
-  Result := TDataValidatorSchema.Create();
+  Result := TDataValidatorSchema.Create;
 end;
 
 class function TDataValidator.Values: IDataValidatorValue;
 begin
-  Result := TDataValidatorValue.Create();
+  Result := TDataValidatorValue.Create;
 end;
 
 class function TDataValidator.JSON(const AJSON: TJSONObject): IDataValidatorJSON;

@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,8 @@ unit DataValidator.Schema.Base;
 interface
 
 uses
-  DataValidator.Intf, DataValidator.Context, DataValidator.Context.Intf;
+  DataValidator.Intf,
+  DataValidator.Context;
 
 type
   TDataValidatorSchemaBase = class(TDataValidatorContext<IDataValidatorSchemaBase>, IDataValidatorSchemaBase, IDataValidatorSchemaContext)

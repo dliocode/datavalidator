@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -35,13 +35,15 @@ unit DataValidator.ItemBase.Sanitizer;
 interface
 
 uses
-  DataValidator.ItemBase.Intf, DataValidator.ItemBase, DataValidator.Result.Intf, DataValidator.Result, DataValidator.Information;
+  DataValidator.Intf,
+  DataValidator.ItemBase, DataValidator.Information;
 
 type
   TValue = DataValidator.ItemBase.TValue;
-  IDataValidatorResult = DataValidator.Result.Intf.IDataValidatorResult;
-  IDataSanitizerItem = DataValidator.ItemBase.Intf.IDataSanitizerItem;
-  TDataValidatorResult = DataValidator.Result.TDataValidatorResult;
+
+  IDataValidatorResult = DataValidator.Intf.IDataValidatorResult;
+  IDataSanitizerItem = DataValidator.Intf.IDataSanitizerItem;
+
   TDataValidatorInformation = DataValidator.Information.TDataValidatorInformation;
 
   TDataValidatorItemBaseSanitizer = class(TDataValidatorItemBase, IDataSanitizerItem)

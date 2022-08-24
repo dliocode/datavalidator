@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ interface
 
 uses
   DataValidator.Types,
-  DataValidator.ItemBase.Intf, DataValidator.Result.Intf,
+  DataValidator.Intf,
   DataValidator.Result, DataValidator.Information,
   System.SysUtils, System.RTTI, System.JSON, System.StrUtils, System.TypInfo;
 
@@ -57,18 +57,19 @@ type
   TDataValidatorCustomJSONMessage = DataValidator.Types.TDataValidatorCustomJSONMessage;
 
   TDataValidatorInformationExecute = DataValidator.Types.TDataValidatorInformationExecute;
-  IDataValidatorItem = DataValidator.ItemBase.Intf.IDataValidatorItem;
-  IDataValidatorResult = DataValidator.Result.Intf.IDataValidatorResult;
+  IDataValidatorItem = DataValidator.Intf.IDataValidatorItem;
+  IDataValidatorResult = DataValidator.Intf.IDataValidatorResult;
   TDataValidatorResult = DataValidator.Result.TDataValidatorResult;
   TDataValidatorInformation = DataValidator.Information.TDataValidatorInformation;
 
   TDataValidatorItemBase = class(TInterfacedObject, IDataValidatorItemBase)
   private
     FMessage: TDataValidatorMessage;
-    function GetAdjustedMessage(const AMessage: string): string;
+    function GetAdjustedMessage(const AMessage: string; const AValue: string): string;
   protected
     FLocaleLanguage: TDataValidatorLocaleLanguage;
     FIsNot: Boolean;
+    FKey: string;
     FName: string;
     FValue: TValue;
     FExecute: TDataValidatorInformationExecute;
@@ -78,8 +79,9 @@ type
     procedure SetValueAdapter(const AValue: TValue);
   public
     function GetDataValidatorLocaleLanguage: TDataValidatorLocaleLanguage;
-    procedure SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
+    procedure SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US);
     procedure SetIsNot(const AIsNot: Boolean);
+    procedure SetKey(const AKey: string);
     procedure SetName(const AName: string);
     procedure SetValue(const AValue: TValue);
     procedure SetMessage(const AMessage: string); overload;
@@ -96,9 +98,14 @@ begin
   Result := FLocaleLanguage;
 end;
 
-procedure TDataValidatorItemBase.SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US);
+procedure TDataValidatorItemBase.SetDataValidatorLocaleLanguage(const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US);
 begin
   FLocaleLanguage := ALocaleLanguage;
+end;
+
+procedure TDataValidatorItemBase.SetKey(const AKey: string);
+begin
+  FKey := AKey;
 end;
 
 procedure TDataValidatorItemBase.SetName(const AName: string);
@@ -133,11 +140,23 @@ begin
   if not AMessage.Description.Trim.IsEmpty then
     FMessage.Description := AMessage.Description;
 
-  if not AMessage.Status.Trim.IsEmpty then
-    FMessage.Status := AMessage.Status;
+  if not AMessage.Solution.Trim.IsEmpty then
+    FMessage.Solution := AMessage.Solution;
+
+  if not AMessage.Source.Trim.IsEmpty then
+    FMessage.Source := AMessage.Source;
+
+  if not AMessage.Code.Trim.IsEmpty then
+    FMessage.Code := AMessage.Code;
+
+  if not AMessage.CodeName.Trim.IsEmpty then
+    FMessage.CodeName := AMessage.CodeName;
 
   if not AMessage.Uri.Trim.IsEmpty then
     FMessage.Uri := AMessage.Uri;
+
+  if not AMessage.Data.Trim.IsEmpty then
+    FMessage.Data := AMessage.Data;
 end;
 
 procedure TDataValidatorItemBase.SetExecute(const AExecute: TDataValidatorInformationExecute);
@@ -146,15 +165,23 @@ begin
 end;
 
 function TDataValidatorItemBase.GetMessage: TDataValidatorMessage;
+var
+  LValue: string;
 begin
+  LValue := GetValueAsString;
+
   Result := Default (TDataValidatorMessage);
 
   Result := FMessage;
-  Result.Title := GetAdjustedMessage(Result.Title);
-  Result.Message := GetAdjustedMessage(Result.Message);
-  Result.Description := GetAdjustedMessage(Result.Description);
-  Result.Status := GetAdjustedMessage(Result.Status);
-  Result.Uri := GetAdjustedMessage(Result.Uri);
+  Result.Title := GetAdjustedMessage(Result.Title, LValue);
+  Result.Message := GetAdjustedMessage(Result.Message, LValue);
+  Result.Description := GetAdjustedMessage(Result.Description, LValue);
+  Result.Solution := GetAdjustedMessage(Result.Solution, LValue);
+  Result.Source := GetAdjustedMessage(Result.Source, LValue);
+  Result.Code := GetAdjustedMessage(Result.Code, LValue);
+  Result.CodeName := GetAdjustedMessage(Result.CodeName, LValue);
+  Result.Uri := GetAdjustedMessage(Result.Uri, LValue);
+  Result.Data := GetAdjustedMessage(Result.Data, LValue);
 end;
 
 function TDataValidatorItemBase.GetValueAsString: string;
@@ -182,6 +209,7 @@ end;
 procedure TDataValidatorItemBase.SetValueAdapter(const AValue: TValue);
 var
   LJSONPair: TJSONPair;
+  LFloat: Double;
 begin
   if FValue.IsType<TJSONPair> then
   begin
@@ -189,33 +217,43 @@ begin
 
     if Assigned(LJSONPair) then
     begin
-      if LJSONPair.JsonValue is TJSONString then
-        if not MatchText(string(AValue.TypeInfo.Name), ['TDateTime', 'TDate', 'TTime', 'TTimeStamp']) then
-          FValue.AsType<TJSONPair>.JsonValue := TJSONString.Create(AValue.AsString);
-
-      Exit;
+      if LJSONPair.JsonValue is TJSONNumber then
+      begin
+        if TryStrToFloat(AValue.AsString, LFloat) then
+          LJSONPair.JsonValue := TJSONNumber.Create(AValue.AsString)
+        else
+          LJSONPair.JsonValue := TJSONString.Create(AValue.AsString);
+      end
+      else
+        if LJSONPair.JsonValue is TJSONString then
+          if not MatchText(string(AValue.TypeInfo.Name), ['TDateTime', 'TDate', 'TTime', 'TTimeStamp']) then
+            LJSONPair.JsonValue := TJSONString.Create(AValue.AsString);
     end;
-  end;
-
-  FValue := AValue;
+  end
+  else
+    FValue := AValue;
 end;
 
-function TDataValidatorItemBase.GetAdjustedMessage(const AMessage: string): string;
+function TDataValidatorItemBase.GetAdjustedMessage(const AMessage: string; const AValue: string): string;
 var
-  LKey: string;
-  LValue: string;
   LMessage: string;
 begin
-  LKey := FName;
-  LValue := GetValueAsString;
+  if FName.Trim.IsEmpty then
+    FName := FKey;
 
   LMessage := AMessage;
-  LMessage := LMessage.Replace('${key}', LKey, [rfReplaceAll, rfIgnoreCase]);
-  LMessage := LMessage.Replace('${keyupper}', UpperCase(LKey), [rfReplaceAll, rfIgnoreCase]);
-  LMessage := LMessage.Replace('${keylower}', LowerCase(LKey), [rfReplaceAll, rfIgnoreCase]);
-  LMessage := LMessage.Replace('${value}', LValue, [rfReplaceAll, rfIgnoreCase]);
-  LMessage := LMessage.Replace('${valueupper}', UpperCase(LValue), [rfReplaceAll, rfIgnoreCase]);
-  LMessage := LMessage.Replace('${valuelower}', LowerCase(LValue), [rfReplaceAll, rfIgnoreCase]);
+
+  LMessage := LMessage.Replace('${name}', FName, [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${nameupper}', UpperCase(FName), [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${namelower}', LowerCase(FName), [rfReplaceAll, rfIgnoreCase]);
+
+  LMessage := LMessage.Replace('${key}', FKey, [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${keyupper}', UpperCase(FKey), [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${keylower}', LowerCase(FKey), [rfReplaceAll, rfIgnoreCase]);
+
+  LMessage := LMessage.Replace('${value}', AValue, [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${valueupper}', UpperCase(AValue), [rfReplaceAll, rfIgnoreCase]);
+  LMessage := LMessage.Replace('${valuelower}', LowerCase(AValue), [rfReplaceAll, rfIgnoreCase]);
 
   Result := LMessage;
 end;

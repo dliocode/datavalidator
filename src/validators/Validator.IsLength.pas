@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils;
+  System.SysUtils, System.Math;
 
 type
   TValidatorIsLength = class(TDataValidatorItemBase, IDataValidatorItem)
@@ -49,9 +49,6 @@ type
   end;
 
 implementation
-
-uses
-  Validator.IsBetween;
 
 { TValidatorIsLength }
 
@@ -70,16 +67,21 @@ function TValidatorIsLength.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
-  LValidatorBetween: IDataValidatorItem;
+  LLength: Integer;
 begin
   LValue := GetValueAsString;
   R := False;
+  LLength := Length(LValue);
 
   if not Trim(LValue).IsEmpty then
   begin
-    LValidatorBetween := TValidatorIsBetween.Create(FMin, FMax, '');
-    LValidatorBetween.SetValue(IntToStr(Length(LValue)));
-    R := LValidatorBetween.Check.OK;
+    R := (LLength >= FMin) and (LLength <= FMax);
+
+    if not R then
+      R := (FMin = 0) and (LLength <= FMax);
+
+    if not R then
+      R := (LLength >= FMin) and (FMax = 0);
   end;
 
   if FIsNot then

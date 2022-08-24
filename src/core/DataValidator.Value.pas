@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,8 @@ unit DataValidator.Value;
 interface
 
 uses
-  DataValidator.Intf, DataValidator.Result.Intf, DataValidator.Information.Intf, DataValidator.ItemBase.Intf, DataValidator.Context.Intf,
+  DataValidator.Types,
+  DataValidator.Intf,
   System.Generics.Collections, System.Rtti, System.JSON;
 
 type
@@ -43,14 +44,14 @@ type
   private
     FList: TList<IDataValidatorValueBaseContext>;
 
-    function CheckValue(const ACheckAll: Boolean): IDataValidatorResult;
+    function CheckValue(const ACheckAll: Boolean; const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
     function TValueToString(const AValue: TValue): string;
   public
-    function Validate(const AValue: string): IDataValidatorValueBaseContext; overload;
-    function Validate(const AValue: TArray<string>): IDataValidatorValueBaseContext; overload;
+    function Validate(const AValue: string; const AName: string = ''): IDataValidatorValueBaseContext; overload;
+    function Validate(const AValue: TArray<string>; const AName: string = ''): IDataValidatorValueBaseContext; overload;
 
     function Check: IDataValidatorResult;
-    function CheckAll: IDataValidatorResult;
+    function CheckAll(const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
 
     constructor Create;
     destructor Destroy; override;
@@ -74,14 +75,14 @@ begin
   FList.Free;
 end;
 
-function TDataValidatorValue.Validate(const AValue: string): IDataValidatorValueBaseContext;
+function TDataValidatorValue.Validate(const AValue: string; const AName: string = ''): IDataValidatorValueBaseContext;
 begin
-  Result := Validate([AValue]);
+  Result := Validate([AValue], AName);
 end;
 
-function TDataValidatorValue.Validate(const AValue: TArray<string>): IDataValidatorValueBaseContext;
+function TDataValidatorValue.Validate(const AValue: TArray<string>; const AName: string = ''): IDataValidatorValueBaseContext;
 begin
-  FList.Add(TDataValidatorValueBase.Create(Self, AValue));
+  FList.Add(TDataValidatorValueBase.Create(Self, AValue, AName));
   Result := FList.Last;
 end;
 
@@ -90,18 +91,19 @@ begin
   Result := CheckValue(False);
 end;
 
-function TDataValidatorValue.CheckAll: IDataValidatorResult;
+function TDataValidatorValue.CheckAll(const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
 begin
-  Result := CheckValue(True);
+  Result := CheckValue(True, ATypeCheck);
 end;
 
-function TDataValidatorValue.CheckValue(const ACheckAll: Boolean): IDataValidatorResult;
+function TDataValidatorValue.CheckValue(const ACheckAll: Boolean; const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
 var
   LOK: Boolean;
   LInfo: IDataValidatorInformations;
   I: Integer;
   LListValidatorItem: TList<IDataValidatorItem>;
   LValue: TArray<string>;
+  LName: string;
   J: Integer;
   LValueSanitizer: TValue;
   K: Integer;
@@ -116,6 +118,7 @@ begin
   begin
     LListValidatorItem := (FList.Items[I] as IDataValidatorContextBase<IDataValidatorItem>).GetItem;
     LValue := (FList.Items[I] as IDataValidatorValueValues).GetValues;
+    LName := (FList.Items[I] as IDataValidatorValueValues).GetName;
 
     for J := 0 to Pred(Length(LValue)) do
     begin
@@ -125,15 +128,15 @@ begin
       begin
         LValidatorItem := LListValidatorItem.Items[K];
 
+        LValidatorItem.SetKey(LName);
+        LValidatorItem.SetName(LName);
+        LValidatorItem.SetValue(LValueSanitizer);
+
         if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
         begin
-          LValidatorItem.SetValue(LValueSanitizer);
           LValueSanitizer := (LValidatorItem as TDataValidatorItemBaseSanitizer).Sanitize;
           Continue;
         end;
-
-        LValidatorItem.SetName('');
-        LValidatorItem.SetValue(LValueSanitizer);
 
         LValidatorResult := LValidatorItem.Check;
 
@@ -146,7 +149,10 @@ begin
           LInfo.Add(LValidatorResult.Informations as IDataValidatorInformations);
 
           if not ACheckAll then
-            Break;
+            Break
+          else
+            if ATypeCheck = TDataValidatorCheckAll.tcFirst then
+              Break;
         end
         else
           if LValidatorItem is TValidatorIsOptional then

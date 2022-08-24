@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ interface
 
 uses
   DataValidator.Types,
-  DataValidator.Context.Intf, DataValidator.ItemBase.Intf,
+  DataValidator.Intf,
   System.RTTI, System.JSON, System.Generics.Collections, System.SysUtils, System.Variants;
 
 type
@@ -50,7 +50,7 @@ type
     FIsNot: Boolean;
   protected
     FValue: TValue;
-    function Add(const AValidatorItem: IDataValidatorItem; const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US; const AModeSchema: Boolean = False): T;
+    function Add(const AValidatorItem: IDataValidatorItem; const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US; const AModeSchema: Boolean = False): T;
   public
     // Schema
     function AddSchema(const ASchema: IDataValidatorSchemaContext): T;
@@ -63,8 +63,8 @@ type
     function Contains(const AValueContains: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
     function EndsWith(const AValueEndsWith: string; const ACaseSensitive: Boolean = False): T; overload;
     function EndsWith(const AValueEndsWith: TArray<string>; const ACaseSensitive: Boolean = False): T; overload;
-    function IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
-    function IsAlphaNumeric(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
+    function IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US; const AAllowedCharacters: TArray<Char> = []): T;
+    function IsAlphaNumeric(const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US; const AAllowedCharacters: TArray<Char> = []): T;
     function IsAscii: T;
     function IsBase32: T;
     function IsBase58: T;
@@ -123,11 +123,11 @@ type
     function IsOctal: T;
     function IsOptional: T; overload;
     function IsOptional(const AExecute: TDataValidatorCustomValue): T; overload;
-    function IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
-    function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
+    function IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US): T;
+    function IsPhoneNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US): T;
     function IsPort: T;
     function IsPositive: T;
-    function IsPostalCode(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
+    function IsPostalCode(const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US): T;
     function IsRGBColor: T;
     function IsSSN: T;
     function IsTime(const AJSONISO8601ReturnUTC: Boolean = True): T;
@@ -376,14 +376,14 @@ begin
   Result := Add(TValidatorEndsWith.Create(AValueEndsWith, ACaseSensitive, Format('Value does not end with %s!', [LMessage])));
 end;
 
-function TDataValidatorContext<T>.IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage): T;
+function TDataValidatorContext<T>.IsAlpha(const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US; const AAllowedCharacters: TArray<Char> = []): T;
 begin
-  Result := Add(TValidatorIsAlpha.Create('Value is not alpha!'), ALocaleLanguage);
+  Result := Add(TValidatorIsAlpha.Create(AAllowedCharacters, 'Value is not alpha!'), ALocaleLanguage);
 end;
 
-function TDataValidatorContext<T>.IsAlphaNumeric(const ALocaleLanguage: TDataValidatorLocaleLanguage): T;
+function TDataValidatorContext<T>.IsAlphaNumeric(const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US; const AAllowedCharacters: TArray<Char> = []): T;
 begin
-  Result := Add(TValidatorIsAlphaNumeric.Create('Value is not alphanumeric!'), ALocaleLanguage);
+  Result := Add(TValidatorIsAlphaNumeric.Create(AAllowedCharacters, 'Value is not alphanumeric!'), ALocaleLanguage);
 end;
 
 function TDataValidatorContext<T>.IsAscii: T;
@@ -446,7 +446,7 @@ begin
   Result := Add(TValidatorIsBTCAddress.Create('Value is not BTC (Bitcoin) Adddress!'));
 end;
 
-function TDataValidatorContext<T>.IsPostalCode(const ALocaleLanguage: TDataValidatorLocaleLanguage = tl_en_US): T;
+function TDataValidatorContext<T>.IsPostalCode(const ALocaleLanguage: TDataValidatorLocaleLanguage = TDataValidatorLocaleLanguage.tl_en_US): T;
 begin
   Result := Add(TValidatorIsPostalCode.Create('Value is not postal code!'), ALocaleLanguage);
 end;

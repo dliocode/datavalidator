@@ -54,7 +54,7 @@ uses DataValidator;
 * Values
 * JSON 
 
-##### Modo: Values
+## Values
 
 - No modo values, o valor informado no **_validate_** é o que será analisado! 
 
@@ -80,10 +80,10 @@ begin
       .NormalizeEmail
   .&End
 
-  .CheckAll;  
+  .Check;  
 ```
 
-##### Modo: JSON
+## JSON
 
 - No modo JSON, o que deve ser informado **_validate_** é o nome da key do json! 
 - Caso seja utilizado algum **_sanitizer_**, o valor dentro do JSON será modificado!
@@ -145,35 +145,42 @@ begin
 
     .CheckAll;
 ```
+## Informações
 
+### Diferença de Check e CheckAll
+- **Check**: Faz a verificação de todos os **_validate_**, mas se houver um item com retorno **_false_** ele interrompe, retornando uma única mensagem com erro se tiver!
 
-#### Como saber se houve error
+- **CheckAll**: Faz a verificação de todos os **_validate_**, retornando todas mensagens com erro se tiver! <br> 
+
+Usando o ``` CheckAll(TDataValidatorCheckAll.tcFirst) ``` ele retornar apenas a primeira mensagem de erro de cada **_validate_**.
+
+### Como saber se houve error
 
 ```
     Result := LResult.Ok; // True = Nenhum erro | False = Tem erro
 ```
 
-#### Como recuperar todas as mensagens de errors
+### Como recuperar a mensagem com erro
 ```
     Result := LResult.Informations.Message;
 ```
 
-#### Como recuperar uma única mensagem de error
+### Como recuperar uma única mensagem de error
 ```
     Result := LResult.Informations.GetItem(0).Message;
 ```
 
-#### Como recuperar o total de errors
+### Como recuperar a quantidade de errors
 ```
     Result := LResult.Informations.Count;
 ```
 
-#### Diferença de Check e CheckAll
+### Como recuperar o valor analizado
+```
+    Result := LResult.Values[0]; // Recupera o primeiro valor
+```
 
-- **Check**: Faz a verificação de todos os **_validate_**, mas se houver um item com retorno **_false_** ele interrompe, retornando uma única mensagem de erro se tiver!
-- **CheckAll**: Faz a verificação de todos os **_validate_**, retornando todas mensagens de erro se tiver!
-
-#### **Validação Schema**
+### **Validação Schema**
 - É uma forma de criar um esqueleto de validação e conseguir reutilizar em outras validações.
 
 ```
@@ -250,84 +257,84 @@ TDataValidator.Values
 
 ## Validators / Sanitizers
 
-|Validação para values  |Validação JSON (Key/Value)       |Sanitizers para Valus |
-| ------------  	      | ------------  	                | ------------  	  |
-|CustomValue            |(Key) IsOptional                 |CustomSanitizer	  |
-|Contains       	      |(Key) IsRequired	                |NormalizeEmail     |
-|EndsWith        	      |(Value) CustomJSONValue          |OnlyNumbers   		  |
-|IsAlpha        	      |(Value) IsNull                   |RemoveAccents      |
-|IsAlphaNumeric 	      |(Value) MinItems                 |Replace            |
-|IsAscii         	      |(Value) MaxItems                 |ToBase64Decode     |
-|IsBase32        	      |(Value) + Validação para values  |ToBase64Encode     |
-|IsBase58        	      |                                 |ToDate             |
-|IsBase64       	      |                                 |ToDateTime         |
-|IsBetween      	      |                                 |ToHTMLDecode	      |
-|IsBoolean       		    |                                 |ToHTMLEncode	      |
-|IsBTCAddress   		    |                                 |ToInteger			    |
-|IsCNPJ         		    |                                 |ToLowerCase		    |
-|IsCPF          		    |                                 |ToMD5				 	    |
-|IsCPFCNPJ      		    |                                 |ToNumeric     	    |
-|IsDate         	      |                                 |ToTime             |
-|IsDateBetween  	      |                                 |ToUpperCase	      |
-|IsDateEquals     	    |                                 |ToURLDecode        |
-|IsDateGreaterThan	    |                                 |ToURLEncode		    |
-|IsDateLessThan		      |                                 |Trim			          |
-|IsDateTime			        |                                 |TrimLeft      	    |
-|IsEmail			          |                                 |TrimRight          |
-|IsEmpty			          |                                 |                   |
-|IsEquals			          |                                 |                   |
-|IsEthereumAddress	    |                                 |					          |
-|IsGreaterThan		      |                                 |					          |
-|IsGTIN       		      |                                 |					          |
-|IsGTIN8       		      |                                 |					          |
-|IsGTIN12     		      |                                 |					          |
-|IsGTIN13      		      |                                 |					          |
-|IsGTIN14      		      |                                 |					          |
-|IsHexadecimal		      |                                 |					          |
-|IsHexColor			        |                                 |					          |
-|IsInteger			        |                                 |					          |
-|IsIP				            |                                 |					          |
-|IsIPv4			            |                                 |					          |
-|IsIPv6			            |                                 |					          |
-|IsISO8601              |                                 |					          |
-|IsJSON				          |                                 |					          |
-|IsJSONArray	          |                                 |					          |
-|IsJSONObject	          |                                 |					          |
-|IsJWT				          |                                 |					          |
-|IsLatLong		          |                                 |					          |
-|IsLength			          |                                 |					          |
-|IsLessThan			        |                                 |					          |
-|IsLocale    		        |                                 |					          |
-|IsLowercase		        |                                 |					          |
-|IsMACAddress		        |                                 |					          |
-|IsMagnetURI 	          |                                 |					          |
-|IsMD5				          |                                 |					          |
-|IsMimeType  	          |                                 |					          |
-|IsMongoId  	          |                                 |					          |
-|IsNegative			        |                                 |					          |
-|IsNumeric			        |                                 |					          |
-|IsOptional		          |                                 |					          |
-|IsOctal     	          |                                 |					          |
-|IsPassportNumber       |                                 |					          |
-|IsPhoneNumber		      |                                 |					          |
-|IsPort   			        |                                 |					          |
-|IsPositive			        |                                 |					          |
-|IsPostalCode  	        |                                 |					          |
-|IsRGBColor   	        |                                 |					          |
-|IsSSN			            |                                 |					          |
-|IsTime				          |                                 |					          |
-|IsTimeBetween		      |                                 |					          |
-|IsTimeEquals		        |                                 |					          |
-|IsTimeGreaterThan	    |                                 |					          |
-|IsTimeLessThan		      |                                 |					          |
-|IsUppercase		        |                                 |					          |
-|IsURL				          |                                 |					          |
-|IsUUID				          |                                 |					          |
-|IsUUIDv1			          |                                 |					          |
-|IsUUIDv2			          |                                 |					          |
-|IsUUIDv3			          |                                 |					          |
-|IsUUIDv4			          |                                 |					          |
-|IsUUIDv5			          |                                 |					          |
-|IsZero				          |                                 |					          |
-|RegexIsMatch	          |                                 |					          |
-|StartsWith  	          |                                 |					          |
+| Validação para values | Validação JSON (Key/Value) | Sanitizers para values | 
+| ------------ | ------------ | ------------ | 
+| CustomValue | (Key) IsOptional | CustomSanitizer | 
+| Contains | (Key) IsRequired | NormalizeEmail | 
+| EndsWith | (Value) CustomJSONValue | OnlyNumbers | 
+| IsAlpha | (Value) IsJSONNull | RemoveAccents | 
+| IsAlphaNumeric | (Value) IsJSONBoolean | Replace | 
+| IsAscii | (Value) IsJSONNumeric | ToBase64Decode | 
+| IsBase32 | (Value) IsJSONString | ToBase64Encode | 
+| IsBase58 | (Value) MinItems | ToDate | 
+| IsBase64 | (Value) MaxItems | ToDateTime | 
+| IsBetween | (Value) + Validação para values | ToHTMLDecode | 
+| IsBoolean | | ToHTMLEncode | 
+| IsBTCAddress | | ToInteger | 
+| IsCNPJ | | ToLowerCase | 
+| IsCPF | | ToMD5 | 
+| IsCPFCNPJ | | ToNumeric | 
+| IsDate | | ToTime | 
+| IsDateBetween | | ToUpperCase | 
+| IsDateEquals | | ToURLDecode | 
+| IsDateGreaterThan | | ToURLEncode | 
+| IsDateLessThan | | Trim | 
+| IsDateTime | | TrimLeft | 
+| IsEmail | | TrimRight | 
+| IsEmpty | | | 
+| IsEquals | | | 
+| IsEthereumAddress | | | 
+| IsGreaterThan | | | 
+| IsGTIN | | | 
+| IsGTIN8 | | | 
+| IsGTIN12 | | | 
+| IsGTIN13 | | | 
+| IsGTIN14 | | | 
+| IsHexadecimal | | | 
+| IsHexColor | | | 
+| IsInteger | | | 
+| IsIP | | | 
+| IsIPv4 | | | 
+| IsIPv6 | | | 
+| IsISO8601 | | | 
+| IsJSON | | | 
+| IsJSONArray | | | 
+| IsJSONObject | | | 
+| IsJWT | | | 
+| IsLatLong | | | 
+| IsLength | | | 
+| IsLessThan | | | 
+| IsLocale | | | 
+| IsLowercase | | | 
+| IsMACAddress | | | 
+| IsMagnetURI | | | 
+| IsMD5 | | | 
+| IsMimeType | | | 
+| IsMongoId | | | 
+| IsNegative | | | 
+| IsNumeric | | | 
+| IsOptional | | | 
+| IsOctal | | | 
+| IsPassportNumber | | | 
+| IsPhoneNumber | | | 
+| IsPort | | | 
+| IsPositive | | | 
+| IsPostalCode | | | 
+| IsRGBColor | | | 
+| IsSSN | | | 
+| IsTime | | | 
+| IsTimeBetween | | | 
+| IsTimeEquals | | | 
+| IsTimeGreaterThan | | | 
+| IsTimeLessThan | | | 
+| IsUppercase | | | 
+| IsURL | | | 
+| IsUUID | | | 
+| IsUUIDv1 | | | 
+| IsUUIDv2 | | | 
+| IsUUIDv3 | | | 
+| IsUUIDv4 | | | 
+| IsUUIDv5 | | | 
+| IsZero | | | 
+| RegexIsMatch | | | 
+| StartsWith | | | 

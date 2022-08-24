@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -120,6 +120,7 @@ begin
     end;
 
     LResultSum := LSum mod 11;
+
     if ((LResultSum = 0) or (LResultSum = 1)) then
       LDig13 := '0'
     else
@@ -138,6 +139,7 @@ begin
     end;
 
     LResultSum := LSum mod 11;
+
     if ((LResultSum = 0) or (LResultSum = 1)) then
       LDig14 := '0'
     else

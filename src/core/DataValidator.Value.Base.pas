@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,8 @@ unit DataValidator.Value.Base;
 interface
 
 uses
-  DataValidator.Intf, DataValidator.Context;
+  DataValidator.Intf,
+  DataValidator.Context;
 
 type
   TDataValidatorValueBase = class(TDataValidatorContext<IDataValidatorValueBase>, IDataValidatorValueBase, IDataValidatorValueValues)
@@ -43,22 +44,26 @@ type
     [weak]
     FResult: IDataValidatorValueResult;
     FValue: TArray<string>;
+    FName: string;
   public
     function &End: IDataValidatorValueResult;
     function GetValues: TArray<string>;
+    function GetName: string;
 
-    constructor Create(const AResult: IDataValidatorValueResult; const AValue: TArray<string>); reintroduce;
+    constructor Create(const AResult: IDataValidatorValueResult; const AValue: TArray<string>; const AName: string = ''); reintroduce;
   end;
 
 implementation
 
 { TDataValidatorValueBase }
 
-constructor TDataValidatorValueBase.Create(const AResult: IDataValidatorValueResult; const AValue: TArray<string>);
+constructor TDataValidatorValueBase.Create(const AResult: IDataValidatorValueResult; const AValue: TArray<string>; const AName: string = '');
 begin
   inherited Create(Self, '');
+
   FResult := AResult;
   FValue := AValue;
+  FName := AName;
 end;
 
 function TDataValidatorValueBase.&End: IDataValidatorValueResult;
@@ -69,6 +74,11 @@ end;
 function TDataValidatorValueBase.GetValues: TArray<string>;
 begin
   Result := FValue;
+end;
+
+function TDataValidatorValueBase.GetName: string;
+begin
+  Result := FName;
 end;
 
 end.

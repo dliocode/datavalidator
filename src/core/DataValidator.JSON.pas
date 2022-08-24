@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,8 @@ unit DataValidator.JSON;
 interface
 
 uses
-  DataValidator.Intf, DataValidator.Result.Intf,
+  DataValidator.Types,
+  DataValidator.Intf,
   System.Generics.Collections, System.Rtti, System.JSON, System.SysUtils;
 
 type
@@ -44,35 +45,42 @@ type
     FJSON: TJSONValue;
     FList: TList<TPair<string, IDataValidatorJSONBaseContext>>;
 
-    function CheckValueArray(const ACheckAll: Boolean): IDataValidatorResult;
-    function CheckValueObject(const ACheckAll: Boolean): IDataValidatorResult;
+    function CheckValueArray(const ACheckAll: Boolean; const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
+    function CheckValueObject(const ACheckAll: Boolean; const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
 
-    function CheckItemValueArray(const AName: string; const ACheckAll: Boolean): IDataValidatorResult;
-    function CheckItemValueObject(const AName: string; const ACheckAll: Boolean): IDataValidatorResult;
+    function CheckItemValueArray(const AKey: string; const ACheckAll: Boolean): IDataValidatorResult;
+    function CheckItemValueObject(const AKey: string; const ACheckAll: Boolean): IDataValidatorResult;
 
     function TValueToString(const AValue: TValue): string;
-    function TryGetValue(const AName: string; var AValue: IDataValidatorJSONBaseContext): Boolean;
+    function TryGetValue(const AKey: string; var AValue: IDataValidatorJSONBaseContext): Boolean;
   public
-    function Validate(const AName: TArray<string>): IDataValidatorJSONBaseContext; overload;
-    function Validate(const AName: string): IDataValidatorJSONBaseContext; overload;
+    function Validate(const AKey: TArray<string>; const AName: string = ''): IDataValidatorJSONBaseContext; overload;
+    function Validate(const AKey: string; const AName: string = ''): IDataValidatorJSONBaseContext; overload;
 
     function Check: IDataValidatorResult;
-    function CheckAll: IDataValidatorResult;
-    function CheckItem(const AName: string): IDataValidatorResult;
-    function CheckItemAll(const AName: string): IDataValidatorResult;
+    function CheckAll(const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
+
+    function CheckItem(const AKey: string): IDataValidatorResult;
+    function CheckItemAll(const AKey: string): IDataValidatorResult;
 
     constructor Create(const AJSON: TJSONObject); overload;
     constructor Create(const AJSON: TJSONArray); overload;
+    constructor Create(const AJSON: TJSONValue); overload;
     destructor Destroy; override;
   end;
 
 implementation
 
 uses
-  DataValidator.Types,
-  DataValidator.Information.Intf, DataValidator.ItemBase.Intf, DataValidator.Context.Intf,
-  DataValidator.JSON.Base, DataValidator.Information, DataValidator.ItemBase.Sanitizer, DataValidator.ItemBase,
-  Validator.JSON.Key.IsRequired, Validator.JSON.Key.IsOptional, Validator.IsOptional;
+  DataValidator.JSON.Base,
+
+  DataValidator.Information,
+  DataValidator.ItemBase.Sanitizer,
+  DataValidator.ItemBase,
+
+  Validator.JSON.Key.IsRequired,
+  Validator.JSON.Key.IsOptional,
+  Validator.IsOptional;
 
 { TDataValidatorJSON }
 
@@ -94,27 +102,38 @@ begin
   FList := TList < TPair < string, IDataValidatorJSONBaseContext >>.Create();
 end;
 
+constructor TDataValidatorJSON.Create(const AJSON: TJSONValue);
+begin
+  if AJSON is TJSONObject then
+    Create(AJSON as TJSONObject)
+  else
+    if AJSON is TJSONArray then
+      Create(AJSON as TJSONArray)
+    else
+      raise EDataValidatorException.Create('JSON invalid!');
+end;
+
 destructor TDataValidatorJSON.Destroy;
 begin
   FList.Free;
 end;
 
-function TDataValidatorJSON.Validate(const AName: TArray<string>): IDataValidatorJSONBaseContext;
+function TDataValidatorJSON.Validate(const AKey: TArray<string>; const AName: string = ''): IDataValidatorJSONBaseContext;
 var
   LBase: IDataValidatorJSONBaseContext;
   I: Integer;
 begin
-  LBase := TDataValidatorJSONBase.Create(Self, nil);
+  LBase := TDataValidatorJSONBase.Create(Self, nil, AName);
 
-  for I := Low(AName) to High(AName) do
-    FList.Add(TPair<string, IDataValidatorJSONBaseContext>.Create(AName[I], LBase));
+  for I := Low(AKey) to High(AKey) do
+    FList.Add(TPair<string, IDataValidatorJSONBaseContext>.Create(AKey[I], LBase));
 
   Result := LBase;
 end;
 
-function TDataValidatorJSON.Validate(const AName: string): IDataValidatorJSONBaseContext;
+function TDataValidatorJSON.Validate(const AKey: string; const AName: string = ''): IDataValidatorJSONBaseContext;
 begin
-  Result := Validate([AName]);
+  Result := Validate([AKey], AName);
 end;
 
 function TDataValidatorJSON.Check: IDataValidatorResult;
@@ -126,34 +145,34 @@ begin
       Result := CheckValueArray(False);
 end;
 
-function TDataValidatorJSON.CheckAll: IDataValidatorResult;
+function TDataValidatorJSON.CheckAll(const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
 begin
   if FJSON is TJSONObject then
-    Result := CheckValueObject(True)
+    Result := CheckValueObject(True, ATypeCheck)
   else
     if FJSON is TJSONArray then
-      Result := CheckValueArray(True);
+      Result := CheckValueArray(True, ATypeCheck);
 end;
 
-function TDataValidatorJSON.CheckItem(const AName: string): IDataValidatorResult;
+function TDataValidatorJSON.CheckItem(const AKey: string): IDataValidatorResult;
 begin
   if FJSON is TJSONObject then
-    Result := CheckItemValueObject(AName, False)
+    Result := CheckItemValueObject(AKey, False)
   else
     if FJSON is TJSONArray then
-      Result := CheckItemValueArray(AName, False);
+      Result := CheckItemValueArray(AKey, False);
 end;
 
-function TDataValidatorJSON.CheckItemAll(const AName: string): IDataValidatorResult;
+function TDataValidatorJSON.CheckItemAll(const AKey: string): IDataValidatorResult;
 begin
   if FJSON is TJSONObject then
-    Result := CheckItemValueObject(AName, True)
+    Result := CheckItemValueObject(AKey, True)
   else
     if FJSON is TJSONArray then
-      Result := CheckItemValueArray(AName, True);
+      Result := CheckItemValueArray(AKey, True);
 end;
 
-function TDataValidatorJSON.CheckValueObject(const ACheckAll: Boolean): IDataValidatorResult;
+function TDataValidatorJSON.CheckValueObject(const ACheckAll: Boolean; const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
 var
   LOK: Boolean;
   LInfo: IDataValidatorInformations;
@@ -172,23 +191,24 @@ begin
   for Enum in FList do
   begin
     LListValidatorItem := (Enum.Value as IDataValidatorContextBase<IDataValidatorItem>).GetItem;
-    LName := Enum.Key;
 
-    LValueSanitizer := TValue.From<TJSONPair>((FJSON as TJSONObject).Get(LName));
+    LName := (Enum.Value as IDataValidatorJSONValues).GetName;
+
+    LValueSanitizer := TValue.From<TJSONPair>((FJSON as TJSONObject).Get(Enum.Key));
 
     for I := 0 to Pred(LListValidatorItem.Count) do
     begin
       LValidatorItem := LListValidatorItem.Items[I];
 
+      LValidatorItem.SetKey(Enum.Key);
+      LValidatorItem.SetName(LName);
+      LValidatorItem.SetValue(LValueSanitizer);
+
       if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
       begin
-        LValidatorItem.SetValue(LValueSanitizer);
         LValueSanitizer := (LValidatorItem as TDataValidatorItemBaseSanitizer).Sanitize;
         Continue;
       end;
-
-      LValidatorItem.SetName(LName);
-      LValidatorItem.SetValue(LValueSanitizer);
 
       LValidatorResult := LValidatorItem.Check;
 
@@ -204,7 +224,10 @@ begin
           Break;
 
         if not ACheckAll then
-          Break;
+          Break
+        else
+          if ATypeCheck = TDataValidatorCheckAll.tcFirst then
+            Break;
       end
       else
         if (LValidatorItem is TDataValidatorJSONKeyIsOptional) or (LValidatorItem is TValidatorIsOptional) then
@@ -221,7 +244,7 @@ begin
   Result := TDataValidatorResult.Create(LOK, LInfo, LValues);
 end;
 
-function TDataValidatorJSON.CheckValueArray(const ACheckAll: Boolean): IDataValidatorResult;
+function TDataValidatorJSON.CheckValueArray(const ACheckAll: Boolean; const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
 var
   LOK: Boolean;
   LInfo: IDataValidatorInformations;
@@ -241,28 +264,29 @@ begin
   for Enum in FList do
   begin
     LListValidatorItem := (Enum.Value as IDataValidatorContextBase<IDataValidatorItem>).GetItem;
-    LName := Enum.Key;
+
+    LName := (Enum.Value as IDataValidatorJSONValues).GetName;
 
     for I := 0 to Pred((FJSON as TJSONArray).Count) do
     begin
       if not((FJSON as TJSONArray).Items[I] is TJSONObject) then
         Continue;
 
-      LValueSanitizer := TValue.From<TJSONPair>(((FJSON as TJSONArray).Items[I] as TJSONObject).Get(LName));
+      LValueSanitizer := TValue.From<TJSONPair>(((FJSON as TJSONArray).Items[I] as TJSONObject).Get(Enum.Key));
 
       for J := 0 to Pred(LListValidatorItem.Count) do
       begin
         LValidatorItem := LListValidatorItem.Items[J];
 
+        LValidatorItem.SetKey(Enum.Key);
+        LValidatorItem.SetName(LName);
+        LValidatorItem.SetValue(LValueSanitizer);
+
         if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
         begin
-          LValidatorItem.SetValue(LValueSanitizer);
           LValueSanitizer := (LValidatorItem as TDataValidatorItemBaseSanitizer).Sanitize;
           Continue;
         end;
-
-        LValidatorItem.SetName(LName);
-        LValidatorItem.SetValue(LValueSanitizer);
 
         LValidatorResult := LValidatorItem.Check;
 
@@ -278,7 +302,10 @@ begin
             Break;
 
           if not ACheckAll then
-            Break;
+            Break
+          else
+            if ATypeCheck = TDataValidatorCheckAll.tcFirst then
+              Break;
         end
         else
           if (LValidatorItem is TDataValidatorJSONKeyIsOptional) or (LValidatorItem is TValidatorIsOptional) then
@@ -296,39 +323,44 @@ begin
   Result := TDataValidatorResult.Create(LOK, LInfo, LValues);
 end;
 
-function TDataValidatorJSON.CheckItemValueObject(const AName: string; const ACheckAll: Boolean): IDataValidatorResult;
+function TDataValidatorJSON.CheckItemValueObject(const AKey: string; const ACheckAll: Boolean): IDataValidatorResult;
 var
   LValue: IDataValidatorJSONBaseContext;
   LOK: Boolean;
   LInfo: IDataValidatorInformations;
   LListValidatorItem: TList<IDataValidatorItem>;
+  LName: string;
   LValueSanitizer: TValue;
   I: Integer;
   LValidatorItem: IDataValidatorItem;
   LValidatorResult: IDataValidatorResult;
   LValues: TArray<string>;
 begin
-  if not TryGetValue(AName, LValue) then
+  if not TryGetValue(AKey, LValue) then
     Exit(nil);
 
   LOK := True;
   LInfo := TDataValidatorInformations.Create;
 
   LListValidatorItem := (LValue as IDataValidatorContextBase<IDataValidatorItem>).GetItem;
-  LValueSanitizer := TValue.From<TJSONPair>((FJSON as TJSONObject).Get(AName));
+
+  LName := (LValue as IDataValidatorJSONValues).GetName;
+
+  LValueSanitizer := TValue.From<TJSONPair>((FJSON as TJSONObject).Get(AKey));
 
   for I := 0 to Pred(LListValidatorItem.Count) do
   begin
     LValidatorItem := LListValidatorItem.Items[I];
 
+    LValidatorItem.SetKey(AKey);
+    LValidatorItem.SetName(LName);
+    LValidatorItem.SetValue(LValueSanitizer);
+
     if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
     begin
-      LValidatorItem.SetValue(LValueSanitizer);
       LValueSanitizer := (LValidatorItem as TDataValidatorItemBaseSanitizer).Sanitize;
       Continue;
     end;
-
-    LValidatorItem.SetValue(LValueSanitizer);
 
     LValidatorResult := LValidatorItem.Check;
 
@@ -356,12 +388,13 @@ begin
   Result := TDataValidatorResult.Create(LOK, LInfo, LValues);
 end;
 
-function TDataValidatorJSON.CheckItemValueArray(const AName: string; const ACheckAll: Boolean): IDataValidatorResult;
+function TDataValidatorJSON.CheckItemValueArray(const AKey: string; const ACheckAll: Boolean): IDataValidatorResult;
 var
   LValue: IDataValidatorJSONBaseContext;
   LOK: Boolean;
   LInfo: IDataValidatorInformations;
   LListValidatorItem: TList<IDataValidatorItem>;
+  LName: string;
   LValueSanitizer: TValue;
   I: Integer;
   J: Integer;
@@ -369,7 +402,7 @@ var
   LValidatorResult: IDataValidatorResult;
   LValues: TArray<string>;
 begin
-  if not TryGetValue(AName, LValue) then
+  if not TryGetValue(AKey, LValue) then
     Exit(nil);
 
   LOK := True;
@@ -377,25 +410,28 @@ begin
 
   LListValidatorItem := (LValue as IDataValidatorContextBase<IDataValidatorItem>).GetItem;
 
+  LName := (LValue as IDataValidatorJSONValues).GetName;
+
   for I := 0 to Pred((FJSON as TJSONArray).Count) do
   begin
     if not((FJSON as TJSONArray).Items[I] is TJSONObject) then
       Continue;
 
-    LValueSanitizer := TValue.From<TJSONPair>(((FJSON as TJSONArray).Items[I] as TJSONObject).Get(AName));
+    LValueSanitizer := TValue.From<TJSONPair>(((FJSON as TJSONArray).Items[I] as TJSONObject).Get(AKey));
 
     for J := 0 to Pred(LListValidatorItem.Count) do
     begin
       LValidatorItem := LListValidatorItem.Items[J];
 
+      LValidatorItem.SetKey(AKey);
+      LValidatorItem.SetName(LName);
+      LValidatorItem.SetValue(LValueSanitizer);
+
       if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
       begin
-        LValidatorItem.SetValue(LValueSanitizer);
         LValueSanitizer := (LValidatorItem as TDataValidatorItemBaseSanitizer).Sanitize;
         Continue;
       end;
-
-      LValidatorItem.SetValue(LValueSanitizer);
 
       LValidatorResult := LValidatorItem.Check;
 
@@ -440,7 +476,7 @@ begin
     Result := AValue.AsString;
 end;
 
-function TDataValidatorJSON.TryGetValue(const AName: string; var AValue: IDataValidatorJSONBaseContext): Boolean;
+function TDataValidatorJSON.TryGetValue(const AKey: string; var AValue: IDataValidatorJSONBaseContext): Boolean;
 var
   LValues: TArray<TPair<string, IDataValidatorJSONBaseContext>>;
   I: Integer;
@@ -451,7 +487,7 @@ begin
   LValues := FList.ToArray;
 
   for I := 0 to Pred(Length(LValues)) do
-    if LValues[I].Key = AName then
+    if LValues[I].Key = AKey then
     begin
       Result := True;
       AValue := LValues[I].Value;

@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -39,13 +39,17 @@ uses
 
 type
   TDataValidatorMessage = record
-    Title: string;
-    Message: string;
-    Description: string;
-    Status: string;
-    Uri: string;
+    Title: string; // Error creating product
+    Message: string; // Could not create product
+    Description: string; // Exception Message
+    Solution: string; // The solution is to fill in all the data
+    Source: string; // VIEW PRODUCT
+    Code: string; // P001
+    CodeName: string; // ERROR_PRODUCT_CREATOR
+    Uri: string; // http://help.developer.org/error_product_creator
+    Data: string; // Anything
 
-    constructor Create(const ATitle: string; const AMessage: string; const ADescription: string; const AStatus: string; const AUri: string); overload;
+    constructor Create(const ATitle: string; const AMessage: string; const ADescription: string; const ASolution: string; const ASource: string = ''; const ACode: string = ''; const ACodeName: string = ''; const AUri: string = ''; const AData: string = ''); overload;
     constructor Create(const AMessage: string; const ADescription: string = ''); overload;
     constructor Create(const AJSONObject: TJSONObject; const AOwner: Boolean = False); overload;
 
@@ -53,7 +57,10 @@ type
     function ToJSONString(const AIncludeAll: Boolean = True): string; overload;
   end;
 
+{$SCOPEDENUMS ON}
   TDataValidatorLocaleLanguage = (tl_en_US, tl_de_DE, tl_fr_FR, tl_it_IT, tl_es_ES, tl_ru_RU, tl_pt_BR);
+  TDataValidatorCheckAll = (tcAll, tcFirst);
+{$SCOPEDENUMS OFF}
 
   TDataValidatorCustomResult = reference to function: Boolean;
   TDataValidatorCustomSanitizer = reference to function(const AValue: string): string;
@@ -76,13 +83,19 @@ implementation
 
 { TDataValidatorMessage }
 
-constructor TDataValidatorMessage.Create(const ATitle: string; const AMessage: string; const ADescription: string; const AStatus: string; const AUri: string);
+constructor TDataValidatorMessage.Create(const ATitle: string; const AMessage: string; const ADescription: string; const ASolution: string; const ASource: string = ''; const ACode: string = ''; const ACodeName: string = ''; const AUri: string = ''; const AData: string = '');
 begin
   Self.Title := ATitle;
-  Self.Title := AMessage;
-  Self.Title := ADescription;
-  Self.Title := AStatus;
-  Self.Title := AUri;
+  Self.Message := AMessage;
+  Self.Description := ADescription;
+  Self.Solution := ASolution;
+
+  Self.Source := ASource;
+  Self.Code := ACode;
+  Self.CodeName := ACodeName;
+  Self.Uri := AUri;
+
+  Self.Data := AData;
 end;
 
 constructor TDataValidatorMessage.Create(const AMessage: string; const ADescription: string = '');
@@ -92,29 +105,20 @@ begin
 end;
 
 constructor TDataValidatorMessage.Create(const AJSONObject: TJSONObject; const AOwner: Boolean = False);
-var
-  LValue: TJSONValue;
 begin
+  if not Assigned(AJSONObject) then
+    Exit;
+
   try
-    LValue := AJSONObject.GetValue('title');
-    if Assigned(LValue) then
-      Self.Title := LValue.Value;
-
-    LValue := AJSONObject.GetValue('message');
-    if Assigned(LValue) then
-      Self.Message := LValue.Value;
-
-    LValue := AJSONObject.GetValue('description');
-    if Assigned(LValue) then
-      Self.Description := LValue.Value;
-
-    LValue := AJSONObject.GetValue('status');
-    if Assigned(LValue) then
-      Self.Status := LValue.Value;
-
-    LValue := AJSONObject.GetValue('uri');
-    if Assigned(LValue) then
-      Self.Uri := LValue.Value;
+    Self.Title := AJSONObject.GetValue<string>('title', Self.Title);
+    Self.Message := AJSONObject.GetValue<string>('message', Self.Message);
+    Self.Description := AJSONObject.GetValue<string>('description', Self.Description);
+    Self.Solution := AJSONObject.GetValue<string>('solution', Self.Solution);
+    Self.Source := AJSONObject.GetValue<string>('source', Self.Source);
+    Self.Code := AJSONObject.GetValue<string>('code', Self.Code);
+    Self.CodeName := AJSONObject.GetValue<string>('code_name', Self.CodeName);
+    Self.Uri := AJSONObject.GetValue<string>('uri', Self.Uri);
+    Self.Data := AJSONObject.GetValue<string>('data', Self.Data);
   finally
     if AOwner then
       AJSONObject.Free;
@@ -136,11 +140,23 @@ begin
   if not Self.Description.IsEmpty or AIncludeAll then
     LJO.AddPair('description', Self.Description);
 
-  if not Self.Status.IsEmpty or AIncludeAll then
-    LJO.AddPair('status', Self.Status);
+  if not Self.Solution.IsEmpty or AIncludeAll then
+    LJO.AddPair('solution', Self.Solution);
+
+  if not Self.Source.IsEmpty or AIncludeAll then
+    LJO.AddPair('source', Self.Source);
+
+  if not Self.Code.IsEmpty or AIncludeAll then
+    LJO.AddPair('code', Self.Code);
+
+  if not Self.CodeName.IsEmpty or AIncludeAll then
+    LJO.AddPair('code_name', Self.CodeName);
 
   if not Self.Uri.IsEmpty or AIncludeAll then
     LJO.AddPair('uri', Self.Uri);
+
+  if not Self.Data.IsEmpty or AIncludeAll then
+    LJO.AddPair('data', Self.Data);
 
   Result := LJO;
 end;

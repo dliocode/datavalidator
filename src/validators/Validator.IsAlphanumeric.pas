@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -36,25 +36,28 @@ interface
 
 uses
   DataValidator.ItemBase,
-  System.SysUtils, System.RegularExpressions;
+  System.SysUtils, System.StrUtils, System.RegularExpressions;
 
 type
   TValidatorIsAlphanumeric = class(TDataValidatorItemBase, IDataValidatorItem)
   private
+    FAllowedCharacters: TArray<Char>;
+    function GetCharactersAllow: string;
     function GetPattern: string;
   public
     function Check: IDataValidatorResult;
-    constructor Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+    constructor Create(const AAllowedCharacters: TArray<Char>; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
   end;
 
 implementation
 
 { TValidatorIsAlphanumeric }
 
-constructor TValidatorIsAlphanumeric.Create(const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
+constructor TValidatorIsAlphanumeric.Create(const AAllowedCharacters: TArray<Char>; const AMessage: string; const AExecute: TDataValidatorInformationExecute = nil);
 begin
   inherited Create;
 
+  FAllowedCharacters := AAllowedCharacters;
   SetMessage(AMessage);
   SetExecute(AExecute);
 end;
@@ -76,24 +79,41 @@ begin
   Result := TDataValidatorResult.Create(R, TDataValidatorInformation.Create(LValue, GetMessage, FExecute));
 end;
 
+function TValidatorIsAlphanumeric.GetCharactersAllow: string;
+var
+  I: Integer;
+begin
+  Result := '';
+
+  for I := Low(FAllowedCharacters) to High(FAllowedCharacters) do
+  begin
+    if MatchText(FAllowedCharacters[I], ['\', ']', '-']) then
+      Result := Result + '\';
+
+    Result := Result + FAllowedCharacters[I];
+  end;
+end;
+
 function TValidatorIsAlphanumeric.GetPattern: string;
 begin
   case FLocaleLanguage of
     TDataValidatorLocaleLanguage.tl_en_US:
-      Result := '^[0-9A-Za-z\s]+$';
+      Result := '^[0-9A-Za-z\s%s]+$';
     TDataValidatorLocaleLanguage.tl_de_DE:
-      Result := '^[0-9A-ZÄÖÜßa-zäöüß\s]+$';
+      Result := '^[0-9A-ZÄÖÜßa-zäöüß\s%s]+$';
     TDataValidatorLocaleLanguage.tl_fr_FR:
-      Result := '^[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸa-zàâæçéèêëïîôœùûüÿ\s]+$';
+      Result := '^[0-9A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸa-zàâæçéèêëïîôœùûüÿ\s%s]+$';
     TDataValidatorLocaleLanguage.tl_it_IT:
-      Result := '^[0-9A-ZÀÉÈÌÎÓÒÙa-zàéèìîóòù\s]+$';
+      Result := '^[0-9A-ZÀÉÈÌÎÓÒÙa-zàéèìîóòù\s%s]+$';
     TDataValidatorLocaleLanguage.tl_es_ES:
-      Result := '^[0-9A-ZÁÉÍÑÓÚÜa-záéíñóúü\s]+$';
+      Result := '^[0-9A-ZÁÉÍÑÓÚÜa-záéíñóúü\s%s]+$';
     TDataValidatorLocaleLanguage.tl_ru_RU:
-      Result := '^[0-9А-ЯЁа-яё\s]+$';
+      Result := '^[0-9А-ЯЁа-яё\s%s]+$';
     TDataValidatorLocaleLanguage.tl_pt_BR:
-      Result := '^[0-9A-ZÃÁÀÂÄÇÉÊËÍÏÕÓÔÖÚÜa-zãáàâäçéêëíïõóôöúü\s]+$';
+      Result := '^[0-9A-ZÃÁÀÂÄÇÉÊËÍÏÕÓÔÖÚÜa-zãáàâäçéêëíïõóôöúü\s%s]+$';
   end;
+
+  Result := Format(Result, [GetCharactersAllow]);
 end;
 
 end.

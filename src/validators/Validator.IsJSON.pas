@@ -7,7 +7,7 @@
 
   MIT License
 
-  Copyright (c) 2021 Danilo Lucas
+  Copyright (c) 2022 Danilo Lucas
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -84,20 +84,20 @@ begin
     end;
 
     if Assigned(LJV) then
-    begin
       try
         case FTypeJSON of
           tjAll:
             R := (LJV is TJSONArray) or (LJV is TJSONObject);
+
           tjArray:
             R := LJV is TJSONArray;
+
           tjObject:
             R := LJV is TJSONObject;
         end;
       finally
         LJV.Free;
       end;
-    end;
   end;
 
   if FIsNot then

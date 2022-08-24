@@ -38,7 +38,7 @@ Adicione as seguintes pastas ao seu projeto, em *Project > Options > Delphi Comp
 ```
 
 #### Samples
-  * Veja alguns exemplos: [samples](https://github.com/dliocode/datavalidator/tree/main/samples)
+  * Veja alguns exemplos: [samples](https://github.com/dliocode/datavalidator/tree/v2/samples)
 
 
 ## Como usar

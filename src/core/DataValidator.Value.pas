@@ -198,16 +198,18 @@ function TDataValidatorValue.ValidateWithSeparator(const AValue, AName: string;
 var
   LStringList : TStringList;
 begin
-  LStringList := TStringList.Create;
-  try
-    LStringList.Delimiter := ADelimiter;
-    LStringList.DelimitedText := AValue;
-
-    Result := Validate(LStringList.ToStringArray, AName);
-  finally
-    LStringList.Free;
+  Result := Validate(AValue, AName);
+  if AValue <> '' then
+  begin
+    LStringList := TStringList.Create;
+    try
+      LStringList.Delimiter := ADelimiter;
+      LStringList.DelimitedText := AValue;
+      Result := Validate(LStringList.ToStringArray, AName);
+    finally
+      LStringList.Free;
+    end;
   end;
-
 end;
 
 end.

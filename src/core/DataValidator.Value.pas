@@ -37,7 +37,7 @@ interface
 uses
   DataValidator.Types,
   DataValidator.Intf,
-  System.Generics.Collections, System.Rtti, System.JSON;
+  System.Generics.Collections, System.Rtti, System.JSON, System.Classes;
 
 type
   TDataValidatorValue = class(TInterfacedObject, IDataValidatorValue, IDataValidatorValueResult)
@@ -46,9 +46,11 @@ type
 
     function CheckValue(const ACheckAll: Boolean; const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
     function TValueToString(const AValue: TValue): string;
+
   public
     function Validate(const AValue: string; const AName: string = ''): IDataValidatorValueBaseContext; overload;
     function Validate(const AValue: TArray<string>; const AName: string = ''): IDataValidatorValueBaseContext; overload;
+    function ValidateWithSeparator(const AValue: string; const AName: string = ''; const ADelimiter : char = ';'): IDataValidatorValueBaseContext;
 
     function Check: IDataValidatorResult;
     function CheckAll(const ATypeCheck: TDataValidatorCheckAll = TDataValidatorCheckAll.tcAll): IDataValidatorResult;
@@ -189,6 +191,23 @@ begin
   end
   else
     Result := AValue.AsString;
+end;
+
+function TDataValidatorValue.ValidateWithSeparator(const AValue, AName: string;
+  const ADelimiter: char): IDataValidatorValueBaseContext;
+var
+  LStringList : TStringList;
+begin
+  LStringList := TStringList.Create;
+  try
+    LStringList.Delimiter := ADelimiter;
+    LStringList.DelimitedText := AValue;
+
+    Result := Validate(LStringList.ToStringArray, AName);
+  finally
+    LStringList.Free;
+  end;
+
 end;
 
 end.

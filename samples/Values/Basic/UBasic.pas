@@ -22,15 +22,11 @@ type
     EditDataNascimento: TLabeledEdit;
     btnCheckAllFirst: TButton;
     btnCheckAll: TButton;
-    Memo: TMemo;
-    Button1: TButton;
-    Memo2: TMemo;
     procedure btnLimparClick(Sender: TObject);
     procedure btnCheckClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnCheckAllClick(Sender: TObject);
     procedure btnCheckAllFirstClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
     function Validation: IDataValidatorValueResult;
@@ -53,23 +49,6 @@ begin
   for I := 0 to Pred(Self.ComponentCount) do
     if (Self.Components[i] is TLabeledEdit) then
       (Self.Components[i] as TLabeledEdit).Clear;
-end;
-
-procedure TForm2.Button1Click(Sender: TObject);
-var
-  LStringList : TStringList;
-begin
-  LStringList := TStringList.Create;
-  try
-    LStringList.Delimiter := ';';
-    LStringList.DelimitedText := Memo.Lines.Text;
-
-    for var i := 0 to LStringList.Count-1 do
-      Memo2.Lines.Add(i.ToString + ' - ' +  LStringList[i]);
-
-  finally
-    LStringList.Free;
-  end;
 end;
 
 procedure TForm2.btnCheckClick(Sender: TObject);
@@ -132,7 +111,7 @@ begin
         .&Not.IsDateGreaterThan(Now).WithMessage('A ${name}(${value}) não pode ser maior que a data atual!')
       .&End
 
-      .Validate(EditEmail.Text, 'E-mail').Execute(EditEmail.SetFocus)
+      .ValidateWithSeparator(EditEmail.Text, 'E-mail').Execute(EditEmail.SetFocus)
         .IsOptional // Não é obrigatório, mas se tiver valor deve validar
         .IsEmail.WithMessage('O ${name}(${value}) informado é inválido!')
       .&End

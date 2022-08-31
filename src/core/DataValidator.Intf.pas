@@ -326,6 +326,7 @@ type
     ['{1D7D5CB4-5188-4F45-8878-A0120A9C1EC2}']
     function Validate(const AValue: string; const AName: string = ''): IDataValidatorValueBaseContext; overload;
     function Validate(const AValue: TArray<string>; const AName: string = ''): IDataValidatorValueBaseContext; overload;
+    function ValidateWithSeparator(const AValue: string; const AName: string = ''; const ADelimiter : char = ';'): IDataValidatorValueBaseContext;
   end;
 
   IDataValidatorValueBase = interface(IDataValidatorValueBaseContext)

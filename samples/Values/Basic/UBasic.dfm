@@ -3,7 +3,7 @@ object Form2: TForm2
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'DataValidator - Basic'
-  ClientHeight = 319
+  ClientHeight = 152
   ClientWidth = 650
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,12 +19,13 @@ object Form2: TForm2
     Left = 0
     Top = 0
     Width = 105
-    Height = 319
+    Height = 152
     Align = alLeft
     BevelOuter = bvNone
     Color = 2565927
     ParentBackground = False
     TabOrder = 0
+    ExplicitHeight = 319
     object btnLimpar: TButton
       AlignWithMargins = True
       Left = 3
@@ -77,10 +78,11 @@ object Form2: TForm2
     Left = 105
     Top = 0
     Width = 545
-    Height = 319
+    Height = 152
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitHeight = 319
     object EditCodigo: TLabeledEdit
       Left = 62
       Top = 11
@@ -157,32 +159,6 @@ object Form2: TForm2
       EditLabel.Caption = 'Data Nascimento'
       LabelPosition = lpLeft
       TabOrder = 6
-    end
-    object Memo: TMemo
-      Left = 0
-      Top = 188
-      Width = 545
-      Height = 53
-      Lines.Strings = (
-        'nelson7808@gmail.com;ti-nelson@arthi.com.br;')
-      TabOrder = 7
-    end
-    object Button1: TButton
-      Left = 36
-      Top = 140
-      Width = 75
-      Height = 25
-      Caption = 'Button1'
-      TabOrder = 8
-      OnClick = Button1Click
-    end
-    object Memo2: TMemo
-      Left = 0
-      Top = 230
-      Width = 545
-      Height = 89
-      Align = alBottom
-      TabOrder = 9
     end
   end
 end

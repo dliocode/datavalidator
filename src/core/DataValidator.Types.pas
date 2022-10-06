@@ -48,8 +48,9 @@ type
     CodeName: string; // ERROR_PRODUCT_CREATOR
     Uri: string; // http://help.developer.org/error_product_creator
     Data: string; // Anything
+    StatusCode: string; // 400
 
-    constructor Create(const ATitle: string; const AMessage: string; const ADescription: string; const ASolution: string; const ASource: string = ''; const ACode: string = ''; const ACodeName: string = ''; const AUri: string = ''; const AData: string = ''); overload;
+    constructor Create(const ATitle: string; const AMessage: string; const ADescription: string; const ASolution: string; const ASource: string = ''; const ACode: string = ''; const ACodeName: string = ''; const AUri: string = ''; const AData: string = ''; const AStatusCode: string = ''); overload;
     constructor Create(const AMessage: string; const ADescription: string = ''); overload;
     constructor Create(const AJSONObject: TJSONObject; const AOwner: Boolean = False); overload;
 
@@ -83,7 +84,7 @@ implementation
 
 { TDataValidatorMessage }
 
-constructor TDataValidatorMessage.Create(const ATitle: string; const AMessage: string; const ADescription: string; const ASolution: string; const ASource: string = ''; const ACode: string = ''; const ACodeName: string = ''; const AUri: string = ''; const AData: string = '');
+constructor TDataValidatorMessage.Create(const ATitle: string; const AMessage: string; const ADescription: string; const ASolution: string; const ASource: string = ''; const ACode: string = ''; const ACodeName: string = ''; const AUri: string = ''; const AData: string = ''; const AStatusCode: string = '');
 begin
   Self.Title := ATitle;
   Self.Message := AMessage;
@@ -94,8 +95,8 @@ begin
   Self.Code := ACode;
   Self.CodeName := ACodeName;
   Self.Uri := AUri;
-
   Self.Data := AData;
+  Self.StatusCode := AStatusCode;
 end;
 
 constructor TDataValidatorMessage.Create(const AMessage: string; const ADescription: string = '');
@@ -119,6 +120,7 @@ begin
     Self.CodeName := AJSONObject.GetValue<string>('code_name', Self.CodeName);
     Self.Uri := AJSONObject.GetValue<string>('uri', Self.Uri);
     Self.Data := AJSONObject.GetValue<string>('data', Self.Data);
+    Self.StatusCode := AJSONObject.GetValue<string>('status_code', Self.Data);
   finally
     if AOwner then
       AJSONObject.Free;
@@ -157,6 +159,9 @@ begin
 
   if not Self.Data.IsEmpty or AIncludeAll then
     LJO.AddPair('data', Self.Data);
+
+  if not Self.StatusCode.IsEmpty or AIncludeAll then
+    LJO.AddPair('status_code', Self.StatusCode);
 
   Result := LJO;
 end;

@@ -157,6 +157,9 @@ begin
 
   if not AMessage.Data.Trim.IsEmpty then
     FMessage.Data := AMessage.Data;
+
+  if not AMessage.StatusCode.Trim.IsEmpty then
+    FMessage.StatusCode := AMessage.StatusCode;
 end;
 
 procedure TDataValidatorItemBase.SetExecute(const AExecute: TDataValidatorInformationExecute);
@@ -182,6 +185,7 @@ begin
   Result.CodeName := GetAdjustedMessage(Result.CodeName, LValue);
   Result.Uri := GetAdjustedMessage(Result.Uri, LValue);
   Result.Data := GetAdjustedMessage(Result.Data, LValue);
+  Result.StatusCode := GetAdjustedMessage(Result.StatusCode, LValue);
 end;
 
 function TDataValidatorItemBase.GetValueAsString: string;

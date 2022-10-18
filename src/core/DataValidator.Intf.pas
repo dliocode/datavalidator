@@ -44,6 +44,8 @@ type
   // Information
   IDataValidatorInformation = interface
     ['{972F5617-FDED-4D8E-8F89-5F372C1D62AB}']
+    function Key: string;
+    function Name: string;
     function Value: string;
     function Messages: TDataValidatorMessage;
     function Execute: TDataValidatorInformationExecute;

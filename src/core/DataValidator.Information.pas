@@ -42,16 +42,20 @@ uses
 type
   TDataValidatorInformation = class(TInterfacedObject, IDataValidatorInformation)
   private
+    FKey: string;
+    FName: string;
     FValue: Variant;
     FMessages: TDataValidatorMessage;
     FExecute: TDataValidatorInformationExecute;
   public
+    function Key: string;
+    function Name: string;
     function Value: string;
     function Messages: TDataValidatorMessage;
     function Execute: TDataValidatorInformationExecute;
     procedure OnExecute;
 
-    constructor Create(const AValue: string; const AMessages: TDataValidatorMessage; const AExecute: TDataValidatorInformationExecute);
+    constructor Create(const AKey: string; const AName: string; const AValue: string; const AMessages: TDataValidatorMessage; const AExecute: TDataValidatorInformationExecute);
   end;
 
   TDataValidatorInformations = class(TInterfacedObject, IDataValidatorInformations)
@@ -127,11 +131,23 @@ end;
 
 { TDataValidatorInformation }
 
-constructor TDataValidatorInformation.Create(const AValue: string; const AMessages: TDataValidatorMessage; const AExecute: TDataValidatorInformationExecute);
+constructor TDataValidatorInformation.Create(const AKey: string; const AName: string; const AValue: string; const AMessages: TDataValidatorMessage; const AExecute: TDataValidatorInformationExecute);
 begin
+  FKey := AKey;
+  FName := AName;
   FValue := AValue;
   FMessages := AMessages;
   FExecute := AExecute;
+end;
+
+function TDataValidatorInformation.Key: string;
+begin
+  Result := FKey;
+end;
+
+function TDataValidatorInformation.Name: string;
+begin
+  REsult := FName;
 end;
 
 function TDataValidatorInformation.Value: string;

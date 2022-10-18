@@ -140,6 +140,9 @@ begin
   if not AMessage.Description.Trim.IsEmpty then
     FMessage.Description := AMessage.Description;
 
+  if Length(AMessage.Details) > 0 then
+    FMessage.Details := AMessage.Details;
+
   if not AMessage.Solution.Trim.IsEmpty then
     FMessage.Solution := AMessage.Solution;
 

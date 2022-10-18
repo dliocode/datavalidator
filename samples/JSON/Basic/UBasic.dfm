@@ -170,7 +170,6 @@ object Form2: TForm2
             '}')
           ScrollBars = ssBoth
           TabOrder = 0
-          ExplicitHeight = 603
         end
         object Memo22: TMemo
           Left = 313

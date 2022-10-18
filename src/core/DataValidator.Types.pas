@@ -35,13 +35,14 @@ unit DataValidator.Types;
 interface
 
 uses
-  System.JSON, System.SysUtils;
+  System.JSON, System.SysUtils, System.Generics.Collections;
 
 type
   TDataValidatorMessage = record
     Title: string; // Error creating product
     Message: string; // Could not create product
-    Description: string; // Exception Message
+    Description: string; // Main Exception Message
+    Details: TArray<string>; // Details Exception Messages
     Solution: string; // The solution is to fill in all the data
     Source: string; // VIEW PRODUCT
     Code: string; // P001
@@ -50,19 +51,19 @@ type
     Data: string; // Anything
     StatusCode: string; // 400
 
-    constructor Create(const ATitle: string; const AMessage: string; const ADescription: string; const ASolution: string; const ASource: string = ''; const ACode: string = ''; const ACodeName: string = ''; const AUri: string = ''; const AData: string = ''; const AStatusCode: string = ''); overload;
-    constructor Create(const AMessage: string; const ADescription: string = ''); overload;
-    constructor Create(const AJSONObject: TJSONObject; const AOwner: Boolean = False); overload;
+    constructor Create(const ATitle: string; const AMessage: string; const ADescription: string; const ADetails: TArray<string> = []; const ASolution: string = ''; const ASource: string = ''; const ACode: string = ''; const ACodeName: string = ''; const AUri: string = ''; const AData: string = ''; const AStatusCode: string = ''); overload;
+    constructor Create(const AMessage: string; const ADescription: string = ''; const ADetails: TArray<string> = []); overload;
+    constructor Create(const AJSONObject: TJSONObject; const AOwns: Boolean = False); overload;
 
     function ToJSONObject(const AIncludeAll: Boolean = True): TJSONObject; overload;
     function ToJSONString(const AIncludeAll: Boolean = True): string; overload;
   end;
 
 {$SCOPEDENUMS ON}
+
   TDataValidatorLocaleLanguage = (tl_en_US, tl_de_DE, tl_fr_FR, tl_it_IT, tl_es_ES, tl_ru_RU, tl_pt_BR);
   TDataValidatorCheckAll = (tcAll, tcFirst);
 {$SCOPEDENUMS OFF}
-
   TDataValidatorCustomResult = reference to function: Boolean;
   TDataValidatorCustomSanitizer = reference to function(const AValue: string): string;
 
@@ -84,11 +85,12 @@ implementation
 
 { TDataValidatorMessage }
 
-constructor TDataValidatorMessage.Create(const ATitle: string; const AMessage: string; const ADescription: string; const ASolution: string; const ASource: string = ''; const ACode: string = ''; const ACodeName: string = ''; const AUri: string = ''; const AData: string = ''; const AStatusCode: string = '');
+constructor TDataValidatorMessage.Create(const ATitle: string; const AMessage: string; const ADescription: string; const ADetails: TArray<string> = []; const ASolution: string = ''; const ASource: string = ''; const ACode: string = ''; const ACodeName: string = ''; const AUri: string = ''; const AData: string = ''; const AStatusCode: string = '');
 begin
   Self.Title := ATitle;
   Self.Message := AMessage;
   Self.Description := ADescription;
+  Self.Details := ADetails;
   Self.Solution := ASolution;
 
   Self.Source := ASource;
@@ -99,13 +101,17 @@ begin
   Self.StatusCode := AStatusCode;
 end;
 
-constructor TDataValidatorMessage.Create(const AMessage: string; const ADescription: string = '');
+constructor TDataValidatorMessage.Create(const AMessage: string; const ADescription: string = ''; const ADetails: TArray<string> = []);
 begin
   Self.Message := AMessage;
   Self.Description := ADescription;
+  Self.Details := ADetails;
 end;
 
-constructor TDataValidatorMessage.Create(const AJSONObject: TJSONObject; const AOwner: Boolean = False);
+constructor TDataValidatorMessage.Create(const AJSONObject: TJSONObject; const AOwns: Boolean = False);
+var
+  LJV: TJSONValue;
+  I: Integer;
 begin
   if not Assigned(AJSONObject) then
     Exit;
@@ -114,6 +120,17 @@ begin
     Self.Title := AJSONObject.GetValue<string>('title', Self.Title);
     Self.Message := AJSONObject.GetValue<string>('message', Self.Message);
     Self.Description := AJSONObject.GetValue<string>('description', Self.Description);
+
+    LJV := AJSONObject.GetValue('destails');
+    if Assigned(LJV) then
+      if (LJV is TJSONArray) then
+      begin
+        Self.Details := [];
+
+        for I := 0 to Pred(TJSONArray(LJV).Count) do
+          Self.Details := Self.Details + [TJSONArray(LJV).Items[I].Value];
+      end;
+
     Self.Solution := AJSONObject.GetValue<string>('solution', Self.Solution);
     Self.Source := AJSONObject.GetValue<string>('source', Self.Source);
     Self.Code := AJSONObject.GetValue<string>('code', Self.Code);
@@ -122,7 +139,7 @@ begin
     Self.Data := AJSONObject.GetValue<string>('data', Self.Data);
     Self.StatusCode := AJSONObject.GetValue<string>('status_code', Self.Data);
   finally
-    if AOwner then
+    if AOwns then
       AJSONObject.Free;
   end;
 end;
@@ -130,6 +147,8 @@ end;
 function TDataValidatorMessage.ToJSONObject(const AIncludeAll: Boolean = True): TJSONObject;
 var
   LJO: TJSONObject;
+  LJADetails: TJSONArray;
+  I: Integer;
 begin
   LJO := TJSONObject.Create;
 
@@ -141,6 +160,15 @@ begin
 
   if not Self.Description.IsEmpty or AIncludeAll then
     LJO.AddPair('description', Self.Description);
+
+  if (Length(Self.Details) > 0) or AIncludeAll then
+  begin
+    LJADetails := TJSONArray.Create;
+    LJO.AddPair('details', LJADetails);
+
+    for I := Low(Self.Details) to High(Self.Details) do
+      LJADetails.Add(Self.Details[I]);
+  end;
 
   if not Self.Solution.IsEmpty or AIncludeAll then
     LJO.AddPair('solution', Self.Solution);

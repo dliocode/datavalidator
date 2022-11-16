@@ -131,6 +131,7 @@ begin
         LValidatorItem.SetKey(LName);
         LValidatorItem.SetName(LName);
         LValidatorItem.SetValue(LValueSanitizer);
+        LValidatorItem.SetIndex('${index}');
 
         if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
         begin

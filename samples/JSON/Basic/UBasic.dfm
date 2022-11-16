@@ -23,7 +23,6 @@ object Form2: TForm2
     Color = 2565927
     ParentBackground = False
     TabOrder = 0
-    ExplicitHeight = 757
     object btnLimpar: TButton
       AlignWithMargins = True
       Left = 3
@@ -80,8 +79,6 @@ object Form2: TForm2
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 1244
-    ExplicitHeight = 757
     object PageControl1: TPageControl
       Left = 0
       Top = 0
@@ -117,9 +114,6 @@ object Form2: TForm2
           Color = clCream
           ScrollBars = ssBoth
           TabOrder = 1
-          ExplicitLeft = 600
-          ExplicitWidth = 143
-          ExplicitHeight = 603
         end
       end
       object TabSample2: TTabSheet
@@ -180,9 +174,6 @@ object Form2: TForm2
           Color = clCream
           ScrollBars = ssBoth
           TabOrder = 1
-          ExplicitLeft = 600
-          ExplicitWidth = 636
-          ExplicitHeight = 727
         end
       end
     end

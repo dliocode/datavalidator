@@ -203,6 +203,7 @@ begin
       LValidatorItem.SetKey(Enum.Key);
       LValidatorItem.SetName(LName);
       LValidatorItem.SetValue(LValueSanitizer);
+      LValidatorItem.SetIndex('${index}');
 
       if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
       begin
@@ -281,6 +282,7 @@ begin
         LValidatorItem.SetKey(Enum.Key);
         LValidatorItem.SetName(LName);
         LValidatorItem.SetValue(LValueSanitizer);
+        LValidatorItem.SetIndex(IntToStr(I + 1));
 
         if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
         begin
@@ -355,6 +357,7 @@ begin
     LValidatorItem.SetKey(AKey);
     LValidatorItem.SetName(LName);
     LValidatorItem.SetValue(LValueSanitizer);
+    LValidatorItem.SetIndex('${index}');
 
     if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
     begin
@@ -426,6 +429,7 @@ begin
       LValidatorItem.SetKey(AKey);
       LValidatorItem.SetName(LName);
       LValidatorItem.SetValue(LValueSanitizer);
+      LValidatorItem.SetIndex(IntToStr(I + 1));
 
       if (LValidatorItem is TDataValidatorItemBaseSanitizer) then
       begin

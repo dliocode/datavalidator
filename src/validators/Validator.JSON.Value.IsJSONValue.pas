@@ -72,26 +72,25 @@ begin
   LValue := GetValueAsString;
   R := False;
 
-  if not Trim(LValue).IsEmpty then
-    if FValue.IsType<TJSONPair> then
-    begin
-      LJSONPair := FValue.AsType<TJSONPair>;
+  if FValue.IsType<TJSONPair> then
+  begin
+    LJSONPair := FValue.AsType<TJSONPair>;
 
-      if Assigned(LJSONPair) then
-        case FTypeJSONValue of
-          tjNull:
-            R := LJSONPair.JsonValue is TJSONNull;
+    if Assigned(LJSONPair) then
+      case FTypeJSONValue of
+        tjNull:
+          R := LJSONPair.JsonValue is TJSONNull;
 
-          tjBoolean:
-            R := LJSONPair.JsonValue is TJSONBool;
+        tjBoolean:
+          R := LJSONPair.JsonValue is TJSONBool;
 
-          tjNumeric:
-            R := LJSONPair.JsonValue is TJSONNumber;
+        tjNumeric:
+          R := LJSONPair.JsonValue is TJSONNumber;
 
-          tjString:
-            R := LJSONPair.JsonValue is TJSONString;
-        end;
-    end;
+        tjString:
+          R := LJSONPair.JsonValue is TJSONString;
+      end;
+  end;
 
   if FIsNot then
     R := not R;

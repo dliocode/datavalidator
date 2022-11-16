@@ -36,9 +36,10 @@ interface
 
 uses
   DataValidator.Types,
-  System.JSON, System.Generics.Collections, System.Rtti;
+  System.Generics.Collections, System.Rtti;
 
 type
+  IDataValidatorValue = interface;
   IDataValidatorJSON = interface;
 
   // Information
@@ -83,6 +84,7 @@ type
     procedure SetKey(const AKey: string);
     procedure SetName(const AName: string);
     procedure SetValue(const AValue: TValue);
+    procedure SetIndex(const AValue: string);
     procedure SetMessage(const AMessage: string); overload;
     procedure SetMessage(const AMessage: TDataValidatorMessage); overload;
     procedure SetExecute(const AExecute: TDataValidatorInformationExecute); overload;
@@ -289,6 +291,7 @@ type
   IDataValidatorJSONContextValue<T> = interface(IDataValidatorJSONContextValueContext<T>)
     ['{320BD31E-810F-4EB6-A8C4-C17CA2C186DB}']
     function &End: T;
+
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValue): IDataValidatorJSONContextValue<T>; overload;
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONValueMessage): IDataValidatorJSONContextValue<T>; overload;
     function CustomJSONValue(const AExecute: TDataValidatorCustomJSONMessage): IDataValidatorJSONContextValue<T>; overload;
@@ -301,6 +304,7 @@ type
     function IsJSONString: IDataValidatorJSONContextValue<T>;
     function JSONMinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
     function JSONMaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
+    function IsOptional(const AExecute: TDataValidatorCustomJSONValue): IDataValidatorJSONContextValue<T>; overload;
   end;
 
   // DataValidator

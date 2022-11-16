@@ -676,12 +676,12 @@ end;
 
 function TDataValidatorContext<T>.IsOptional: T;
 begin
-  Result := Add(TValidatorIsOptional.Create(nil, 'Value is optional!'));
+  Result := Add(TValidatorIsOptional.Create(nil, nil, 'Value is optional!'));
 end;
 
 function TDataValidatorContext<T>.IsOptional(const AExecute: TDataValidatorCustomValue): T;
 begin
-  Result := Add(TValidatorIsOptional.Create(AExecute, 'Value is optional!'));
+  Result := Add(TValidatorIsOptional.Create(AExecute, nil, 'Value is optional!'));
 end;
 
 function TDataValidatorContext<T>.IsPassportNumber(const ALocaleLanguage: TDataValidatorLocaleLanguage): T;

@@ -49,7 +49,7 @@ type
 implementation
 
 uses
-  Validator.Contains;
+  Validator.IsEquals;
 
 { TValidatorIsBoolean }
 
@@ -65,17 +65,17 @@ function TValidatorIsBoolean.Check: IDataValidatorResult;
 var
   LValue: string;
   R: Boolean;
-  LValidatorContains: IDataValidatorItem;
+  LValidatorEquals: IDataValidatorItem;
 begin
   LValue := GetValueAsString;
   R := False;
 
   if not Trim(LValue).IsEmpty then
   begin
-    LValidatorContains := TValidatorContains.Create(['true', 'false'], False, '');
-    LValidatorContains.SetValue(LValue);
+    LValidatorEquals := TValidatorIsEquals.Create(['true', 'false'], False, '');
+    LValidatorEquals.SetValue(LValue);
 
-    R := LValidatorContains.Check.OK;
+    R := LValidatorEquals.Check.OK;
   end;
 
   if FIsNot then

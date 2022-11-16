@@ -72,6 +72,7 @@ type
     FKey: string;
     FName: string;
     FValue: TValue;
+    FIndex: string;
     FExecute: TDataValidatorInformationExecute;
 
     function GetMessage: TDataValidatorMessage;
@@ -84,6 +85,7 @@ type
     procedure SetKey(const AKey: string);
     procedure SetName(const AName: string);
     procedure SetValue(const AValue: TValue);
+    procedure SetIndex(const AValue: string);
     procedure SetMessage(const AMessage: string); overload;
     procedure SetMessage(const AMessage: TDataValidatorMessage); overload;
     procedure SetExecute(const AExecute: TDataValidatorInformationExecute);
@@ -116,6 +118,11 @@ end;
 procedure TDataValidatorItemBase.SetValue(const AValue: TValue);
 begin
   FValue := AValue;
+end;
+
+procedure TDataValidatorItemBase.SetIndex(const AValue: string);
+begin
+  FIndex := AValue;
 end;
 
 procedure TDataValidatorItemBase.SetIsNot(const AIsNot: Boolean);
@@ -261,6 +268,8 @@ begin
   LMessage := LMessage.Replace('${value}', AValue, [rfReplaceAll, rfIgnoreCase]);
   LMessage := LMessage.Replace('${valueupper}', UpperCase(AValue), [rfReplaceAll, rfIgnoreCase]);
   LMessage := LMessage.Replace('${valuelower}', LowerCase(AValue), [rfReplaceAll, rfIgnoreCase]);
+
+  LMessage := LMessage.Replace('${index}', FIndex, [rfReplaceAll, rfIgnoreCase]);
 
   Result := LMessage;
 end;

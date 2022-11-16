@@ -245,7 +245,11 @@ begin
 
                   .Value
                     .Trim
-                    .&Not.IsEmpty.WithMessage('O ${key} deve ser informado!')
+                    .IsOptional(
+                    function(const AValue: TJSONValue): Boolean
+                    begin
+                      Result := AValue.Null;
+                    end)
                     .IsJSONString.WithMessage('${key} - ${value} - Não é do tipo string!')
                     .IsLength(10,10).WithMessage('${key} - Deve ter somente 10 caracteres!')
                     .IsDate(False).WithMessage('${key} - ${value} - Não é uma data válida!')
@@ -375,84 +379,6 @@ begin
                     .IsEmail.WithMessage('${key} - ${value} - Não é um e-mail válido!')
                   .&End
                 .&End
-
-                .Validate('items')
-                  .Key
-                    .IsRequired.WithMessage('Informe a key ${key}')
-                  .&End
-
-                  .Value
-                    .IsJSONObject.WithMessage('${key} - Não é do tipo JSONObject!')
-                    .CustomJSONSubValidator(
-                      function(const AValue: IDataValidatorJSON; var AMessage: TDataValidatorMessage): Boolean
-                      var
-                        LJSONResult: IDataValidatorJSONResult;
-                        LResult: IDataValidatorResult;
-                      begin
-                        LJSONResult :=
-                          AValue
-                            .Validate('product_id')
-                              .Key
-                                .IsRequired.WithMessage('Informe a key ${key}')
-                              .&End
-
-                              .Value
-                                .Trim
-                                .&Not.IsEmpty.WithMessage('O ${key} deve ser informado!')
-                                .IsJSONNumeric.WithMessage('${key} - ${value} - Não é do tipo numeric!')
-                                .IsGreaterThan(0).WithMessage('O ${key} deve ser maior que zero!')
-                                .IsInteger.WithMessage('O ${key} deve ser do tipo inteiro!')
-                              .&End
-                            .&End
-
-                            .Validate('product_name')
-                              .Key
-                                .IsRequired.WithMessage('Informe a key ${key}')
-                              .&End
-
-                              .Value
-                                .Trim
-                                .&Not.IsEmpty.WithMessage('O ${key} deve ser informado!')
-                                .IsJSONString.WithMessage('${key} - ${value} - Não é do tipo string!')
-                                .IsAlphaNumeric(TDataValidatorLocaleLanguage.tl_pt_BR, ['-', ',', '/', '\']).WithMessage('${key} - ${value} - Não é um valor AlphaNumeric!')
-                              .&End
-                            .&End
-
-                            .Validate('price')
-                              .Key
-                                .IsRequired.WithMessage('Informe a key ${key}')
-                              .&End
-
-                              .Value
-                                .Trim
-                                .&Not.IsEmpty.WithMessage('O ${key} deve ser informado!')
-                                .IsNumeric.WithMessage('O ${key} não é um valor inválido!')
-                                .IsGreaterThan(-1).WithMessage('Informe um valor maior que Zero!')
-                              .&End
-                            .&End
-
-                            .Validate('quantity')
-                              .Key
-                                .IsRequired.WithMessage('Informe a key ${key}')
-                              .&End
-
-                              .Value
-                                .Trim
-                                .&Not.IsEmpty.WithMessage('O ${key} deve ser informado!')
-                                .IsNumeric.WithMessage('O ${key} não é um valor inválido!')
-                              .&End
-                            .&End
-                            ;
-
-                        LResult := LJSONResult.Check;
-
-                        Result := LResult.OK;
-
-                        if not Result then
-                          AMessage := LResult.Informations.GetItem(0).Messages;
-                      end)
-                    .&End
-                  .&End
                 ;
 
             LResult := LJSONResult.Check;
@@ -462,8 +388,87 @@ begin
             if not Result then
               AMessage := LResult.Informations.GetItem(0).Messages;
           end)
+
       .&End
     .&End
+
+    .Validate('items')
+      .Key
+        .IsRequired.WithMessage('Informe a key ${key}')
+      .&End
+
+      .Value
+        .IsJSONArray.WithMessage('${key} - Não é do tipo JSONArray!')
+        .CustomJSONSubValidator(
+          function(const AValue: IDataValidatorJSON; var AMessage: TDataValidatorMessage): Boolean
+          var
+            LJSONResult: IDataValidatorJSONResult;
+            LResult: IDataValidatorResult;
+          begin
+            LJSONResult :=
+              AValue
+                .Validate('product_id')
+                  .Key
+                    .IsRequired.WithMessage('Informe a key ${key}')
+                  .&End
+
+                  .Value
+                    .Trim
+                    .&Not.IsEmpty.WithMessage('O ${key} deve ser informado!')
+                    .IsJSONNumeric.WithMessage('${key} - ${value} - Não é do tipo numeric!')
+                    .IsGreaterThan(0).WithMessage('O ${key} deve ser maior que zero!')
+                    .IsInteger.WithMessage('O ${key} deve ser do tipo inteiro!')
+                  .&End
+                .&End
+
+                .Validate('product_name')
+                  .Key
+                    .IsRequired.WithMessage('Informe a key ${key}')
+                  .&End
+
+                  .Value
+                    .Trim
+                    .&Not.IsEmpty.WithMessage('O ${key} deve ser informado!')
+                    .IsJSONString.WithMessage('${key} - ${value} - Não é do tipo string!')
+                    .IsAlphaNumeric(TDataValidatorLocaleLanguage.tl_pt_BR, ['-', ',', '/', '\']).WithMessage('${key} - ${value} - Não é um valor AlphaNumeric!')
+                  .&End
+                .&End
+
+                .Validate('price')
+                  .Key
+                    .IsRequired.WithMessage('Informe a key ${key}')
+                  .&End
+
+                  .Value
+                    .Trim
+                    .&Not.IsEmpty.WithMessage('O ${key} deve ser informado!')
+                    .IsNumeric.WithMessage('O ${key} não é um valor inválido!')
+                    .IsGreaterThan(-1).WithMessage('Informe um valor maior que Zero!')
+                  .&End
+                .&End
+
+                .Validate('quantity')
+                  .Key
+                    .IsRequired.WithMessage('Informe a key ${key}')
+                  .&End
+
+                  .Value
+                    .Trim
+                    .&Not.IsEmpty.WithMessage('O ${key} deve ser informado!')
+                    .IsNumeric.WithMessage('O ${key} não é um valor inválido!')
+                  .&End
+                .&End
+                ;
+
+            LResult := LJSONResult.Check;
+
+            Result := LResult.OK;
+
+            if not Result then
+              AMessage := LResult.Informations.GetItem(0).Messages;
+          end)
+        .&End
+      .&End
 end;
 
 procedure TForm2.FormCreate(Sender: TObject);

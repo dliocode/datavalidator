@@ -75,6 +75,8 @@ type
     function JSONMinItems(const AMinItems: Integer): IDataValidatorJSONContextValue<T>;
     function JSONMaxItems(const AMaxItems: Integer): IDataValidatorJSONContextValue<T>;
 
+    function IsOptional(const AExecute: TDataValidatorCustomJSONValue): IDataValidatorJSONContextValue<T>; overload;
+
     function &End: T;
 
     constructor Create(const AOwner: T; const AValue: TJSONPair);
@@ -88,7 +90,8 @@ uses
   Validator.JSON.SubValidator.Custom,
   Validator.JSON.Value.Custom,
   Validator.JSON.Value.IsJSONValue,
-  Validator.JSON.Value.IsMinMaxItems;
+  Validator.JSON.Value.IsMinMaxItems,
+  Validator.IsOptional;
 
 { TDataValidatorJSONContext<T> }
 
@@ -227,6 +230,12 @@ function TDataValidatorJSONContext<T>.JSONMaxItems(const AMaxItems: Integer): ID
 begin
   Result := Self;
   Add(TDataValidatorJSONValueIsMinMaxItems.Create(TTypeJSONValueMinMax.tmMax, AMaxItems, Format('Its size is greater than %d!', [AMaxItems])));
+end;
+
+function TDataValidatorJSONContext<T>.IsOptional(const AExecute: TDataValidatorCustomJSONValue): IDataValidatorJSONContextValue<T>;
+begin
+  Result := Self;
+  Add(TValidatorIsOptional.Create(nil, AExecute, 'Value is optional!'));
 end;
 
 function TDataValidatorJSONContext<T>.&End: T;

@@ -72,7 +72,7 @@ begin
 
   if not Trim(LValue).IsEmpty then
   begin
-    R := TryStrToDate(LValue, LDate);
+    R := TryStrToDateTime(LValue, LDate);
 
     if not R then
       R := TryISO8601ToDate(LValue, LDate, FJSONISO8601ReturnUTC);
